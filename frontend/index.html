@@ -538,7 +538,7 @@
             {{ showAllApps ? '收起' : '查看全部' }} {{ showAllApps ? '▲' : '▼' }}
           </div>
         </div>
-        <div class="app-grid">
+        <div class="app-grid" v-show="!showAllApps">
           <div class="app-card" v-for="app in displayedApps" :key="app.key" @click="openSubsystem(app.key)">
             <div class="app-icon" :style="{ background: app.iconBg }">{{ app.icon }}</div>
             <div class="app-name">{{ app.name }}</div>
