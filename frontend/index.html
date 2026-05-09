@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HiCorLite - 总控中心</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+      background: #eef2f7;
+    }
+    #app { height: 100%; }
+
+    /* ===== 顶部导航栏 ===== */
+    .topbar {
+      height: 60px;
+      background: linear-gradient(90deg, #1a2744 0%, #243b5f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-area img {
+      height: 36px;
+      width: auto;
+    }
+
+    .logo-area .logo-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+
+    .logo-area .logo-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 1px;
+      margin-left: 8px;
+    }
+
+    .topbar-nav {
+      display: flex;
+      gap: 4px;
+      margin-left: 40px;
+    }
+
+    .nav-item {
+      padding: 8px 20px;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .nav-item.active {
+      background: rgba(64, 158, 255, 0.25);
+      color: #fff;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-time {
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .topbar-time .time-big {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .topbar-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+      color: rgba(255,255,255,0.7);
+      position: relative;
+    }
+
+    .topbar-icon:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .topbar-icon .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 8px;
+      height: 8px;
+      background: #f56c6c;
+      border-radius: 50%;
+      border: 2px solid #1a2744;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 12px 4px 4px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .user-area:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #409eff, #67c23a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .user-name {
+      color: #fff;
+      font-size: 14px;
+    }
+
+    /* ===== 左侧快捷导航 ===== */
+    .side-nav {
+      position: fixed;
+      left: 0;
+      top: 60px;
+      bottom: 0;
+      width: 72px;
+      background: #fff;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 4px;
+      z-index: 90;
+      overflow-y: auto;
+    }
+
+    .side-nav::-webkit-scrollbar { width: 0; }
+
+    .side-nav-item {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .side-nav-item:hover {
+      background: #f0f5ff;
+    }
+
+    .side-nav-item.active {
+      background: #ecf5ff;
+    }
+
+    .side-nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 3px;
+      background: #409eff;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .side-nav-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .side-nav-label {
+      font-size: 11px;
+      color: #606266;
+      white-space: nowrap;
+    }
+
+    .side-nav-item.active .side-nav-label {
+      color: #409eff;
+      font-weight: 500;
+    }
+
+    /* ===== 主内容区 ===== */
+    .main-content {
+      margin-top: 60px;
+      margin-left: 72px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+      padding: 24px 28px;
+      background: #eef2f7;
+    }
+
+    /* ===== 欢迎区 + 统计 ===== */
+    .welcome-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .welcome-text h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a2744;
+      margin-bottom: 6px;
+    }
+
+    .welcome-text p {
+      font-size: 14px;
+      color: #909399;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .stat-chip {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      min-width: 140px;
+    }
+
+    .stat-chip-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .stat-chip-info .stat-chip-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a2744;
+      line-height: 1;
+    }
+
+    .stat-chip-info .stat-chip-label {
+      font-size: 12px;
+      color: #909399;
+      margin-top: 4px;
+    }
+
+    /* ===== 应用中心 ===== */
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a2744;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .icon {
+      font-size: 20px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .app-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      transition: border-color 0.25s;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .app-card:hover::after {
+      border-color: rgba(64, 158, 255, 0.3);
+    }
+
+    .app-card:active {
+      transform: translateY(-2px);
+    }
+
+    .app-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .app-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .app-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a2744;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-info p {
+      font-size: 12px;
+      color: #909399;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      background: #f56c6c;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+    }
+
+    .app-status {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .app-status.online {
+      background: #f0f9eb;
+      color: #67c23a;
+    }
+
+    .app-status.dev {
+      background: #fdf6ec;
+      color: #e6a23c;
+    }
+
+    /* ===== 下方区域 ===== */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .card-header h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a2744;
+    }
+
+    .card-header .more {
+      font-size: 13px;
+      color: #409eff;
+      cursor: pointer;
+    }
+
+    .card-body {
+      padding: 16px 20px;
+    }
+
+    /* 待办 */
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid #f5f5f5;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .todo-item:last-child { border-bottom: none; }
+    .todo-item:hover { background: #fafafa; margin: 0 -20px; padding: 11px 20px; }
+
+    .todo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .todo-dot.urgent { background: #f56c6c; }
+    .todo-dot.warn { background: #e6a23c; }
+    .todo-dot.info { background: #409eff; }
+
+    .todo-text {
+      flex: 1;
+      font-size: 14px;
+      color: #303133;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .todo-time {
+      font-size: 12px;
+      color: #c0c4cc;
+      flex-shrink: 0;
+    }
+
+    .todo-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .todo-tag.urgent { background: #fef0f0; color: #f56c6c; }
+    .todo-tag.warn { background: #fdf6ec; color: #e6a23c; }
+
+    /* 快捷操作 */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .quick-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .quick-item:hover {
+      background: #f0f5ff;
+      transform: translateY(-2px);
+    }
+
+    .quick-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .quick-item span {
+      font-size: 12px;
+      color: #606266;
+    }
+
+    /* 公告 */
+    .notice-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .notice-item:last-child { border-bottom: none; }
+
+    .notice-item h4 {
+      font-size: 14px;
+      color: #303133;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .notice-item p {
+      font-size: 13px;
+      color: #909399;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .notice-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: #c0c4cc;
+    }
+
+    /* 子系统页面容器 */
+    .subsystem-frame {
+      position: fixed;
+      top: 60px;
+      left: 72px;
+      right: 0;
+      bottom: 0;
+      background: #eef2f7;
+      z-index: 80;
+      display: none;
+      flex-direction: column;
+    }
+
+    .subsystem-frame.active {
+      display: flex;
+    }
+
+    .subsystem-header {
+      height: 52px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      flex-shrink: 0;
+    }
+
+    .subsystem-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #606266;
+      transition: all 0.2s;
+      border: 1px solid #dcdfe6;
+      background: #fff;
+    }
+
+    .back-btn:hover {
+      color: #409eff;
+      border-color: #c6e2ff;
+      background: #ecf5ff;
+    }
+
+    .subsystem-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a2744;
+    }
+
+    .subsystem-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+    }
+
+    /* 子系统内容模板 */
+    .sub-content {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      min-height: 400px;
+    }
+
+    .sub-search {
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .sub-toolbar {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* 动画 */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .main-content {
+      animation: fadeInUp 0.4s ease;
+    }
+
+    .app-card {
+      animation: fadeInUp 0.4s ease backwards;
+    }
+    .app-card:nth-child(1) { animation-delay: 0.02s; }
+    .app-card:nth-child(2) { animation-delay: 0.04s; }
+    .app-card:nth-child(3) { animation-delay: 0.06s; }
+    .app-card:nth-child(4) { animation-delay: 0.08s; }
+    .app-card:nth-child(5) { animation-delay: 0.10s; }
+    .app-card:nth-child(6) { animation-delay: 0.12s; }
+    .app-card:nth-child(7) { animation-delay: 0.14s; }
+    .app-card:nth-child(8) { animation-delay: 0.16s; }
+    .app-card:nth-child(9) { animation-delay: 0.18s; }
+    .app-card:nth-child(10) { animation-delay: 0.20s; }
+
+    /* 响应式 */
+    @media (max-width: 1400px) {
+      .app-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 1100px) {
+      .app-grid { grid-template-columns: repeat(3, 1fr); }
+      .bottom-grid { grid-template-columns: 1fr; }
+      .stats-row { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部导航 -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="logo-area">
+          <img src="logo_icon.png" alt="HiCorLite">
+          <span class="logo-title">HiCorLite</span>
+          <span class="logo-sub">HOSPITAL INFORMATION SYSTEM</span>
+        </div>
+        <div class="topbar-nav">
+          <div class="nav-item" :class="{ active: currentView === 'home' }" @click="goHome">
+            <span>🏠</span> 总控中心
+          </div>
+          <div class="nav-item" :class="{ active: currentView === 'apps' }" @click="currentView='apps'">
+            <span>📱</span> 应用中心
+          </div>
+          <div class="nav-item">
+            <span>📊</span> 数据中心
+          </div>
+          <div class="nav-item">
+            <span>⚙️</span> 系统设置
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time">
+          <div class="time-big">{{ currentTime }}</div>
+          <div>{{ currentDate }}</div>
+        </div>
+        <div class="topbar-icon" title="搜索">
+          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M909.6 854.5L649.9 594.8C690.2 542.7 714 478.2 714 408c0-167.4-135.8-303.2-303.2-303.2S107.7 240.6 107.7 408S243.5 711.2 410.9 711.2c70.2 0 134.7-23.8 186.8-64.1l259.7 259.6a8.2 8.2 0 0 0 11.6 0l36.6-36.6a8.2 8.2 0 0 0 0-11.6zM410.9 656c-137.4 0-248.9-111.5-248.9-248.9S273.5 158.2 410.9 158.2S659.8 269.7 659.8 408S548.3 656 410.9 656z"/></svg>
+        </div>
+        <div class="topbar-icon" title="消息">
+          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372zm47.7-474c-7.5-7.2-19.7-7.1-27.1.2L448 498.2l-52.6-52.6a19.2 19.2 0 0 0-27.1 0 19.2 19.2 0 0 0 0 27.1l66.1 66.1c7.5 7.5 19.7 7.5 27.1 0l104.1-104.1c7.5-7.5 7.5-19.7 0-27.1a19.1 19.1 0 0 0-27.9-.5z"/></svg>
+          <div class="badge"></div>
+        </div>
+        <div class="user-area">
+          <div class="user-avatar">管</div>
+          <div class="user-name">管理员</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 左侧快捷导航 -->
+    <div class="side-nav">
+      <div class="side-nav-item active" @click="goHome">
+        <div class="side-nav-icon" style="background:#ecf5ff;">🏠</div>
+        <span class="side-nav-label">首页</span>
+      </div>
+      <div class="side-nav-item" v-for="item in sideNavItems" :key="item.key" @click="openSubsystem(item.key)">
+        <div class="side-nav-icon" :style="{ background: item.bg }">{{ item.icon }}</div>
+        <span class="side-nav-label">{{ item.label }}</span>
+      </div>
+    </div>
+
+    <!-- 主内容区 - 应用中心 -->
+    <div class="main-content" v-show="currentView === 'home' || currentView === 'apps'">
+      <!-- 欢迎 + 统计 -->
+      <div class="welcome-section">
+        <div class="welcome-text">
+          <h1>👋 您好，{{ userName }}</h1>
+          <p>欢迎使用 HiCorLite 轻量级医院信息系统 · {{ fullDate }}</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-chip">
+            <div class="stat-chip-icon" style="background:#ecf5ff;color:#409eff;">📋</div>
+            <div class="stat-chip-info">
+              <div class="stat-chip-value">1,286</div>
+              <div class="stat-chip-label">今日门诊</div>
+            </div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-icon" style="background:#f0f9eb;color:#67c23a;">🛏️</div>
+            <div class="stat-chip-info">
+              <div class="stat-chip-value">328</div>
+              <div class="stat-chip-label">在院患者</div>
+            </div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-icon" style="background:#fdf6ec;color:#e6a23c;">💊</div>
+            <div class="stat-chip-info">
+              <div class="stat-chip-value">856</div>
+              <div class="stat-chip-label">今日处方</div>
+            </div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-icon" style="background:#fef0f0;color:#f56c6c;">💰</div>
+            <div class="stat-chip-info">
+              <div class="stat-chip-value">¥68.5万</div>
+              <div class="stat-chip-label">今日营收</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 应用中心 -->
+      <div class="section-title"><span class="icon">📱</span> 应用中心</div>
+      <div class="app-grid">
+        <div class="app-card" v-for="app in appList" :key="app.key" @click="openSubsystem(app.key)">
+          <div class="app-icon" :style="{ background: app.iconBg }">{{ app.icon }}</div>
+          <div class="app-info">
+            <h3>{{ app.name }}</h3>
+            <p>{{ app.desc }}</p>
+          </div>
+          <div class="app-badge" v-if="app.badge">{{ app.badge }}</div>
+          <div class="app-status" :class="app.statusClass" v-if="app.status">{{ app.status }}</div>
+        </div>
+      </div>
+
+      <!-- 下方区域 -->
+      <div class="bottom-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>📌 待办事项</h3>
+            <span class="more">查看全部 →</span>
+          </div>
+          <div class="card-body">
+            <div class="todo-item" v-for="(todo, i) in todoList" :key="i">
+              <div class="todo-dot" :class="todo.level"></div>
+              <div class="todo-text">{{ todo.text }}</div>
+              <div class="todo-time">{{ todo.time }}</div>
+              <div class="todo-tag" :class="todo.level">{{ todo.tag }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>⚡ 快捷操作</h3>
+          </div>
+          <div class="card-body">
+            <div class="quick-grid">
+              <div class="quick-item" v-for="q in quickActions" :key="q.label" @click="openSubsystem(q.key)">
+                <div class="quick-icon" :style="{ background: q.bg }">{{ q.icon }}</div>
+                <span>{{ q.label }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <div class="card">
+          <div class="card-header">
+            <h3>📢 系统公告</h3>
+            <span class="more">更多 →</span>
+          </div>
+          <div class="card-body">
+            <div class="notice-item" v-for="(n, i) in noticeList" :key="i">
+              <h4>{{ n.title }}</h4>
+              <p>{{ n.content }}</p>
+              <div class="notice-meta">
+                <span>📅 {{ n.date }}</span>
+                <span>👤 {{ n.author }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 子系统页面 -->
+    <div class="subsystem-frame" v-for="sub in allSubsystems" :key="sub.key" :class="{ active: currentView === sub.key }">
+      <div class="subsystem-header">
+        <div class="subsystem-header-left">
+          <div class="back-btn" @click="goHome">
+            <svg viewBox="0 0 1024 1024" width="14" height="14"><path fill="currentColor" d="M603.3 327.3l-225.1 225c-4.7 4.7-12.3 4.7-17 0l-225.1-225c-4.7-4.7-4.7-12.3 0-17l225.1-225c4.7-4.7 12.3-4.7 17 0l225.1 225c4.7 4.7 4.7 12.3 0 17z"/></svg>
+            返回
+          </div>
+          <div class="subsystem-title">{{ sub.icon }} {{ sub.name }}</div>
+        </div>
+      </div>
+      <div class="subsystem-body">
+        <div class="sub-content">
+          <div class="sub-search">
+            <el-input :placeholder="sub.searchPlaceholder || '搜索...'" style="width:280px;" clearable />
+            <el-select placeholder="状态" style="width:140px;" clearable v-if="sub.hasStatus">
+              <el-option label="全部" value="" />
+              <el-option label="启用" value="1" />
+              <el-option label="停用" value="0" />
+            </el-select>
+            <el-button type="primary">查询</el-button>
+            <el-button>重置</el-button>
+          </div>
+          <div class="sub-toolbar">
+            <el-button type="primary" size="default">+ {{ sub.addText || '新增' }}</el-button>
+            <div>
+              <el-button size="default">导出</el-button>
+              <el-button size="default">打印</el-button>
+            </div>
+          </div>
+          <el-table :data="sub.tableData || []" stripe style="width:100%" v-if="sub.tableData && sub.tableData.length">
+            <el-table-column v-for="col in sub.columns" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" />
+            <el-table-column label="操作" width="180" fixed="right">
+              <template #default>
+                <el-button type="primary" link size="small">编辑</el-button>
+                <el-button type="danger" link size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div v-else style="text-align:center;padding:100px 0;color:#909399;">
+            <div style="font-size:48px;margin-bottom:16px;">🚧</div>
+            <p style="font-size:16px;">{{ sub.name }}模块开发中...</p>
+            <p style="font-size:13px;margin-top:8px;">敬请期待</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+  <script>
+    const { createApp, ref, computed, onMounted, onUnmounted } = Vue;
+
+    createApp({
+      setup() {
+        const userName = ref('管理员');
+        const currentView = ref('home');
+        const currentTime = ref('');
+        const currentDate = ref('');
+        const fullDate = ref('');
+
+        let timer = null;
+        const updateTime = () => {
+          const now = new Date();
+          currentTime.value = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          currentDate.value = now.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+          fullDate.value = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+        };
+
+        onMounted(() => {
+          updateTime();
+          timer = setInterval(updateTime, 1000);
+        });
+        onUnmounted(() => clearInterval(timer));
+
+        const sideNavItems = [
+          { key: 'outpatient', icon: '🏥', label: '门急诊', bg: '#ecf5ff' },
+          { key: 'inpatient', icon: '🛏️', label: '住院', bg: '#f0f9eb' },
+          { key: 'emr', icon: '📋', label: '病历', bg: '#fdf6ec' },
+          { key: 'pharmacy', icon: '💊', label: '药品', bg: '#fef0f0' },
+          { key: 'lis', icon: '🔬', label: '检验', bg: '#f4f4f5' },
+          { key: 'pacs', icon: '📷', label: '影像', bg: '#ecf5ff' },
+          { key: 'fee', icon: '💳', label: '收费', bg: '#f0f9eb' },
+          { key: 'user', icon: '👤', label: '用户', bg: '#fdf6ec' },
+          { key: 'dept', icon: '🏗️', label: '科室', bg: '#fef0f0' },
+        ];
+
+        const appList = [
+          { key: 'appointment', name: '预约挂号', desc: '在线预约 · 智能排班', icon: '📅', iconBg: '#ecf5ff', status: '已上线', statusClass: 'online' },
+          { key: 'registration', name: '现场挂号', desc: '窗口挂号 · 自助挂号', icon: '📋', iconBg: '#f0f9eb', badge: 12, status: '已上线', statusClass: 'online' },
+          { key: 'triage', name: '门诊分诊', desc: '智能分诊 · 叫号管理', icon: '🔊', iconBg: '#fdf6ec', status: '已上线', statusClass: 'online' },
+          { key: 'doctor-ws', name: '医生工作站', desc: '开方 · 检查 · 诊断', icon: '🩺', iconBg: '#f0f9eb', badge: 5, status: '已上线', statusClass: 'online' },
+          { key: 'nurse-ws', name: '护士工作站', desc: '执行医嘱 · 护理记录', icon: '💉', iconBg: '#fef0f0', status: '已上线', statusClass: 'online' },
+          { key: 'emergency', name: '急诊管理', desc: '急诊分诊 · 抢救记录', icon: '🚑', iconBg: '#fef0f0', badge: 3, status: '已上线', statusClass: 'online' },
+          { key: 'admission', name: '入院登记', desc: '入院办理 · 床位分配', icon: '🏥', iconBg: '#ecf5ff', status: '已上线', statusClass: 'online' },
+          { key: 'inp-doctor', name: '住院医生站', desc: '医嘱 · 病程 · 会诊', icon: '📝', iconBg: '#f0f9eb', status: '已上线', statusClass: 'online' },
+          { key: 'inp-nurse', name: '住院护士站', desc: '护理 · 执行 · 交班', icon: '🏥', iconBg: '#fdf6ec', status: '已上线', statusClass: 'online' },
+          { key: 'surgery', name: '手术管理', desc: '手术排程 · 麻醉记录', icon: '⚕️', iconBg: '#fef0f0', status: '已上线', statusClass: 'online' },
+          { key: 'emr-editor', name: '电子病历', desc: '结构化病历 · 模板管理', icon: '📄', iconBg: '#ecf5ff', status: '已上线', statusClass: 'online' },
+          { key: 'drug-store', name: '药库管理', desc: '库存 · 调拨 · 盘点', icon: '📦', iconBg: '#f0f9eb', badge: 2, status: '已上线', statusClass: 'online' },
+          { key: 'drug-dispense', name: '药房管理', desc: '处方调配 · 发药', icon: '💊', iconBg: '#fdf6ec', status: '已上线', statusClass: 'online' },
+          { key: 'outpatient-fee', name: '门诊收费', desc: '收费 · 退费 · 结算', icon: '💳', iconBg: '#fef0f0', status: '已上线', statusClass: 'online' },
+          { key: 'inp-fee', name: '住院收费', desc: '预交金 · 费用清单', icon: '💰', iconBg: '#ecf5ff', status: '已上线', statusClass: 'online' },
+          { key: 'lis', name: '检验管理', desc: '标本采集 · 报告审核', icon: '🔬', iconBg: '#f0f9eb', status: '已上线', statusClass: 'online' },
+          { key: 'pacs', name: '影像管理', desc: '影像采集 · 报告书写', icon: '📷', iconBg: '#fdf6ec', status: '已上线', statusClass: 'online' },
+          { key: 'insurance', name: '医保接口', desc: '医保结算 · 对账', icon: '🏦', iconBg: '#fef0f0', status: '已上线', statusClass: 'online' },
+          { key: 'empi', name: '患者主索引', desc: '患者信息 · 主数据管理', icon: '👤', iconBg: '#ecf5ff', status: '已上线', statusClass: 'online' },
+          { key: 'dashboard-board', name: '院长驾驶舱', desc: '运营分析 · 决策支持', icon: '📊', iconBg: '#f0f9eb', status: '开发中', statusClass: 'dev' },
+          { key: 'clinical-path', name: '临床路径', desc: '路径管理 · 变异分析', icon: '📈', iconBg: '#fdf6ec', status: '开发中', statusClass: 'dev' },
+          { key: 'user', name: '用户管理', desc: '账号 · 权限 · 角色', icon: '👥', iconBg: '#ecf5ff', status: '已上线', statusClass: 'online' },
+          { key: 'dept', name: '组织架构', desc: '科室 · 院区 · 床位', icon: '🏗️', iconBg: '#f0f9eb', status: '已上线', statusClass: 'online' },
+          { key: 'dict', name: '数据字典', desc: '系统配置 · 字典维护', icon: '📖', iconBg: '#fdf6ec', status: '已上线', statusClass: 'online' },
+        ];
+
+        const todoList = [
+          { text: '急诊科 3 床患者会诊申请待处理', time: '10分钟前', level: 'urgent', tag: '紧急' },
+          { text: 'ICU 患者张某某检验报告异常', time: '30分钟前', level: 'urgent', tag: '紧急' },
+          { text: '药品库存预警：阿莫西林库存不足', time: '1小时前', level: 'warn', tag: '预警' },
+          { text: '内科门诊 5 份病历待质控审核', time: '2小时前', level: 'warn', tag: '待办' },
+          { text: '新员工李四权限配置待审批', time: '3小时前', level: 'info', tag: '通知' },
+          { text: '手术室明日排班需确认', time: '4小时前', level: 'info', tag: '通知' },
+        ];
+
+        const quickActions = [
+          { key: 'registration', icon: '📋', label: '现场挂号', bg: '#ecf5ff' },
+          { key: 'doctor-ws', icon: '🩺', label: '医生工作站', bg: '#f0f9eb' },
+          { key: 'outpatient-fee', icon: '💳', label: '门诊收费', bg: '#fdf6ec' },
+          { key: 'drug-dispense', icon: '💊', label: '药房发药', bg: '#fef0f0' },
+          { key: 'lis', icon: '🔬', label: '检验报告', bg: '#f4f4f5' },
+          { key: 'pacs', icon: '📷', label: '影像报告', bg: '#ecf5ff' },
+          { key: 'admission', icon: '🏥', label: '入院登记', bg: '#f0f9eb' },
+          { key: 'emr-editor', icon: '📝', label: '电子病历', bg: '#fdf6ec' },
+        ];
+
+        const noticeList = [
+          { title: 'HiCorLite v1.0.0 正式发布', content: '轻量级医院信息系统正式上线，涵盖门急诊、住院、电子病历、药品管理等核心模块。如需技术支持请联系信息科。', date: '2026-05-09', author: '系统管理员' },
+          { title: '医保接口升级通知', content: '根据国家医保局最新要求，系统将于本月底完成医保接口升级，届时将支持 DRG/DIP 付费模式。请各科室做好准备。', date: '2026-05-08', author: '信息科' },
+        ];
+
+        // 子系统定义
+        const userColumns = [
+          { prop: 'employeeNo', label: '工号', width: 100 },
+          { prop: 'realName', label: '姓名', width: 100 },
+          { prop: 'username', label: '登录账号', width: 140 },
+          { prop: 'userType', label: '类型', width: 100 },
+          { prop: 'dept', label: '科室', width: 140 },
+          { prop: 'phone', label: '手机号', width: 130 },
+          { prop: 'status', label: '状态', width: 80 },
+        ];
+
+        const userTableData = [
+          { employeeNo: 'D001', realName: '张伟', username: 'zhangwei', userType: '医生', dept: '内科门诊', phone: '138****1234', status: '启用' },
+          { employeeNo: 'D002', realName: '李芳', username: 'lifang', userType: '医生', dept: '外科门诊', phone: '139****5678', status: '启用' },
+          { employeeNo: 'N001', realName: '王丽', username: 'wangli', userType: '护士', dept: '内科病区', phone: '137****9012', status: '启用' },
+          { employeeNo: 'P001', realName: '陈静', username: 'chenjing', userType: '药师', dept: '药剂科', phone: '135****7890', status: '启用' },
+          { employeeNo: 'A001', realName: '刘强', username: 'liuqiang', userType: '管理员', dept: '信息科', phone: '133****2345', status: '启用' },
+          { employeeNo: 'D003', realName: '周明', username: 'zhouming', userType: '医生', dept: '妇产科', phone: '132****6789', status: '停用' },
+        ];
+
+        const allSubsystems = [
+          { key: 'user', name: '用户管理', icon: '👥', searchPlaceholder: '用户名 / 工号 / 姓名', addText: '新增用户', hasStatus: true, columns: userColumns, tableData: userTableData },
+          { key: 'dept', name: '组织架构', icon: '🏗️', searchPlaceholder: '科室名称 / 编码', addText: '新增科室', hasStatus: true },
+          { key: 'appointment', name: '预约挂号', icon: '📅', searchPlaceholder: '患者姓名 / 患者ID', addText: '新建预约' },
+          { key: 'registration', name: '现场挂号', icon: '📋', searchPlaceholder: '患者姓名 / 挂号单号', addText: '新建挂号' },
+          { key: 'triage', name: '门诊分诊', icon: '🔊', searchPlaceholder: '患者姓名 / 分诊号' },
+          { key: 'doctor-ws', name: '医生工作站', icon: '🩺', searchPlaceholder: '患者姓名 / 就诊号' },
+          { key: 'nurse-ws', name: '护士工作站', icon: '💉', searchPlaceholder: '患者姓名 / 床位号' },
+          { key: 'emergency', name: '急诊管理', icon: '🚑', searchPlaceholder: '患者姓名 / 急诊号' },
+          { key: 'admission', name: '入院登记', icon: '🏥', searchPlaceholder: '患者姓名 / 住院号', addText: '入院登记' },
+          { key: 'inp-doctor', name: '住院医生站', icon: '📝', searchPlaceholder: '患者姓名 / 住院号' },
+          { key: 'inp-nurse', name: '住院护士站', icon: '🏥', searchPlaceholder: '患者姓名 / 床位号' },
+          { key: 'surgery', name: '手术管理', icon: '⚕️', searchPlaceholder: '患者姓名 / 手术单号' },
+          { key: 'emr-editor', name: '电子病历', icon: '📄', searchPlaceholder: '患者姓名 / 病历号' },
+          { key: 'drug-store', name: '药库管理', icon: '📦', searchPlaceholder: '药品名称 / 编码', addText: '新增药品' },
+          { key: 'drug-dispense', name: '药房管理', icon: '💊', searchPlaceholder: '处方号 / 患者姓名' },
+          { key: 'outpatient-fee', name: '门诊收费', icon: '💳', searchPlaceholder: '患者姓名 / 收费单号' },
+          { key: 'inp-fee', name: '住院收费', icon: '💰', searchPlaceholder: '患者姓名 / 住院号' },
+          { key: 'lis', name: '检验管理', icon: '🔬', searchPlaceholder: '患者姓名 / 标本号' },
+          { key: 'pacs', name: '影像管理', icon: '📷', searchPlaceholder: '患者姓名 / 检查号' },
+          { key: 'insurance', name: '医保接口', icon: '🏦', searchPlaceholder: '患者姓名 / 医保号' },
+          { key: 'empi', name: '患者主索引', icon: '👤', searchPlaceholder: '患者姓名 / 身份证号', addText: '新增患者' },
+          { key: 'dashboard-board', name: '院长驾驶舱', icon: '📊' },
+          { key: 'clinical-path', name: '临床路径', icon: '📈', searchPlaceholder: '路径名称', addText: '新增路径' },
+          { key: 'dict', name: '数据字典', icon: '📖', searchPlaceholder: '字典名称 / 编码', addText: '新增字典' },
+          { key: 'outpatient', name: '门急诊业务', icon: '🏥' },
+          { key: 'inpatient', name: '住院业务', icon: '🛏️' },
+          { key: 'emr', name: '电子病历', icon: '📋' },
+          { key: 'pharmacy', name: '药品管理', icon: '💊' },
+          { key: 'fee', name: '收费财务', icon: '💳' },
+        ];
+
+        const openSubsystem = (key) => {
+          currentView.value = key;
+        };
+
+        const goHome = () => {
+          currentView.value = 'home';
+        };
+
+        return {
+          userName, currentView, currentTime, currentDate, fullDate,
+          sideNavItems, appList, todoList, quickActions, noticeList,
+          allSubsystems, openSubsystem, goHome,
+        };
+      }
+    }).use(ElementPlus).mount('#app');
+  </script>
+</body>
+</html>
