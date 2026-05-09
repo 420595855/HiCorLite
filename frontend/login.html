@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HiCorLite - 医院信息系统</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0c1426 0%, #1a2744 40%, #1e3a5f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 背景装饰 */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(64, 158, 255, 0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(103, 194, 58, 0.06) 0%, transparent 50%);
+      animation: bgFloat 20s ease-in-out infinite;
+    }
+
+    @keyframes bgFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(1deg); }
+      66% { transform: translate(-20px, 20px) rotate(-1deg); }
+    }
+
+    /* 网格背景 */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(64, 158, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(64, 158, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* 浮动粒子 */
+    .particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(64, 158, 255, 0.3);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      max-width: 1000px;
+      padding: 0 40px;
+    }
+
+    /* 左侧品牌区 */
+    .brand-section {
+      flex: 1;
+      color: #fff;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .logo-icon {
+      width: auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon img {
+      height: 64px;
+      width: auto;
+      filter: drop-shadow(0 4px 12px rgba(64, 158, 255, 0.3));
+    }
+
+    .logo-text h1 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #fff, #a0cfff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-text p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 4px;
+      margin-top: 4px;
+    }
+
+    .brand-desc {
+      margin-top: 40px;
+    }
+
+    .brand-desc h2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+    }
+
+    .brand-desc p {
+      margin-top: 16px;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.8;
+    }
+
+    .feature-tags {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .feature-tag {
+      padding: 8px 20px;
+      background: rgba(64, 158, 255, 0.1);
+      border: 1px solid rgba(64, 158, 255, 0.2);
+      border-radius: 24px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+    }
+
+    .feature-tag:hover {
+      background: rgba(64, 158, 255, 0.2);
+      border-color: rgba(64, 158, 255, 0.4);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* 右侧登录卡片 */
+    .login-card {
+      width: 420px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 48px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .login-header h2 {
+      font-size: 24px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .login-header p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 8px;
+    }
+
+    /* Element Plus 覆盖 */
+    .el-input__wrapper {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 12px !important;
+      box-shadow: none !important;
+      height: 48px;
+      padding: 0 16px !important;
+      transition: all 0.3s !important;
+    }
+
+    .el-input__wrapper:hover {
+      border-color: rgba(64, 158, 255, 0.4) !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .el-input__wrapper.is-focus {
+      border-color: #409eff !important;
+      background: rgba(64, 158, 255, 0.08) !important;
+      box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.15) !important;
+    }
+
+    .el-input__inner {
+      color: #fff !important;
+      font-size: 15px;
+    }
+
+    .el-input__inner::placeholder {
+      color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .el-input__prefix .el-icon {
+      color: rgba(255, 255, 255, 0.4) !important;
+      font-size: 18px;
+    }
+
+    .el-checkbox__label {
+      color: rgba(255, 255, 255, 0.5) !important;
+      font-size: 14px;
+    }
+
+    .el-checkbox__inner {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .el-checkbox__input.is-checked .el-checkbox__inner {
+      background: #409eff;
+      border-color: #409eff;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .form-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-item label {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-options a {
+      color: #409eff;
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .form-options a:hover {
+      color: #66b1ff;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 48px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px !important;
+      background: linear-gradient(135deg, #409eff, #337ecc) !important;
+      border: none !important;
+      letter-spacing: 4px;
+      transition: all 0.3s !important;
+      box-shadow: 0 4px 16px rgba(64, 158, 255, 0.3) !important;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(64, 158, 255, 0.4) !important;
+      background: linear-gradient(135deg, #66b1ff, #409eff) !important;
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .login-footer {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .login-footer p {
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 12px;
+    }
+
+    /* 分隔线 */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* 其他登录方式 */
+    .other-login {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .other-login-item {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 20px;
+    }
+
+    .other-login-item:hover {
+      background: rgba(64, 158, 255, 0.15);
+      border-color: rgba(64, 158, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* 响应式 */
+    @media (max-width: 900px) {
+      .login-container {
+        flex-direction: column;
+        gap: 40px;
+      }
+      .brand-section {
+        text-align: center;
+      }
+      .brand-logo {
+        justify-content: center;
+      }
+      .feature-tags {
+        justify-content: center;
+      }
+      .login-card {
+        width: 100%;
+        max-width: 420px;
+      }
+    }
+
+    /* 加载动画 */
+    .login-card {
+      animation: cardSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    @keyframes cardSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .brand-section {
+      animation: brandSlideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    @keyframes brandSlideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="particles" id="particles"></div>
+
+  <div class="login-container">
+    <!-- 左侧品牌 -->
+    <div class="brand-section">
+      <div class="brand-logo">
+        <div class="logo-icon"><img src="logo_icon.png" alt="HiCorLite"></div>
+        <div class="logo-text">
+          <h1>HiCorLite</h1>
+          <p>HOSPITAL INFORMATION SYSTEM</p>
+        </div>
+      </div>
+      <div class="brand-desc">
+        <h2>轻量级医院<br>信息管理系统</h2>
+        <p>覆盖门急诊、住院、电子病历、药品管理、<br>收费财务、医技、医保对接等核心业务</p>
+      </div>
+      <div class="feature-tags">
+        <span class="feature-tag">🏥 门急诊管理</span>
+        <span class="feature-tag">🛏️ 住院管理</span>
+        <span class="feature-tag">📋 电子病历</span>
+        <span class="feature-tag">💊 药品管理</span>
+        <span class="feature-tag">📊 数据分析</span>
+      </div>
+    </div>
+
+    <!-- 右侧登录 -->
+    <div class="login-card" id="app">
+      <div class="login-header">
+        <h2>系统登录</h2>
+        <p>请输入您的账号和密码</p>
+      </div>
+
+      <div class="login-form">
+        <div class="form-item">
+          <label>账号</label>
+          <el-input
+            v-model="loginForm.username"
+            placeholder="请输入工号 / 用户名"
+            size="large"
+            clearable
+          >
+            <template #prefix>
+              <el-icon><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="currentColor" d="M512 512a192 192 0 1 0 0-384 192 192 0 0 0 0 384zm0 64a256 256 0 1 1 0-512 256 256 0 0 1 0 512zm320 320v-96a319.6 319.6 0 0 0-257.6-316.8A128 128 0 0 0 512 256a128 128 0 0 0-126.4 147.2A319.6 319.6 0 0 0 128 832v96h704z"/></svg></el-icon>
+            </template>
+          </el-input>
+        </div>
+
+        <div class="form-item">
+          <label>密码</label>
+          <el-input
+            v-model="loginForm.password"
+            type="password"
+            placeholder="请输入密码"
+            size="large"
+            show-password
+          >
+            <template #prefix>
+              <el-icon><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path fill="currentColor" d="M512 64a256 256 0 0 1 256 256v128h-128V320a128 128 0 0 0-256 0v128H256V320a256 256 0 0 1 256-256zm-128 320h256v128a128 128 0 1 1-256 0V384zm-64 0v128a192 192 0 1 0 384 0V384h128v512H256V384h128z"/></svg></el-icon>
+            </template>
+          </el-input>
+        </div>
+
+        <div class="form-options">
+          <el-checkbox v-model="loginForm.remember">记住密码</el-checkbox>
+          <a href="javascript:void(0)">忘记密码？</a>
+        </div>
+
+        <el-button
+          class="login-btn"
+          type="primary"
+          size="large"
+          :loading="loading"
+          @click="handleLogin"
+        >
+          {{ loading ? '登录中...' : '登 录' }}
+        </el-button>
+
+        <div class="divider">其他登录方式</div>
+
+        <div class="other-login">
+          <div class="other-login-item" title="扫码登录">📱</div>
+          <div class="other-login-item" title="CA证书登录">🔑</div>
+          <div class="other-login-item" title="指纹登录">👆</div>
+        </div>
+      </div>
+
+      <div class="login-footer">
+        <p>© 2026 HiCorLite 轻量级医院信息系统 · v1.0.0</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+  <script>
+    // 粒子效果
+    const particlesEl = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (8 + Math.random() * 12) + 's';
+      p.style.animationDelay = Math.random() * 10 + 's';
+      p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+      p.style.background = `rgba(${64 + Math.random() * 40}, ${158 + Math.random() * 40}, 255, ${0.15 + Math.random() * 0.2})`;
+      particlesEl.appendChild(p);
+    }
+
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        const loginForm = ref({
+          username: '',
+          password: '',
+          remember: false
+        });
+        const loading = ref(false);
+
+        const handleLogin = () => {
+          if (!loginForm.value.username || !loginForm.value.password) {
+            ElementPlus.ElMessage.warning('请输入账号和密码');
+            return;
+          }
+          loading.value = true;
+          setTimeout(() => {
+            loading.value = false;
+            ElementPlus.ElMessage.success('登录成功');
+          }, 1500);
+        };
+
+        return { loginForm, loading, handleLogin };
+      }
+    }).use(ElementPlus).mount('#app');
+  </script>
+</body>
+</html>
