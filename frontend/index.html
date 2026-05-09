@@ -382,13 +382,13 @@
     }
 
     /* 响应式 */
-    @media (max-width: 1600px) { .app-grid { grid-template-columns: repeat(6, 1fr); } }
+    @media (max-width: 1600px) { .app-grid, .drawer-grid { grid-template-columns: repeat(6, 1fr); } }
     @media (max-width: 1400px) {
-      .app-grid { grid-template-columns: repeat(5, 1fr); }
+      .app-grid, .drawer-grid { grid-template-columns: repeat(5, 1fr); }
       .dashboard-grid { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 1100px) {
-      .app-grid { grid-template-columns: repeat(4, 1fr); }
+      .app-grid, .drawer-grid { grid-template-columns: repeat(4, 1fr); }
       .dashboard-grid { grid-template-columns: 1fr; }
       .bottom-row { grid-template-columns: 1fr; }
       .stats-row { flex-wrap: wrap; }
@@ -1144,9 +1144,7 @@
           { key: 'nurse-pda', name: '护理系统-PDA', icon: '📱', iconBg: '#fffbeb' },
         ];
 
-        const displayedApps = computed(() => {
-          return showAllApps.value ? appList : appList.slice(0, 16);
-        });
+        const displayedApps = computed(() => appList.slice(0, 16));
 
         const todoList = [
           { text: '急诊科 3 床患者会诊申请待处理', time: '10分钟前', level: 'urgent', tag: '紧急' },
