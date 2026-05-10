@@ -58,40 +58,85 @@
     }
     .subsys-menu-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
-    /* 子系统菜单下拉 */
+    /* 子系统菜单下拉 - 气泡弹出框 */
     .subsys-dropdown {
       position: absolute;
-      top: 48px; left: 50%;
+      top: calc(100% + 12px); left: 50%;
       transform: translateX(-50%);
       background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-      padding: 8px 0;
-      min-width: 200px;
+      border-radius: 16px;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+      padding: 20px 24px 16px;
+      min-width: 420px;
+      max-width: min(90vw, 860px);
       z-index: 300;
-      animation: dropdownIn 0.2s ease;
+      animation: popoverIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
-    .subsys-dropdown-item {
-      padding: 12px 20px;
-      font-size: 15px;
-      color: #334155;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
+    /* 小三角箭头 */
+    .subsys-dropdown::before {
+      content: '';
+      position: absolute;
+      top: -7px; left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 14px; height: 14px;
+      background: #fff;
+      box-shadow: -2px -2px 4px rgba(0,0,0,0.04);
+      border-radius: 2px;
+    }
+    .subsys-dropdown-header {
+      font-size: 12px; color: #94a3b8; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    /* 菜单分组网格 */
+    .subsys-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 10px;
     }
-    .subsys-dropdown-item:hover { background: #f0f5ff; color: #4a6cf7; }
-    .subsys-dropdown-item.active { background: #eff3ff; color: #4a6cf7; font-weight: 500; }
-    .subsys-dropdown-divider { height: 1px; background: #f1f5f9; margin: 4px 0; }
-    .subsys-dropdown-header {
-      padding: 10px 20px 6px;
-      font-size: 12px;
-      color: #94a3b8;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    /* 每个分类卡片 */
+    .subsys-menu-card {
+      background: #f8fafc;
+      border: 1px solid #e8ecf1;
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: all 0.2s;
+    }
+    .subsys-menu-card:hover {
+      border-color: #c7d2fe; background: #f0f4ff;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.08);
+    }
+    .subsys-menu-card-title {
+      font-size: 13px; font-weight: 600; color: #475569;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+      padding-bottom: 8px; border-bottom: 1px solid #e8ecf1;
+    }
+    .subsys-menu-card-items { display: flex; flex-direction: column; gap: 2px; }
+    .subsys-menu-card-item {
+      padding: 7px 10px; border-radius: 8px; font-size: 14px;
+      color: #475569; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .subsys-menu-card-item:hover { background: #e0e7ff; color: #3730a3; }
+    .subsys-menu-card-item.active { background: #dbeafe; color: #1d4ed8; font-weight: 500; }
+    /* 返回总控中心 */
+    .subsys-dropdown-back {
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+      display: flex; justify-content: center;
+    }
+    .subsys-dropdown-back-btn {
+      padding: 8px 24px; border-radius: 10px; font-size: 14px;
+      color: #64748b; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+      background: #f8fafc; border: 1px solid #e2e8f0;
+    }
+    .subsys-dropdown-back-btn:hover { background: #eff6ff; color: #4a6cf7; border-color: #93c5fd; }
+
+    @keyframes popoverIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.96); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
     }
 
     /* 导航菜单 */
@@ -324,6 +369,72 @@
     .sub-search { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
     .sub-toolbar { padding: 14px 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
 
+    /* 子系统默认仪表盘 */
+    .subsys-dashboard { padding: 28px; }
+    .subsys-dashboard-header { margin-bottom: 28px; }
+    .subsys-dashboard-header h2 { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+    .subsys-dashboard-header p { font-size: 14px; color: #94a3b8; }
+
+    /* 快捷入口网格 */
+    .subsys-quick-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px; margin-bottom: 28px;
+    }
+    .subsys-quick-card {
+      background: #f8fafc; border: 1px solid #e8ecf1; border-radius: 14px;
+      padding: 20px 16px; display: flex; flex-direction: column; align-items: center;
+      gap: 10px; cursor: pointer; transition: all 0.25s;
+    }
+    .subsys-quick-card:hover {
+      background: #fff; border-color: #93c5fd; transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(59,130,246,0.1);
+    }
+    .subsys-quick-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; font-size: 24px;
+    }
+    .subsys-quick-card span { font-size: 14px; font-weight: 500; color: #334155; }
+
+    /* 统计卡片 */
+    .subsys-stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px; margin-bottom: 28px;
+    }
+    .subsys-stat-card {
+      background: #fff; border: 1px solid #e8ecf1; border-radius: 14px;
+      padding: 20px; display: flex; align-items: center; gap: 16px;
+      transition: all 0.2s;
+    }
+    .subsys-stat-card:hover { border-color: #c7d2fe; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+    .subsys-stat-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; font-size: 26px;
+    }
+    .subsys-stat-info .subsys-stat-value { font-size: 24px; font-weight: 700; color: #1e293b; }
+    .subsys-stat-info .subsys-stat-label { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+
+    /* 底部面板 */
+    .subsys-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .subsys-panel {
+      background: #fff; border: 1px solid #e8ecf1; border-radius: 14px; overflow: hidden;
+    }
+    .subsys-panel-header {
+      padding: 16px 20px; font-size: 16px; font-weight: 600; color: #1e293b;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .subsys-panel-body { padding: 8px 20px; }
+    .subsys-panel-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid #f8fafc;
+    }
+    .subsys-panel-item:last-child { border-bottom: none; }
+    .subsys-panel-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .subsys-panel-text { flex: 1; font-size: 14px; color: #334155; }
+    .subsys-panel-time { font-size: 13px; color: #94a3b8; flex-shrink: 0; }
+    .subsys-panel-tag {
+      font-size: 12px; padding: 3px 10px; border-radius: 6px; flex-shrink: 0; font-weight: 500;
+    }
+
     /* 动画 */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(16px); }
@@ -412,17 +523,27 @@
           <!-- 菜单图标 -->
           <div class="subsys-menu-btn" @click.stop="showSubsysMenu = !showSubsysMenu">
             <svg viewBox="0 0 1024 1024" width="20" height="20"><path fill="currentColor" d="M160 256h704a32 32 0 1 0 0-64H160a32 32 0 0 0 0 64zm704 224H160a32 32 0 0 0 0 64h704a32 32 0 1 0 0-64zm0 288H160a32 32 0 0 0 0 64h704a32 32 0 1 0 0-64z"/></svg>
-            <!-- 子系统菜单下拉 -->
+            <!-- 子系统菜单下拉 - 气泡弹出框 -->
             <div class="subsys-dropdown" v-show="showSubsysMenu" @click.stop>
-              <div class="subsys-dropdown-header">功能模块</div>
-              <div class="subsys-dropdown-item" v-for="item in currentSubsysMenus" :key="item.key"
-                :class="{ active: currentSubMenuItem === item.key }"
-                @click="currentSubMenuItem = item.key; showSubsysMenu = false;">
-                <span>{{ item.icon }}</span> {{ item.label }}
+              <div class="subsys-dropdown-header">{{ currentSubsys.name }} · 功能导航</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
+                <div class="subsys-menu-card" v-for="group in currentSubsysMenuGroups" :key="group.category">
+                  <div class="subsys-menu-card-title">
+                    <span>{{ group.icon }}</span> {{ group.category }}
+                  </div>
+                  <div class="subsys-menu-card-items">
+                    <div class="subsys-menu-card-item" v-for="item in group.items" :key="item.key"
+                      :class="{ active: currentSubMenuItem === item.key }"
+                      @click="currentSubMenuItem = item.key; showSubsysMenu = false;">
+                      <span>{{ item.icon }}</span> {{ item.label }}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="subsys-dropdown-divider"></div>
-              <div class="subsys-dropdown-item" @click="goHome">
-                <span>🏠</span> 返回总控中心
+              <div class="subsys-dropdown-back">
+                <div class="subsys-dropdown-back-btn" @click="goHome">
+                  <span>🏠</span> 返回总控中心
+                </div>
               </div>
             </div>
           </div>
@@ -719,10 +840,53 @@
             </template>
           </el-table-column>
         </el-table>
-        <div v-else style="text-align:center;padding:100px 0;color:#94a3b8;">
-          <div style="font-size:48px;margin-bottom:16px;">🚧</div>
-          <p style="font-size:17px;">{{ currentSubsys.name }} · {{ currentSubMenuItem ? currentSubsysMenus.find(m=>m.key===currentSubMenuItem)?.label : '主页' }}</p>
-          <p style="font-size:14px;margin-top:8px;">功能模块开发中，敬请期待</p>
+        <!-- 默认仪表盘 -->
+        <div v-else class="subsys-dashboard">
+          <div class="subsys-dashboard-header">
+            <h2>{{ currentSubsys.icon }} {{ currentSubsys.name }}</h2>
+            <p>欢迎使用 {{ currentSubsys.name }}，以下是模块概览</p>
+          </div>
+          <!-- 快捷入口 -->
+          <div class="subsys-quick-grid">
+            <div class="subsys-quick-card" v-for="item in currentSubsysMenus.slice(0, 6)" :key="item.key"
+              @click="currentSubMenuItem = item.key">
+              <div class="subsys-quick-icon" :style="{ background: item.bg }">{{ item.icon }}</div>
+              <span>{{ item.label }}</span>
+            </div>
+          </div>
+          <!-- 统计卡片 -->
+          <div class="subsys-stats-grid">
+            <div class="subsys-stat-card" v-for="(stat, i) in subsysStats" :key="i">
+              <div class="subsys-stat-icon" :style="{ background: stat.bg, color: stat.color }">{{ stat.icon }}</div>
+              <div class="subsys-stat-info">
+                <div class="subsys-stat-value">{{ stat.value }}</div>
+                <div class="subsys-stat-label">{{ stat.label }}</div>
+              </div>
+            </div>
+          </div>
+          <!-- 最近操作 + 待办 -->
+          <div class="subsys-bottom-grid">
+            <div class="subsys-panel">
+              <div class="subsys-panel-header">📋 最近操作</div>
+              <div class="subsys-panel-body">
+                <div class="subsys-panel-item" v-for="(op, i) in recentOps" :key="i">
+                  <div class="subsys-panel-dot" :style="{ background: op.color }"></div>
+                  <div class="subsys-panel-text">{{ op.text }}</div>
+                  <div class="subsys-panel-time">{{ op.time }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="subsys-panel">
+              <div class="subsys-panel-header">📌 待办事项</div>
+              <div class="subsys-panel-body">
+                <div class="subsys-panel-item" v-for="(t, i) in subsysTodos" :key="i">
+                  <div class="subsys-panel-dot" :style="{ background: t.color }"></div>
+                  <div class="subsys-panel-text">{{ t.text }}</div>
+                  <div class="subsys-panel-tag" :style="{ background: t.tagBg, color: t.tagColor }">{{ t.tag }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -770,309 +934,323 @@
         // 每个子系统的左侧菜单
         const subsysMenusMap = {
           'sys-mgmt': [
-            { key: 'overview', icon: '📊', label: '系统概览', bg: '#eff6ff' },
-            { key: 'apps', icon: '📱', label: '应用管理', bg: '#f0fdf4' },
-            { key: 'modules', icon: '🧩', label: '模块配置', bg: '#fffbeb' },
-            { key: 'params', icon: '⚙️', label: '参数设置', bg: '#fef2f2' },
-            { key: 'logs', icon: '📜', label: '操作日志', bg: '#f5f3ff' },
-            { key: 'version', icon: '🏷️', label: '版本管理', bg: '#eff6ff' },
+            { key: 'overview', icon: '📊', label: '系统概览', bg: '#eff6ff', category: '系统管理', catIcon: '⚙️' },
+            { key: 'apps', icon: '📱', label: '应用管理', bg: '#f0fdf4', category: '系统管理', catIcon: '⚙️' },
+            { key: 'modules', icon: '🧩', label: '模块配置', bg: '#fffbeb', category: '系统管理', catIcon: '⚙️' },
+            { key: 'params', icon: '⚙️', label: '参数设置', bg: '#fef2f2', category: '系统管理', catIcon: '⚙️' },
+            { key: 'logs', icon: '📜', label: '操作日志', bg: '#f5f3ff', category: '运维监控', catIcon: '📡' },
+            { key: 'version', icon: '🏷️', label: '版本管理', bg: '#eff6ff', category: '运维监控', catIcon: '📡' },
           ],
           'user-mgmt': [
-            { key: 'users', icon: '👤', label: '用户列表', bg: '#eff6ff' },
-            { key: 'roles', icon: '🎭', label: '角色管理', bg: '#f0fdf4' },
-            { key: 'permissions', icon: '🔐', label: '权限配置', bg: '#fffbeb' },
-            { key: 'org', icon: '🏢', label: '组织架构', bg: '#fef2f2' },
-            { key: 'auth', icon: '🔑', label: '认证管理', bg: '#f5f3ff' },
-            { key: 'audit', icon: '📋', label: '审计日志', bg: '#eff6ff' },
+            { key: 'users', icon: '👤', label: '用户列表', bg: '#eff6ff', category: '用户管理', catIcon: '👥' },
+            { key: 'roles', icon: '🎭', label: '角色管理', bg: '#f0fdf4', category: '用户管理', catIcon: '👥' },
+            { key: 'permissions', icon: '🔐', label: '权限配置', bg: '#fffbeb', category: '权限体系', catIcon: '🔐' },
+            { key: 'org', icon: '🏢', label: '组织架构', bg: '#fef2f2', category: '组织管理', catIcon: '🏢' },
+            { key: 'auth', icon: '🔑', label: '认证管理', bg: '#f5f3ff', category: '权限体系', catIcon: '🔐' },
+            { key: 'audit', icon: '📋', label: '审计日志', bg: '#eff6ff', category: '组织管理', catIcon: '🏢' },
           ],
           'master-data': [
-            { key: 'dict', icon: '📖', label: '数据字典', bg: '#eff6ff' },
-            { key: 'code', icon: '🏷️', label: '编码规则', bg: '#f0fdf4' },
-            { key: 'standard', icon: '📐', label: '标准数据', bg: '#fffbeb' },
-            { key: 'sync', icon: '🔄', label: '数据同步', bg: '#fef2f2' },
-            { key: 'import', icon: '📥', label: '数据导入', bg: '#f5f3ff' },
-            { key: 'export', icon: '📤', label: '数据导出', bg: '#eff6ff' },
+            { key: 'dict', icon: '📖', label: '数据字典', bg: '#eff6ff', category: '基础数据', catIcon: '🗂️' },
+            { key: 'code', icon: '🏷️', label: '编码规则', bg: '#f0fdf4', category: '基础数据', catIcon: '🗂️' },
+            { key: 'standard', icon: '📐', label: '标准数据', bg: '#fffbeb', category: '基础数据', catIcon: '🗂️' },
+            { key: 'sync', icon: '🔄', label: '数据同步', bg: '#fef2f2', category: '数据运维', catIcon: '🔄' },
+            { key: 'import', icon: '📥', label: '数据导入', bg: '#f5f3ff', category: '数据运维', catIcon: '🔄' },
+            { key: 'export', icon: '📤', label: '数据导出', bg: '#eff6ff', category: '数据运维', catIcon: '🔄' },
           ],
           'inp-doctor': [
-            { key: 'patient', icon: '👥', label: '患者列表', bg: '#eff6ff' },
-            { key: 'order', icon: '📋', label: '医嘱管理', bg: '#f0fdf4' },
-            { key: 'emr', icon: '📝', label: '病程记录', bg: '#fffbeb' },
-            { key: 'consult', icon: '🤝', label: '会诊管理', bg: '#fef2f2' },
-            { key: 'exam', icon: '🔬', label: '检查申请', bg: '#f5f3ff' },
-            { key: 'transfer', icon: '🔄', label: '转科管理', bg: '#eff6ff' },
+            { key: 'patient', icon: '👥', label: '患者列表', bg: '#eff6ff', category: '患者管理', catIcon: '🏥' },
+            { key: 'order', icon: '📋', label: '医嘱管理', bg: '#f0fdf4', category: '诊疗业务', catIcon: '💊' },
+            { key: 'emr', icon: '📝', label: '病程记录', bg: '#fffbeb', category: '诊疗业务', catIcon: '💊' },
+            { key: 'consult', icon: '🤝', label: '会诊管理', bg: '#fef2f2', category: '诊疗业务', catIcon: '💊' },
+            { key: 'exam', icon: '🔬', label: '检查申请', bg: '#f5f3ff', category: '检查检验', catIcon: '🔬' },
+            { key: 'transfer', icon: '🔄', label: '转科管理', bg: '#eff6ff', category: '患者管理', catIcon: '🏥' },
           ],
           'inp-nurse': [
-            { key: 'ward', icon: '🏥', label: '病区总览', bg: '#eff6ff' },
-            { key: 'execute', icon: '💉', label: '医嘱执行', bg: '#f0fdf4' },
-            { key: 'vital', icon: '💓', label: '体征录入', bg: '#fffbeb' },
-            { key: 'nursing', icon: '📋', label: '护理记录', bg: '#fef2f2' },
-            { key: 'shift', icon: '🔄', label: '交班管理', bg: '#f5f3ff' },
-            { key: 'bed', icon: '🛏️', label: '床位管理', bg: '#eff6ff' },
+            { key: 'ward', icon: '🏥', label: '病区总览', bg: '#eff6ff', category: '病区管理', catIcon: '🏥' },
+            { key: 'execute', icon: '💉', label: '医嘱执行', bg: '#f0fdf4', category: '护理业务', catIcon: '💉' },
+            { key: 'vital', icon: '💓', label: '体征录入', bg: '#fffbeb', category: '护理业务', catIcon: '💉' },
+            { key: 'nursing', icon: '📋', label: '护理记录', bg: '#fef2f2', category: '护理业务', catIcon: '💉' },
+            { key: 'shift', icon: '🔄', label: '交班管理', bg: '#f5f3ff', category: '病区管理', catIcon: '🏥' },
+            { key: 'bed', icon: '🛏️', label: '床位管理', bg: '#eff6ff', category: '病区管理', catIcon: '🏥' },
           ],
           'out-doctor': [
-            { key: 'queue', icon: '🔊', label: '叫号队列', bg: '#eff6ff' },
-            { key: 'diagnosis', icon: '🩺', label: '诊断开方', bg: '#f0fdf4' },
-            { key: 'order', icon: '📋', label: '检查申请', bg: '#fffbeb' },
-            { key: 'emr', icon: '📝', label: '门诊病历', bg: '#fef2f2' },
-            { key: 'referral', icon: '🔄', label: '转诊管理', bg: '#f5f3ff' },
-            { key: 'history', icon: '📜', label: '就诊记录', bg: '#eff6ff' },
+            { key: 'queue', icon: '🔊', label: '叫号队列', bg: '#eff6ff', category: '门诊接诊', catIcon: '🩺' },
+            { key: 'diagnosis', icon: '🩺', label: '诊断开方', bg: '#f0fdf4', category: '门诊接诊', catIcon: '🩺' },
+            { key: 'order', icon: '📋', label: '检查申请', bg: '#fffbeb', category: '门诊接诊', catIcon: '🩺' },
+            { key: 'emr', icon: '📝', label: '门诊病历', bg: '#fef2f2', category: '门诊接诊', catIcon: '🩺' },
+            { key: 'referral', icon: '🔄', label: '转诊管理', bg: '#f5f3ff', category: '转诊管理', catIcon: '🔄' },
+            { key: 'history', icon: '📜', label: '就诊记录', bg: '#eff6ff', category: '转诊管理', catIcon: '🔄' },
           ],
           'out-aux': [
-            { key: 'lis', icon: '🔬', label: '检验报告', bg: '#eff6ff' },
-            { key: 'pacs', icon: '📷', label: '影像报告', bg: '#f0fdf4' },
-            { key: 'pathology', icon: '🧬', label: '病理报告', bg: '#fffbeb' },
-            { key: 'ecg', icon: '💓', label: '心电报告', bg: '#fef2f2' },
-            { key: 'ultrasound', icon: '📡', label: '超声报告', bg: '#f5f3ff' },
-            { key: 'endoscope', icon: '🔍', label: '内镜报告', bg: '#eff6ff' },
+            { key: 'lis', icon: '🔬', label: '检验报告', bg: '#eff6ff', category: '辅助检查', catIcon: '🔬' },
+            { key: 'pacs', icon: '📷', label: '影像报告', bg: '#f0fdf4', category: '辅助检查', catIcon: '🔬' },
+            { key: 'pathology', icon: '🧬', label: '病理报告', bg: '#fffbeb', category: '辅助检查', catIcon: '🔬' },
+            { key: 'ecg', icon: '💓', label: '心电报告', bg: '#fef2f2', category: '功能检查', catIcon: '💓' },
+            { key: 'ultrasound', icon: '📡', label: '超声报告', bg: '#f5f3ff', category: '功能检查', catIcon: '💓' },
+            { key: 'endoscope', icon: '🔍', label: '内镜报告', bg: '#eff6ff', category: '功能检查', catIcon: '💓' },
           ],
           'out-office': [
-            { key: 'schedule', icon: '📅', label: '排班管理', bg: '#eff6ff' },
-            { key: 'statistics', icon: '📊', label: '门诊统计', bg: '#f0fdf4' },
-            { key: 'complaint', icon: '📢', label: '投诉管理', bg: '#fffbeb' },
-            { key: 'notice', icon: '📋', label: '通知公告', bg: '#fef2f2' },
+            { key: 'schedule', icon: '📅', label: '排班管理', bg: '#eff6ff', category: '门诊管理', catIcon: '🏢' },
+            { key: 'statistics', icon: '📊', label: '门诊统计', bg: '#f0fdf4', category: '门诊管理', catIcon: '🏢' },
+            { key: 'complaint', icon: '📢', label: '投诉管理', bg: '#fffbeb', category: '综合管理', catIcon: '📋' },
+            { key: 'notice', icon: '📋', label: '通知公告', bg: '#fef2f2', category: '综合管理', catIcon: '📋' },
           ],
           'out-reg-fee': [
-            { key: 'register', icon: '📋', label: '挂号登记', bg: '#eff6ff' },
-            { key: 'charge', icon: '💳', label: '收费结算', bg: '#f0fdf4' },
-            { key: 'refund', icon: '↩️', label: '退费管理', bg: '#fffbeb' },
-            { key: 'daily', icon: '📊', label: '日结对账', bg: '#fef2f2' },
-            { key: 'queue', icon: '🔊', label: '排队管理', bg: '#f5f3ff' },
+            { key: 'register', icon: '📋', label: '挂号登记', bg: '#eff6ff', category: '挂号管理', catIcon: '📋' },
+            { key: 'charge', icon: '💳', label: '收费结算', bg: '#f0fdf4', category: '收费管理', catIcon: '💳' },
+            { key: 'refund', icon: '↩️', label: '退费管理', bg: '#fffbeb', category: '收费管理', catIcon: '💳' },
+            { key: 'daily', icon: '📊', label: '日结对账', bg: '#fef2f2', category: '收费管理', catIcon: '💳' },
+            { key: 'queue', icon: '🔊', label: '排队管理', bg: '#f5f3ff', category: '挂号管理', catIcon: '📋' },
           ],
           'inp-fee': [
-            { key: 'deposit', icon: '💰', label: '预交金', bg: '#eff6ff' },
-            { key: 'cost', icon: '📋', label: '费用清单', bg: '#f0fdf4' },
-            { key: 'settle', icon: '💳', label: '出院结算', bg: '#fffbeb' },
-            { key: 'insurance', icon: '🏦', label: '医保结算', bg: '#fef2f2' },
-            { key: 'report', icon: '📊', label: '费用报表', bg: '#f5f3ff' },
+            { key: 'deposit', icon: '💰', label: '预交金', bg: '#eff6ff', category: '费用管理', catIcon: '💰' },
+            { key: 'cost', icon: '📋', label: '费用清单', bg: '#f0fdf4', category: '费用管理', catIcon: '💰' },
+            { key: 'settle', icon: '💳', label: '出院结算', bg: '#fffbeb', category: '结算管理', catIcon: '💳' },
+            { key: 'insurance', icon: '🏦', label: '医保结算', bg: '#fef2f2', category: '结算管理', catIcon: '💳' },
+            { key: 'report', icon: '📊', label: '费用报表', bg: '#f5f3ff', category: '费用管理', catIcon: '💰' },
           ],
           'drug-store': [
-            { key: 'stock', icon: '📦', label: '库存管理', bg: '#eff6ff' },
-            { key: 'purchase', icon: '🛒', label: '采购入库', bg: '#f0fdf4' },
-            { key: 'transfer', icon: '🔄', label: '调拨管理', bg: '#fffbeb' },
-            { key: 'inventory', icon: '📋', label: '盘点管理', bg: '#fef2f2' },
-            { key: 'alert', icon: '⚠️', label: '库存预警', bg: '#f5f3ff' },
+            { key: 'stock', icon: '📦', label: '库存管理', bg: '#eff6ff', category: '库存管理', catIcon: '📦' },
+            { key: 'purchase', icon: '🛒', label: '采购入库', bg: '#f0fdf4', category: '采购管理', catIcon: '🛒' },
+            { key: 'transfer', icon: '🔄', label: '调拨管理', bg: '#fffbeb', category: '库存管理', catIcon: '📦' },
+            { key: 'inventory', icon: '📋', label: '盘点管理', bg: '#fef2f2', category: '库存管理', catIcon: '📦' },
+            { key: 'alert', icon: '⚠️', label: '库存预警', bg: '#f5f3ff', category: '采购管理', catIcon: '🛒' },
           ],
           'drug-dispense': [
-            { key: 'prescription', icon: '📋', label: '处方列表', bg: '#eff6ff' },
-            { key: 'dispense', icon: '💊', label: '调配发药', bg: '#f0fdf4' },
-            { key: 'return', icon: '↩️', label: '退药管理', bg: '#fffbeb' },
-            { key: 'stock', icon: '📦', label: '药房库存', bg: '#fef2f2' },
-            { key: 'statistics', icon: '📊', label: '用药统计', bg: '#f5f3ff' },
+            { key: 'prescription', icon: '📋', label: '处方列表', bg: '#eff6ff', category: '处方管理', catIcon: '📋' },
+            { key: 'dispense', icon: '💊', label: '调配发药', bg: '#f0fdf4', category: '发药管理', catIcon: '💊' },
+            { key: 'return', icon: '↩️', label: '退药管理', bg: '#fffbeb', category: '发药管理', catIcon: '💊' },
+            { key: 'stock', icon: '📦', label: '药房库存', bg: '#fef2f2', category: '处方管理', catIcon: '📋' },
+            { key: 'statistics', icon: '📊', label: '用药统计', bg: '#f5f3ff', category: '处方管理', catIcon: '📋' },
           ],
           'medical-ws': [
-            { key: 'quality', icon: '🏅', label: '质量管理', bg: '#eff6ff' },
-            { key: 'training', icon: '📚', label: '培训管理', bg: '#f0fdf4' },
-            { key: 'meeting', icon: '🤝', label: '会议管理', bg: '#fffbeb' },
-            { key: 'schedule', icon: '📅', label: '排班总览', bg: '#fef2f2' },
+            { key: 'quality', icon: '🏅', label: '质量管理', bg: '#eff6ff', category: '医务管理', catIcon: '🏥' },
+            { key: 'training', icon: '📚', label: '培训管理', bg: '#f0fdf4', category: '医务管理', catIcon: '🏥' },
+            { key: 'meeting', icon: '🤝', label: '会议管理', bg: '#fffbeb', category: '综合管理', catIcon: '📋' },
+            { key: 'schedule', icon: '📅', label: '排班总览', bg: '#fef2f2', category: '综合管理', catIcon: '📋' },
           ],
           'insurance': [
-            { key: 'settle', icon: '💳', label: '医保结算', bg: '#eff6ff' },
-            { key: 'catalog', icon: '📖', label: '目录对照', bg: '#f0fdf4' },
-            { key: 'audit', icon: '🔍', label: '费用审核', bg: '#fffbeb' },
-            { key: 'report', icon: '📊', label: '对账报表', bg: '#fef2f2' },
-            { key: 'drg', icon: '📈', label: 'DRG/DIP', bg: '#f5f3ff' },
+            { key: 'settle', icon: '💳', label: '医保结算', bg: '#eff6ff', category: '医保结算', catIcon: '💳' },
+            { key: 'catalog', icon: '📖', label: '目录对照', bg: '#f0fdf4', category: '基础配置', catIcon: '⚙️' },
+            { key: 'audit', icon: '🔍', label: '费用审核', bg: '#fffbeb', category: '医保结算', catIcon: '💳' },
+            { key: 'report', icon: '📊', label: '对账报表', bg: '#fef2f2', category: '医保结算', catIcon: '💳' },
+            { key: 'drg', icon: '📈', label: 'DRG/DIP', bg: '#f5f3ff', category: '基础配置', catIcon: '⚙️' },
           ],
           'med-tech': [
-            { key: 'lis', icon: '🔬', label: '检验系统', bg: '#eff6ff' },
-            { key: 'pacs', icon: '📷', label: '影像系统', bg: '#f0fdf4' },
-            { key: 'pathology', icon: '🧬', label: '病理系统', bg: '#fffbeb' },
-            { key: 'ecg', icon: '💓', label: '心电系统', bg: '#fef2f2' },
-            { key: 'report', icon: '📋', label: '报告管理', bg: '#f5f3ff' },
+            { key: 'lis', icon: '🔬', label: '检验系统', bg: '#eff6ff', category: '检验管理', catIcon: '🔬' },
+            { key: 'pacs', icon: '📷', label: '影像系统', bg: '#f0fdf4', category: '影像管理', catIcon: '📷' },
+            { key: 'pathology', icon: '🧬', label: '病理系统', bg: '#fffbeb', category: '检验管理', catIcon: '🔬' },
+            { key: 'ecg', icon: '💓', label: '心电系统', bg: '#fef2f2', category: '功能检查', catIcon: '💓' },
+            { key: 'report', icon: '📋', label: '报告管理', bg: '#f5f3ff', category: '功能检查', catIcon: '💓' },
           ],
           'discharge': [
-            { key: 'admit', icon: '🏥', label: '入院登记', bg: '#eff6ff' },
-            { key: 'discharge', icon: '🚪', label: '出院办理', bg: '#f0fdf4' },
-            { key: 'transfer', icon: '🔄', label: '转科管理', bg: '#fffbeb' },
-            { key: 'bed', icon: '🛏️', label: '床位总览', bg: '#fef2f2' },
+            { key: 'admit', icon: '🏥', label: '入院登记', bg: '#eff6ff', category: '入院管理', catIcon: '🏥' },
+            { key: 'discharge', icon: '🚪', label: '出院办理', bg: '#f0fdf4', category: '出院管理', catIcon: '🚪' },
+            { key: 'transfer', icon: '🔄', label: '转科管理', bg: '#fffbeb', category: '入院管理', catIcon: '🏥' },
+            { key: 'bed', icon: '🛏️', label: '床位总览', bg: '#fef2f2', category: '出院管理', catIcon: '🚪' },
           ],
           'appointment': [
-            { key: 'booking', icon: '📅', label: '预约管理', bg: '#eff6ff' },
-            { key: 'schedule', icon: '📋', label: '排班管理', bg: '#f0fdf4' },
-            { key: 'channel', icon: '📱', label: '渠道管理', bg: '#fffbeb' },
-            { key: 'statistics', icon: '📊', label: '预约统计', bg: '#fef2f2' },
+            { key: 'booking', icon: '📅', label: '预约管理', bg: '#eff6ff', category: '预约管理', catIcon: '📅' },
+            { key: 'schedule', icon: '📋', label: '排班管理', bg: '#f0fdf4', category: '预约管理', catIcon: '📅' },
+            { key: 'channel', icon: '📱', label: '渠道管理', bg: '#fffbeb', category: '渠道管理', catIcon: '📱' },
+            { key: 'statistics', icon: '📊', label: '预约统计', bg: '#fef2f2', category: '渠道管理', catIcon: '📱' },
           ],
           'price-mgmt': [
-            { key: 'catalog', icon: '📖', label: '价目目录', bg: '#eff6ff' },
-            { key: 'adjust', icon: '💲', label: '调价管理', bg: '#f0fdf4' },
-            { key: 'audit', icon: '🔍', label: '价格审核', bg: '#fffbeb' },
-            { key: 'report', icon: '📊', label: '价格报表', bg: '#fef2f2' },
+            { key: 'catalog', icon: '📖', label: '价目目录', bg: '#eff6ff', category: '价格管理', catIcon: '💲' },
+            { key: 'adjust', icon: '💲', label: '调价管理', bg: '#f0fdf4', category: '价格管理', catIcon: '💲' },
+            { key: 'audit', icon: '🔍', label: '价格审核', bg: '#fffbeb', category: '价格管理', catIcon: '💲' },
+            { key: 'report', icon: '📊', label: '价格报表', bg: '#fef2f2', category: '价格管理', catIcon: '💲' },
           ],
           'nurse-ws': [
-            { key: 'ward', icon: '🏥', label: '病区总览', bg: '#eff6ff' },
-            { key: 'execute', icon: '💉', label: '医嘱执行', bg: '#f0fdf4' },
-            { key: 'vital', icon: '💓', label: '体征录入', bg: '#fffbeb' },
-            { key: 'nursing', icon: '📋', label: '护理记录', bg: '#fef2f2' },
-            { key: 'shift', icon: '🔄', label: '交班管理', bg: '#f5f3ff' },
-            { key: 'education', icon: '📚', label: '健康宣教', bg: '#eff6ff' },
+            { key: 'ward', icon: '🏥', label: '病区总览', bg: '#eff6ff', category: '病区管理', catIcon: '🏥' },
+            { key: 'execute', icon: '💉', label: '医嘱执行', bg: '#f0fdf4', category: '护理业务', catIcon: '💉' },
+            { key: 'vital', icon: '💓', label: '体征录入', bg: '#fffbeb', category: '护理业务', catIcon: '💉' },
+            { key: 'nursing', icon: '📋', label: '护理记录', bg: '#fef2f2', category: '护理业务', catIcon: '💉' },
+            { key: 'shift', icon: '🔄', label: '交班管理', bg: '#f5f3ff', category: '病区管理', catIcon: '🏥' },
+            { key: 'education', icon: '📚', label: '健康宣教', bg: '#eff6ff', category: '病区管理', catIcon: '🏥' },
           ],
           'nurse-pda': [
-            { key: 'scan', icon: '📱', label: '扫码核对', bg: '#eff6ff' },
-            { key: 'execute', icon: '💉', label: '执行记录', bg: '#f0fdf4' },
-            { key: 'vital', icon: '💓', label: '体征采集', bg: '#fffbeb' },
-            { key: 'identity', icon: '👤', label: '身份核验', bg: '#fef2f2' },
+            { key: 'scan', icon: '📱', label: '扫码核对', bg: '#eff6ff', category: '移动护理', catIcon: '📱' },
+            { key: 'execute', icon: '💉', label: '执行记录', bg: '#f0fdf4', category: '移动护理', catIcon: '📱' },
+            { key: 'vital', icon: '💓', label: '体征采集', bg: '#fffbeb', category: '移动护理', catIcon: '📱' },
+            { key: 'identity', icon: '👤', label: '身份核验', bg: '#fef2f2', category: '移动护理', catIcon: '📱' },
           ],
           'emr-quality': [
-            { key: 'review', icon: '📋', label: '病历审核', bg: '#eff6ff' },
-            { key: 'score', icon: '⭐', label: '质控评分', bg: '#f0fdf4' },
-            { key: 'issue', icon: '⚠️', label: '缺陷管理', bg: '#fffbeb' },
-            { key: 'report', icon: '📊', label: '质控报表', bg: '#fef2f2' },
+            { key: 'review', icon: '📋', label: '病历审核', bg: '#eff6ff', category: '质控管理', catIcon: '🏅' },
+            { key: 'score', icon: '⭐', label: '质控评分', bg: '#f0fdf4', category: '质控管理', catIcon: '🏅' },
+            { key: 'issue', icon: '⚠️', label: '缺陷管理', bg: '#fffbeb', category: '质控管理', catIcon: '🏅' },
+            { key: 'report', icon: '📊', label: '质控报表', bg: '#fef2f2', category: '质控管理', catIcon: '🏅' },
           ],
           'unipay': [
-            { key: 'payment', icon: '💳', label: '支付管理', bg: '#eff6ff' },
-            { key: 'channel', icon: '📱', label: '渠道管理', bg: '#f0fdf4' },
-            { key: 'refund', icon: '↩️', label: '退款管理', bg: '#fffbeb' },
-            { key: 'reconcile', icon: '📊', label: '对账管理', bg: '#fef2f2' },
+            { key: 'payment', icon: '💳', label: '支付管理', bg: '#eff6ff', category: '支付管理', catIcon: '💳' },
+            { key: 'channel', icon: '📱', label: '渠道管理', bg: '#f0fdf4', category: '支付管理', catIcon: '💳' },
+            { key: 'refund', icon: '↩️', label: '退款管理', bg: '#fffbeb', category: '支付管理', catIcon: '💳' },
+            { key: 'reconcile', icon: '📊', label: '对账管理', bg: '#fef2f2', category: '支付管理', catIcon: '💳' },
           ],
           'api-platform': [
-            { key: 'apis', icon: '🔗', label: '接口列表', bg: '#eff6ff' },
-            { key: 'doc', icon: '📖', label: '接口文档', bg: '#f0fdf4' },
-            { key: 'monitor', icon: '📊', label: '调用监控', bg: '#fffbeb' },
-            { key: 'key', icon: '🔑', label: '密钥管理', bg: '#fef2f2' },
+            { key: 'apis', icon: '🔗', label: '接口列表', bg: '#eff6ff', category: '接口管理', catIcon: '🔗' },
+            { key: 'doc', icon: '📖', label: '接口文档', bg: '#f0fdf4', category: '接口管理', catIcon: '🔗' },
+            { key: 'monitor', icon: '📊', label: '调用监控', bg: '#fffbeb', category: '运维监控', catIcon: '📡' },
+            { key: 'key', icon: '🔑', label: '密钥管理', bg: '#fef2f2', category: '运维监控', catIcon: '📡' },
           ],
           'data-open': [
-            { key: 'dataset', icon: '📊', label: '数据集', bg: '#eff6ff' },
-            { key: 'api', icon: '🔗', label: '数据接口', bg: '#f0fdf4' },
-            { key: 'report', icon: '📋', label: '报表中心', bg: '#fffbeb' },
-            { key: 'analysis', icon: '📈', label: '数据分析', bg: '#fef2f2' },
+            { key: 'dataset', icon: '📊', label: '数据集', bg: '#eff6ff', category: '数据管理', catIcon: '📊' },
+            { key: 'api', icon: '🔗', label: '数据接口', bg: '#f0fdf4', category: '数据管理', catIcon: '📊' },
+            { key: 'report', icon: '📋', label: '报表中心', bg: '#fffbeb', category: '数据分析', catIcon: '📈' },
+            { key: 'analysis', icon: '📈', label: '数据分析', bg: '#fef2f2', category: '数据分析', catIcon: '📈' },
           ],
           'msg-mgmt': [
-            { key: 'inbox', icon: '📥', label: '收件箱', bg: '#eff6ff' },
-            { key: 'template', icon: '📄', label: '消息模板', bg: '#f0fdf4' },
-            { key: 'channel', icon: '📱', label: '推送渠道', bg: '#fffbeb' },
-            { key: 'history', icon: '📜', label: '发送记录', bg: '#fef2f2' },
+            { key: 'inbox', icon: '📥', label: '收件箱', bg: '#eff6ff', category: '消息管理', catIcon: '💬' },
+            { key: 'template', icon: '📄', label: '消息模板', bg: '#f0fdf4', category: '消息管理', catIcon: '💬' },
+            { key: 'channel', icon: '📱', label: '推送渠道', bg: '#fffbeb', category: '消息管理', catIcon: '💬' },
+            { key: 'history', icon: '📜', label: '发送记录', bg: '#fef2f2', category: '消息管理', catIcon: '💬' },
           ],
           'tpl-platform': [
-            { key: 'templates', icon: '📄', label: '模板列表', bg: '#eff6ff' },
-            { key: 'category', icon: '📂', label: '分类管理', bg: '#f0fdf4' },
-            { key: 'preview', icon: '👁️', label: '模板预览', bg: '#fffbeb' },
+            { key: 'templates', icon: '📄', label: '模板列表', bg: '#eff6ff', category: '模板管理', catIcon: '📄' },
+            { key: 'category', icon: '📂', label: '分类管理', bg: '#f0fdf4', category: '模板管理', catIcon: '📄' },
+            { key: 'preview', icon: '👁️', label: '模板预览', bg: '#fffbeb', category: '模板管理', catIcon: '📄' },
           ],
           'rule-check': [
-            { key: 'rules', icon: '📋', label: '规则列表', bg: '#eff6ff' },
-            { key: 'execute', icon: '▶️', label: '规则执行', bg: '#f0fdf4' },
-            { key: 'result', icon: '📊', label: '校验结果', bg: '#fffbeb' },
+            { key: 'rules', icon: '📋', label: '规则列表', bg: '#eff6ff', category: '规则管理', catIcon: '🔍' },
+            { key: 'execute', icon: '▶️', label: '规则执行', bg: '#f0fdf4', category: '规则管理', catIcon: '🔍' },
+            { key: 'result', icon: '📊', label: '校验结果', bg: '#fffbeb', category: '规则管理', catIcon: '🔍' },
           ],
           'day-doctor': [
-            { key: 'patient', icon: '👥', label: '患者列表', bg: '#eff6ff' },
-            { key: 'order', icon: '📋', label: '医嘱管理', bg: '#f0fdf4' },
-            { key: 'plan', icon: '📝', label: '诊疗计划', bg: '#fffbeb' },
-            { key: 'discharge', icon: '🚪', label: '日间出院', bg: '#fef2f2' },
+            { key: 'patient', icon: '👥', label: '患者列表', bg: '#eff6ff', category: '日间诊疗', catIcon: '☀️' },
+            { key: 'order', icon: '📋', label: '医嘱管理', bg: '#f0fdf4', category: '日间诊疗', catIcon: '☀️' },
+            { key: 'plan', icon: '📝', label: '诊疗计划', bg: '#fffbeb', category: '日间诊疗', catIcon: '☀️' },
+            { key: 'discharge', icon: '🚪', label: '日间出院', bg: '#fef2f2', category: '日间诊疗', catIcon: '☀️' },
           ],
           'day-nurse': [
-            { key: 'ward', icon: '🏥', label: '病区总览', bg: '#eff6ff' },
-            { key: 'execute', icon: '💉', label: '医嘱执行', bg: '#f0fdf4' },
-            { key: 'observe', icon: '👁️', label: '观察记录', bg: '#fffbeb' },
+            { key: 'ward', icon: '🏥', label: '病区总览', bg: '#eff6ff', category: '日间护理', catIcon: '🌤️' },
+            { key: 'execute', icon: '💉', label: '医嘱执行', bg: '#f0fdf4', category: '日间护理', catIcon: '🌤️' },
+            { key: 'observe', icon: '👁️', label: '观察记录', bg: '#fffbeb', category: '日间护理', catIcon: '🌤️' },
           ],
           'print-platform': [
-            { key: 'templates', icon: '📄', label: '打印模板', bg: '#eff6ff' },
-            { key: 'queue', icon: '📋', label: '打印队列', bg: '#f0fdf4' },
-            { key: 'history', icon: '📜', label: '打印记录', bg: '#fffbeb' },
-            { key: 'settings', icon: '⚙️', label: '打印机设置', bg: '#fef2f2' },
+            { key: 'templates', icon: '📄', label: '打印模板', bg: '#eff6ff', category: '打印管理', catIcon: '🖨️' },
+            { key: 'queue', icon: '📋', label: '打印队列', bg: '#f0fdf4', category: '打印管理', catIcon: '🖨️' },
+            { key: 'history', icon: '📜', label: '打印记录', bg: '#fffbeb', category: '打印管理', catIcon: '🖨️' },
+            { key: 'settings', icon: '⚙️', label: '打印机设置', bg: '#fef2f2', category: '打印管理', catIcon: '🖨️' },
           ],
           'med-tech-dir': [
-            { key: 'catalog', icon: '📖', label: '技术目录', bg: '#eff6ff' },
-            { key: 'category', icon: '📂', label: '分类管理', bg: '#f0fdf4' },
-            { key: 'audit', icon: '🔍', label: '准入审核', bg: '#fffbeb' },
+            { key: 'catalog', icon: '📖', label: '技术目录', bg: '#eff6ff', category: '技术管理', catIcon: '📖' },
+            { key: 'category', icon: '📂', label: '分类管理', bg: '#f0fdf4', category: '技术管理', catIcon: '📖' },
+            { key: 'audit', icon: '🔍', label: '准入审核', bg: '#fffbeb', category: '技术管理', catIcon: '📖' },
           ],
           'report-card': [
-            { key: 'templates', icon: '📄', label: '报告模板', bg: '#eff6ff' },
-            { key: 'fill', icon: '✏️', label: '填报管理', bg: '#f0fdf4' },
-            { key: 'review', icon: '🔍', label: '审核管理', bg: '#fffbeb' },
-            { key: 'statistics', icon: '📊', label: '统计分析', bg: '#fef2f2' },
+            { key: 'templates', icon: '📄', label: '报告模板', bg: '#eff6ff', category: '报告管理', catIcon: '📊' },
+            { key: 'fill', icon: '✏️', label: '填报管理', bg: '#f0fdf4', category: '报告管理', catIcon: '📊' },
+            { key: 'review', icon: '🔍', label: '审核管理', bg: '#fffbeb', category: '报告管理', catIcon: '📊' },
+            { key: 'statistics', icon: '📊', label: '统计分析', bg: '#fef2f2', category: '报告管理', catIcon: '📊' },
           ],
           'hrp-high': [
-            { key: 'catalog', icon: '📖', label: '耗材目录', bg: '#eff6ff' },
-            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#f0fdf4' },
-            { key: 'stock', icon: '📦', label: '库存管理', bg: '#fffbeb' },
-            { key: 'use', icon: '💉', label: '使用记录', bg: '#fef2f2' },
-            { key: 'trace', icon: '🔍', label: '追溯管理', bg: '#f5f3ff' },
+            { key: 'catalog', icon: '📖', label: '耗材目录', bg: '#eff6ff', category: '耗材管理', catIcon: '💎' },
+            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#f0fdf4', category: '采购管理', catIcon: '🛒' },
+            { key: 'stock', icon: '📦', label: '库存管理', bg: '#fffbeb', category: '耗材管理', catIcon: '💎' },
+            { key: 'use', icon: '💉', label: '使用记录', bg: '#fef2f2', category: '耗材管理', catIcon: '💎' },
+            { key: 'trace', icon: '🔍', label: '追溯管理', bg: '#f5f3ff', category: '采购管理', catIcon: '🛒' },
           ],
           'hrp-low': [
-            { key: 'catalog', icon: '📖', label: '材料目录', bg: '#eff6ff' },
-            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#f0fdf4' },
-            { key: 'stock', icon: '📦', label: '库存管理', bg: '#fffbeb' },
-            { key: 'consume', icon: '📊', label: '消耗统计', bg: '#fef2f2' },
+            { key: 'catalog', icon: '📖', label: '材料目录', bg: '#eff6ff', category: '材料管理', catIcon: '📎' },
+            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#f0fdf4', category: '采购管理', catIcon: '🛒' },
+            { key: 'stock', icon: '📦', label: '库存管理', bg: '#fffbeb', category: '材料管理', catIcon: '📎' },
+            { key: 'consume', icon: '📊', label: '消耗统计', bg: '#fef2f2', category: '材料管理', catIcon: '📎' },
           ],
           'hrp-logistics': [
-            { key: 'catalog', icon: '📖', label: '物资目录', bg: '#eff6ff' },
-            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#f0fdf4' },
-            { key: 'stock', icon: '📦', label: '库存管理', bg: '#fffbeb' },
-            { key: 'maintenance', icon: '🔧', label: '维修管理', bg: '#fef2f2' },
+            { key: 'catalog', icon: '📖', label: '物资目录', bg: '#eff6ff', category: '后勤物资', catIcon: '🚚' },
+            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#f0fdf4', category: '采购管理', catIcon: '🛒' },
+            { key: 'stock', icon: '📦', label: '库存管理', bg: '#fffbeb', category: '后勤物资', catIcon: '🚚' },
+            { key: 'maintenance', icon: '🔧', label: '维修管理', bg: '#fef2f2', category: '后勤物资', catIcon: '🚚' },
           ],
           'quality-platform': [
-            { key: 'indicators', icon: '📊', label: '指标体系', bg: '#eff6ff' },
-            { key: 'monitor', icon: '📈', label: '实时监控', bg: '#f0fdf4' },
-            { key: 'alert', icon: '⚠️', label: '预警管理', bg: '#fffbeb' },
-            { key: 'report', icon: '📋', label: '质量报表', bg: '#fef2f2' },
+            { key: 'indicators', icon: '📊', label: '指标体系', bg: '#eff6ff', category: '质量管理', catIcon: '🏅' },
+            { key: 'monitor', icon: '📈', label: '实时监控', bg: '#f0fdf4', category: '质量管理', catIcon: '🏅' },
+            { key: 'alert', icon: '⚠️', label: '预警管理', bg: '#fffbeb', category: '质量管理', catIcon: '🏅' },
+            { key: 'report', icon: '📋', label: '质量报表', bg: '#fef2f2', category: '质量管理', catIcon: '🏅' },
           ],
           'interop': [
-            { key: 'standard', icon: '📐', label: '测评标准', bg: '#eff6ff' },
-            { key: 'test', icon: '🧪', label: '测试管理', bg: '#f0fdf4' },
-            { key: 'result', icon: '📊', label: '测评结果', bg: '#fffbeb' },
-            { key: 'improve', icon: '📈', label: '改进跟踪', bg: '#fef2f2' },
+            { key: 'standard', icon: '📐', label: '测评标准', bg: '#eff6ff', category: '互联互通', catIcon: '🔄' },
+            { key: 'test', icon: '🧪', label: '测试管理', bg: '#f0fdf4', category: '互联互通', catIcon: '🔄' },
+            { key: 'result', icon: '📊', label: '测评结果', bg: '#fffbeb', category: '互联互通', catIcon: '🔄' },
+            { key: 'improve', icon: '📈', label: '改进跟踪', bg: '#fef2f2', category: '互联互通', catIcon: '🔄' },
           ],
           'quality-eval': [
-            { key: 'plan', icon: '📋', label: '评价计划', bg: '#eff6ff' },
-            { key: 'execute', icon: '▶️', label: '评价执行', bg: '#f0fdf4' },
-            { key: 'result', icon: '📊', label: '评价结果', bg: '#fffbeb' },
-            { key: 'track', icon: '📈', label: '整改跟踪', bg: '#fef2f2' },
+            { key: 'plan', icon: '📋', label: '评价计划', bg: '#eff6ff', category: '质量评价', catIcon: '⭐' },
+            { key: 'execute', icon: '▶️', label: '评价执行', bg: '#f0fdf4', category: '质量评价', catIcon: '⭐' },
+            { key: 'result', icon: '📊', label: '评价结果', bg: '#fffbeb', category: '质量评价', catIcon: '⭐' },
+            { key: 'track', icon: '📈', label: '整改跟踪', bg: '#fef2f2', category: '质量评价', catIcon: '⭐' },
           ],
           'med-qual': [
-            { key: 'apply', icon: '📝', label: '申请管理', bg: '#eff6ff' },
-            { key: 'review', icon: '🔍', label: '审核管理', bg: '#f0fdf4' },
-            { key: 'cert', icon: '📜', label: '资质证书', bg: '#fffbeb' },
-            { key: 'alert', icon: '⚠️', label: '到期预警', bg: '#fef2f2' },
+            { key: 'apply', icon: '📝', label: '申请管理', bg: '#eff6ff', category: '资质管理', catIcon: '✅' },
+            { key: 'review', icon: '🔍', label: '审核管理', bg: '#f0fdf4', category: '资质管理', catIcon: '✅' },
+            { key: 'cert', icon: '📜', label: '资质证书', bg: '#fffbeb', category: '资质管理', catIcon: '✅' },
+            { key: 'alert', icon: '⚠️', label: '到期预警', bg: '#fef2f2', category: '资质管理', catIcon: '✅' },
           ],
           'invoice': [
-            { key: 'issue', icon: '🧾', label: '开票管理', bg: '#eff6ff' },
-            { key: 'verify', icon: '🔍', label: '验真管理', bg: '#f0fdf4' },
-            { key: 'archive', icon: '📦', label: '归档管理', bg: '#fffbeb' },
-            { key: 'report', icon: '📊', label: '票据报表', bg: '#fef2f2' },
+            { key: 'issue', icon: '🧾', label: '开票管理', bg: '#eff6ff', category: '票据管理', catIcon: '🧾' },
+            { key: 'verify', icon: '🔍', label: '验真管理', bg: '#f0fdf4', category: '票据管理', catIcon: '🧾' },
+            { key: 'archive', icon: '📦', label: '归档管理', bg: '#fffbeb', category: '票据管理', catIcon: '🧾' },
+            { key: 'report', icon: '📊', label: '票据报表', bg: '#fef2f2', category: '票据管理', catIcon: '🧾' },
           ],
           'outpatient': [
-            { key: 'register', icon: '📋', label: '门诊挂号', bg: '#eff6ff' },
-            { key: 'doctor', icon: '🩺', label: '门诊医生', bg: '#f0fdf4' },
-            { key: 'fee', icon: '💳', label: '门诊收费', bg: '#fffbeb' },
-            { key: 'pharmacy', icon: '💊', label: '门诊药房', bg: '#fef2f2' },
-            { key: 'aux', icon: '🔬', label: '门诊辅诊', bg: '#f5f3ff' },
+            { key: 'register', icon: '📋', label: '门诊挂号', bg: '#eff6ff', category: '门急诊', catIcon: '🏥' },
+            { key: 'doctor', icon: '🩺', label: '门诊医生', bg: '#f0fdf4', category: '门急诊', catIcon: '🏥' },
+            { key: 'fee', icon: '💳', label: '门诊收费', bg: '#fffbeb', category: '门急诊', catIcon: '🏥' },
+            { key: 'pharmacy', icon: '💊', label: '门诊药房', bg: '#fef2f2', category: '门急诊', catIcon: '🏥' },
+            { key: 'aux', icon: '🔬', label: '门诊辅诊', bg: '#f5f3ff', category: '门急诊', catIcon: '🏥' },
           ],
           'inpatient': [
-            { key: 'admit', icon: '🏥', label: '入院管理', bg: '#eff6ff' },
-            { key: 'doctor', icon: '📝', label: '住院医生', bg: '#f0fdf4' },
-            { key: 'nurse', icon: '💉', label: '住院护士', bg: '#fffbeb' },
-            { key: 'fee', icon: '💰', label: '住院收费', bg: '#fef2f2' },
-            { key: 'discharge', icon: '🚪', label: '出院管理', bg: '#f5f3ff' },
+            { key: 'admit', icon: '🏥', label: '入院管理', bg: '#eff6ff', category: '住院管理', catIcon: '🛏️' },
+            { key: 'doctor', icon: '📝', label: '住院医生', bg: '#f0fdf4', category: '住院管理', catIcon: '🛏️' },
+            { key: 'nurse', icon: '💉', label: '住院护士', bg: '#fffbeb', category: '住院管理', catIcon: '🛏️' },
+            { key: 'fee', icon: '💰', label: '住院收费', bg: '#fef2f2', category: '住院管理', catIcon: '🛏️' },
+            { key: 'discharge', icon: '🚪', label: '出院管理', bg: '#f5f3ff', category: '住院管理', catIcon: '🛏️' },
           ],
           'emr': [
-            { key: 'editor', icon: '📝', label: '病历编辑', bg: '#eff6ff' },
-            { key: 'template', icon: '📄', label: '模板管理', bg: '#f0fdf4' },
-            { key: 'quality', icon: '🏅', label: '质量控制', bg: '#fffbeb' },
-            { key: 'archive', icon: '📦', label: '归档管理', bg: '#fef2f2' },
+            { key: 'editor', icon: '📝', label: '病历编辑', bg: '#eff6ff', category: '电子病历', catIcon: '📋' },
+            { key: 'template', icon: '📄', label: '模板管理', bg: '#f0fdf4', category: '电子病历', catIcon: '📋' },
+            { key: 'quality', icon: '🏅', label: '质量控制', bg: '#fffbeb', category: '电子病历', catIcon: '📋' },
+            { key: 'archive', icon: '📦', label: '归档管理', bg: '#fef2f2', category: '电子病历', catIcon: '📋' },
           ],
           'pharmacy': [
-            { key: 'store', icon: '📦', label: '药库管理', bg: '#eff6ff' },
-            { key: 'dispense', icon: '💊', label: '药房管理', bg: '#f0fdf4' },
-            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#fffbeb' },
-            { key: 'monitor', icon: '📊', label: '用药监控', bg: '#fef2f2' },
+            { key: 'store', icon: '📦', label: '药库管理', bg: '#eff6ff', category: '药品管理', catIcon: '💊' },
+            { key: 'dispense', icon: '💊', label: '药房管理', bg: '#f0fdf4', category: '药品管理', catIcon: '💊' },
+            { key: 'purchase', icon: '🛒', label: '采购管理', bg: '#fffbeb', category: '采购管理', catIcon: '🛒' },
+            { key: 'monitor', icon: '📊', label: '用药监控', bg: '#fef2f2', category: '药品管理', catIcon: '💊' },
           ],
           'fee': [
-            { key: 'outpatient', icon: '📋', label: '门诊收费', bg: '#eff6ff' },
-            { key: 'inpatient', icon: '💰', label: '住院收费', bg: '#f0fdf4' },
-            { key: 'settle', icon: '💳', label: '结算管理', bg: '#fffbeb' },
-            { key: 'report', icon: '📊', label: '财务报表', bg: '#fef2f2' },
+            { key: 'outpatient', icon: '📋', label: '门诊收费', bg: '#eff6ff', category: '收费管理', catIcon: '💳' },
+            { key: 'inpatient', icon: '💰', label: '住院收费', bg: '#f0fdf4', category: '收费管理', catIcon: '💳' },
+            { key: 'settle', icon: '💳', label: '结算管理', bg: '#fffbeb', category: '结算管理', catIcon: '💰' },
+            { key: 'report', icon: '📊', label: '财务报表', bg: '#fef2f2', category: '结算管理', catIcon: '💰' },
           ],
         };
 
         // 默认菜单（未定义具体菜单的子系统）
         const defaultMenu = [
-          { key: 'home', icon: '🏠', label: '模块首页', bg: '#eff6ff' },
-          { key: 'list', icon: '📋', label: '数据列表', bg: '#f0fdf4' },
-          { key: 'add', icon: '➕', label: '新增数据', bg: '#fffbeb' },
-          { key: 'report', icon: '📊', label: '统计报表', bg: '#fef2f2' },
-          { key: 'settings', icon: '⚙️', label: '模块设置', bg: '#f5f3ff' },
+          { key: 'home', icon: '🏠', label: '模块首页', bg: '#eff6ff', category: '模块功能', catIcon: '📋' },
+          { key: 'list', icon: '📋', label: '数据列表', bg: '#f0fdf4', category: '模块功能', catIcon: '📋' },
+          { key: 'add', icon: '➕', label: '新增数据', bg: '#fffbeb', category: '数据管理', catIcon: '📊' },
+          { key: 'report', icon: '📊', label: '统计报表', bg: '#fef2f2', category: '数据管理', catIcon: '📊' },
+          { key: 'settings', icon: '⚙️', label: '模块设置', bg: '#f5f3ff', category: '模块功能', catIcon: '📋' },
         ];
 
         const currentSubsysMenus = computed(() => {
           return subsysMenusMap[currentView.value] || defaultMenu;
+        });
+
+        // 将菜单按分类分组（用于气泡弹出框）
+        const currentSubsysMenuGroups = computed(() => {
+          const menus = currentSubsysMenus.value;
+          const groupMap = {};
+          menus.forEach(item => {
+            const cat = item.category || '其他';
+            if (!groupMap[cat]) {
+              groupMap[cat] = { category: cat, icon: item.catIcon || '📋', items: [] };
+            }
+            groupMap[cat].items.push(item);
+          });
+          return Object.values(groupMap);
         });
 
         // 进入子系统时默认选中第一个菜单
@@ -1169,6 +1347,27 @@
           { title: '医保接口升级通知', content: '根据国家医保局最新要求，系统将于本月底完成医保接口升级，届时将支持 DRG/DIP 付费模式。请各科室做好准备。', date: '2026-05-08', author: '信息科' },
         ];
 
+        // 子系统仪表盘数据
+        const subsysStats = [
+          { icon: '📋', value: '1,286', label: '今日处理量', bg: '#eff6ff', color: '#3b82f6' },
+          { icon: '✅', value: '96.8%', label: '完成率', bg: '#f0fdf4', color: '#22c55e' },
+          { icon: '⏱️', value: '18分', label: '平均处理时长', bg: '#fffbeb', color: '#f59e0b' },
+          { icon: '⚠️', value: '12', label: '待处理事项', bg: '#fef2f2', color: '#ef4444' },
+        ];
+        const recentOps = [
+          { text: '张伟 完成了患者李某的医嘱开具', time: '10分钟前', color: '#22c55e' },
+          { text: '系统自动备份已完成', time: '30分钟前', color: '#3b82f6' },
+          { text: '王丽 提交了护理记录', time: '1小时前', color: '#22c55e' },
+          { text: '药品库存预警：阿莫西林库存不足', time: '2小时前', color: '#f59e0b' },
+          { text: '新员工赵六权限配置已审批通过', time: '3小时前', color: '#22c55e' },
+        ];
+        const subsysTodos = [
+          { text: '急诊科 3 床患者会诊申请待处理', tag: '紧急', tagBg: '#fef2f2', tagColor: '#ef4444', color: '#ef4444' },
+          { text: '5 份病历待质控审核', tag: '待办', tagBg: '#fffbeb', tagColor: '#f59e0b', color: '#f59e0b' },
+          { text: '明日手术室排班需确认', tag: '通知', tagBg: '#eff6ff', tagColor: '#3b82f6', color: '#3b82f6' },
+          { text: '月度运营报表待生成', tag: '待办', tagBg: '#fffbeb', tagColor: '#f59e0b', color: '#f59e0b' },
+        ];
+
         // 子系统定义
         const userColumns = [
           { prop: 'employeeNo', label: '工号', width: 100 },
@@ -1255,8 +1454,9 @@
         return {
           userName, currentView, currentTime, currentDate, fullDate,
           showUserMenu, showAllApps, showSubsysMenu, currentSubMenuItem,
-          isInSubsystem, currentSubsys, currentSubsysMenus,
+          isInSubsystem, currentSubsys, currentSubsysMenus, currentSubsysMenuGroups,
           sideNavItems, appList, displayedApps, todoList, messageList, noticeList,
+          subsysStats, recentOps, subsysTodos,
           allSubsystems, openSubsystem, goHome, handleLogout,
         };
       }

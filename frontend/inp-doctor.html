@@ -60,6 +60,33 @@
 
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
     .fade-in{animation:fadeIn .3s ease}
+
+    /* 仪表盘 */
+    .subsys-dashboard{padding:28px;overflow-y:auto;flex:1}
+    .subsys-dashboard-header{margin-bottom:24px}
+    .subsys-dashboard-header h2{font-size:22px;font-weight:700;color:#1e293b;margin-bottom:6px}
+    .subsys-dashboard-header p{font-size:14px;color:#94a3b8}
+    .subsys-quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+    .subsys-quick-card{background:#fff;border:1px solid #e8ecf1;border-radius:14px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .25s}
+    .subsys-quick-card:hover{border-color:#93c5fd;transform:translateY(-3px);box-shadow:0 8px 24px rgba(59,130,246,.1)}
+    .subsys-quick-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+    .subsys-quick-card span{font-size:13px;font-weight:500;color:#334155}
+    .subsys-stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:24px}
+    .subsys-stat-card{background:#fff;border:1px solid #e8ecf1;border-radius:14px;padding:18px;display:flex;align-items:center;gap:14px;transition:all .2s}
+    .subsys-stat-card:hover{border-color:#c7d2fe;box-shadow:0 4px 12px rgba(0,0,0,.04)}
+    .subsys-stat-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px}
+    .subsys-stat-value{font-size:22px;font-weight:700;color:#1e293b}
+    .subsys-stat-label{font-size:13px;color:#94a3b8;margin-top:3px}
+    .subsys-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .subsys-panel{background:#fff;border:1px solid #e8ecf1;border-radius:14px;overflow:hidden}
+    .subsys-panel-header{padding:14px 18px;font-size:15px;font-weight:600;color:#1e293b;border-bottom:1px solid #f1f5f9}
+    .subsys-panel-body{padding:6px 18px}
+    .subsys-panel-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f8fafc}
+    .subsys-panel-item:last-child{border-bottom:none}
+    .subsys-panel-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .subsys-panel-text{flex:1;font-size:13px;color:#334155}
+    .subsys-panel-time{font-size:12px;color:#94a3b8;flex-shrink:0}
+    .subsys-panel-tag{font-size:11px;padding:2px 8px;border-radius:5px;flex-shrink:0;font-weight:500}
   </style>
 </head>
 <body>
@@ -88,13 +115,38 @@
     </div>
   </div>
 
-  <!-- 欢迎页 -->
+  <!-- 仪表盘首页 -->
   <div class="main-content" v-if="!activeItem">
-    <div class="welcome-page fade-in">
-      <div class="welcome-icon">📋</div>
-      <div class="welcome-title">住院医生站</div>
-      <div class="welcome-desc">请点击右上角 <b style="color:#4a6cf7;">☰ 菜单图标</b> 选择功能模块</div>
-      <div class="welcome-hint">快捷键 <kbd>Ctrl</kbd> + <kbd>M</kbd> 打开菜单</div>
+    <div class="subsys-dashboard fade-in">
+      <div class="subsys-dashboard-header">
+        <h2>📋 住院医生站</h2>
+        <p>欢迎使用住院医生站，以下是模块概览</p>
+      </div>
+      <div class="subsys-quick-grid">
+        <div class="subsys-quick-card" v-for="g in menuData.slice(0,6)" :key="g.key" @click="$refs.menuRef.visible=false;onMenuSelect({key:g.items[0].key,groupLabel:g.label,itemLabel:g.items[0].label})">
+          <div class="subsys-quick-icon" style="background:#eff6ff">{{ g.icon }}</div>
+          <span>{{ g.label }}</span>
+        </div>
+      </div>
+      <div class="subsys-stats-grid">
+        <div class="subsys-stat-card"><div class="subsys-stat-icon" style="background:#eff6ff;color:#3b82f6">👥</div><div><div class="subsys-stat-value">128</div><div class="subsys-stat-label">在院患者</div></div></div>
+        <div class="subsys-stat-card"><div class="subsys-stat-icon" style="background:#f0fdf4;color:#22c55e">📋</div><div><div class="subsys-stat-value">356</div><div class="subsys-stat-label">今日医嘱</div></div></div>
+        <div class="subsys-stat-card"><div class="subsys-stat-icon" style="background:#fffbeb;color:#f59e0b">🔪</div><div><div class="subsys-stat-value">12</div><div class="subsys-stat-label">今日手术</div></div></div>
+        <div class="subsys-stat-card"><div class="subsys-stat-icon" style="background:#fef2f2;color:#ef4444">⚠️</div><div><div class="subsys-stat-value">5</div><div class="subsys-stat-label">待处理事项</div></div></div>
+      </div>
+      <div class="subsys-bottom-grid">
+        <div class="subsys-panel"><div class="subsys-panel-header">📋 最近操作</div><div class="subsys-panel-body">
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#22c55e"></div><div class="subsys-panel-text">张伟 完成了患者李某的医嘱开具</div><div class="subsys-panel-time">10分钟前</div></div>
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#3b82f6"></div><div class="subsys-panel-text">王丽 提交了护理记录</div><div class="subsys-panel-time">30分钟前</div></div>
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#f59e0b"></div><div class="subsys-panel-text">手术室排班已更新</div><div class="subsys-panel-time">1小时前</div></div>
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#22c55e"></div><div class="subsys-panel-text">新入院患者陈某已分配床位</div><div class="subsys-panel-time">2小时前</div></div>
+        </div></div>
+        <div class="subsys-panel"><div class="subsys-panel-header">📌 待办事项</div><div class="subsys-panel-body">
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#ef4444"></div><div class="subsys-panel-text">急诊科 3 床会诊申请待处理</div><div class="subsys-panel-tag" style="background:#fef2f2;color:#ef4444">紧急</div></div>
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#f59e0b"></div><div class="subsys-panel-text">5 份病历待质控审核</div><div class="subsys-panel-tag" style="background:#fffbeb;color:#f59e0b">待办</div></div>
+          <div class="subsys-panel-item"><div class="subsys-panel-dot" style="background:#3b82f6"></div><div class="subsys-panel-text">明日手术室排班需确认</div><div class="subsys-panel-tag" style="background:#eff6ff;color:#3b82f6">通知</div></div>
+        </div></div>
+      </div>
     </div>
   </div>
 
