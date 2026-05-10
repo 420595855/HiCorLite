@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HiCorLite - 主数据管理系统</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+      background: #f0f2f5;
+      font-size: 14px;
+    }
+    #app { height: 100%; display: flex; flex-direction: column; }
+
+    /* ===== 顶部导航栏 ===== */
+    .topbar {
+      height: 56px;
+      background: linear-gradient(90deg, #4a6cf7 0%, #6366f1 50%, #8b5cf6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+      z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 16px; }
+    .logo-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .logo-area img { height: 32px; }
+    .logo-title { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-left: 20px; }
+    .breadcrumb-item { color: rgba(255,255,255,0.6); font-size: 13px; }
+    .breadcrumb-sep { color: rgba(255,255,255,0.3); }
+    .breadcrumb-current { color: #fff; font-size: 14px; font-weight: 500; }
+    .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.7); transition: all 0.2s; }
+    .topbar-icon:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .user-area { display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 20px; cursor: pointer; transition: background 0.2s; }
+    .user-area:hover { background: rgba(255,255,255,0.15); }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #60a5fa, #34d399); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; }
+    .user-name { color: #fff; font-size: 14px; }
+
+    /* ===== 主体布局 ===== */
+    .main-layout {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ===== 左侧菜单 ===== */
+    .sidebar {
+      width: 240px;
+      background: #fff;
+      border-right: 1px solid #e8ecf1;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* 搜索框 */
+    .sidebar-search {
+      padding: 16px 14px 12px;
+      border-bottom: 1px solid #f0f2f5;
+      flex-shrink: 0;
+    }
+    .search-input-wrap {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      border-radius: 6px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .search-input-wrap:focus-within { border-color: #4a6cf7; }
+    .search-input-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: #303133;
+      background: transparent;
+    }
+    .search-input-wrap input::placeholder { color: #c0c4cc; }
+    .search-btn {
+      padding: 8px 14px;
+      background: #ecf5ff;
+      color: #409eff;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .search-btn:hover { background: #d9ecff; }
+
+    /* 菜单列表 */
+    .menu-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .menu-list::-webkit-scrollbar { width: 4px; }
+    .menu-list::-webkit-scrollbar-thumb { background: #dcdfe6; border-radius: 2px; }
+
+    /* 模块组 */
+    .menu-group { margin-bottom: 2px; }
+
+    /* 模块标题（一级） */
+    .menu-group-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px 10px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      position: relative;
+    }
+    .menu-group-title:hover { background: #f5f7fa; }
+    .menu-group-title .menu-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .menu-group-title .menu-icon svg { width: 16px; height: 16px; }
+    .menu-group-title .menu-label {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: #3370ff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .menu-group-title .expand-arrow {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c0c4cc;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .menu-group-title .expand-arrow.expanded { transform: rotate(90deg); }
+
+    /* 子项（二级） */
+    .menu-children { overflow: hidden; }
+    .menu-child-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px 9px 42px;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .menu-child-item:hover { background: #f5f7fa; }
+    .menu-child-item.active {
+      background: #ecf5ff;
+    }
+    .menu-child-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: #409eff;
+      border-radius: 0 3px 3px 0;
+    }
+    .menu-child-item .child-icon {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .menu-child-item .child-icon svg { width: 14px; height: 14px; }
+    .menu-child-item .child-label {
+      font-size: 13px;
+      color: #606266;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .menu-child-item.active .child-label {
+      color: #303133;
+      font-weight: 500;
+    }
+
+    /* 三级子项 */
+    .menu-sub-children { overflow: hidden; }
+    .menu-sub-child-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px 8px 68px;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .menu-sub-child-item:hover { background: #f5f7fa; }
+    .menu-sub-child-item.active {
+      background: #ecf5ff;
+    }
+    .menu-sub-child-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3px;
+      background: #409eff;
+      border-radius: 0 3px 3px 0;
+    }
+    .menu-sub-child-item .sub-child-label {
+      font-size: 13px;
+      color: #909399;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .menu-sub-child-item.active .sub-child-label {
+      color: #303133;
+      font-weight: 500;
+    }
+
+    /* ===== 右侧内容区 ===== */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #f0f2f5;
+    }
+
+    /* 内容头部 */
+    .content-header {
+      padding: 16px 24px 12px;
+      background: #fff;
+      border-bottom: 1px solid #e8ecf1;
+      flex-shrink: 0;
+    }
+    .content-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 12px;
+    }
+
+    /* 搜索/筛选区 */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* 工具栏 */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      background: #fff;
+      border-bottom: 1px solid #e8ecf1;
+      flex-shrink: 0;
+    }
+    .toolbar-left { display: flex; gap: 10px; }
+    .toolbar-right { display: flex; gap: 10px; }
+
+    /* 表格区 */
+    .table-area {
+      flex: 1;
+      padding: 16px 24px;
+      overflow-y: auto;
+    }
+    .table-area::-webkit-scrollbar { width: 6px; }
+    .table-area::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 3px; }
+
+    /* 分页 */
+    .pagination-bar {
+      padding: 12px 24px;
+      background: #fff;
+      border-top: 1px solid #e8ecf1;
+      display: flex;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    /* 空状态 */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 40px;
+      color: #94a3b8;
+    }
+    .empty-icon { font-size: 56px; margin-bottom: 16px; opacity: 0.6; }
+    .empty-title { font-size: 17px; color: #606266; margin-bottom: 8px; }
+    .empty-desc { font-size: 14px; color: #94a3b8; }
+
+    /* 动画 */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.3s ease; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部导航 -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="logo-area" onclick="window.location.href='index.html'">
+          <img src="logo_icon.png" alt="HiCorLite">
+          <span class="logo-title">HiCorLite</span>
+        </div>
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">总控中心</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current">主数据管理系统</span>
+          <template v-if="currentChild">
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-current">{{ currentChild }}</span>
+          </template>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-icon" title="返回首页" onclick="window.location.href='index.html'">
+          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v320c0 17.7 14.3 32 32 32h256V736h128v256h256c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.2z"/></svg>
+        </div>
+        <div class="topbar-icon" title="消息">
+          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/></svg>
+        </div>
+        <div class="user-area">
+          <div class="user-avatar">管</div>
+          <span class="user-name">管理员</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-layout">
+      <!-- 左侧菜单 -->
+      <div class="sidebar">
+        <!-- 搜索框 -->
+        <div class="sidebar-search">
+          <div class="search-input-wrap">
+            <input type="text" v-model="searchText" placeholder="搜索菜单..." @input="onSearch">
+            <button class="search-btn" @click="onSearch">搜索</button>
+          </div>
+        </div>
+
+        <!-- 菜单列表 -->
+        <div class="menu-list">
+          <template v-for="group in filteredMenu" :key="group.key">
+            <div class="menu-group">
+              <!-- 一级：模块名称 -->
+              <div class="menu-group-title" @click="toggleGroup(group.key)">
+                <span class="menu-icon" v-html="group.iconSvg"></span>
+                <span class="menu-label">{{ group.label }}</span>
+                <span class="expand-arrow" :class="{ expanded: expandedGroups.includes(group.key) }">
+                  <svg viewBox="0 0 1024 1024" width="12" height="12"><path fill="currentColor" d="M384 192v640l384-320z"/></svg>
+                </span>
+              </div>
+
+              <!-- 二级子项 -->
+              <div class="menu-children" v-show="expandedGroups.includes(group.key)">
+                <template v-for="child in group.children" :key="child.key">
+                  <div>
+                    <div class="menu-child-item"
+                      :class="{ active: activeItem === child.key }"
+                      @click="selectItem(group.key, child.key)">
+                      <span class="child-icon" v-html="child.iconSvg || group.defaultChildIcon"></span>
+                      <span class="child-label">{{ child.label }}</span>
+                    </div>
+
+                    <!-- 三级子项 -->
+                    <div class="menu-sub-children" v-if="child.children && child.children.length">
+                      <div class="menu-sub-child-item"
+                        v-for="sub in child.children"
+                        :key="sub.key"
+                        :class="{ active: activeItem === sub.key }"
+                        @click="selectItem(group.key, sub.key)">
+                        <span class="sub-child-label">{{ sub.label }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- 右侧内容区 -->
+      <div class="content-area">
+        <div class="content-header">
+          <h2>{{ currentTitle }}</h2>
+          <div class="filter-bar">
+            <el-input v-model="filterKeyword" :placeholder="'搜索' + currentTitle + '...'" style="width:280px;" clearable />
+            <el-select placeholder="状态" style="width:120px;" clearable>
+              <el-option label="全部" value="" />
+              <el-option label="启用" value="1" />
+              <el-option label="停用" value="0" />
+            </el-select>
+            <el-button type="primary">查询</el-button>
+            <el-button>重置</el-button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <el-button type="primary">+ 新增</el-button>
+            <el-button>批量导入</el-button>
+          </div>
+          <div class="toolbar-right">
+            <el-button>导出</el-button>
+            <el-button>打印</el-button>
+          </div>
+        </div>
+
+        <!-- 表格区域 -->
+        <div class="table-area" v-if="currentTableData.length">
+          <el-table :data="currentTableData" stripe border style="width:100%" :header-cell-style="{ background:'#f5f7fa', color:'#303133', fontWeight:'600' }">
+            <el-table-column v-for="col in currentColumns" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
+            <el-table-column label="状态" width="80" fixed="right">
+              <template #default="scope">
+                <el-tag :type="scope.row.status === '启用' ? 'success' : 'info'" size="small">{{ scope.row.status }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="160" fixed="right">
+              <template #default>
+                <el-button type="primary" link size="small">编辑</el-button>
+                <el-button type="danger" link size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <!-- 空状态 -->
+        <div class="empty-state fade-in" v-else>
+          <div class="empty-icon">📂</div>
+          <div class="empty-title">{{ currentTitle }}</div>
+          <div class="empty-desc">功能模块开发中，敬请期待</div>
+        </div>
+
+        <!-- 分页 -->
+        <div class="pagination-bar" v-if="currentTableData.length">
+          <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10, 20, 50]" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+  <script>
+    const { createApp, ref, computed, watch } = Vue;
+
+    // SVG 图标定义
+    const icons = {
+      grid: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136V232h752v560z"/><path fill="#909399" d="M304 456h80v80h-80zm0 0"/><path fill="#909399" d="M304 456h80v80h-80zm0 0"/></svg>',
+      gridBlue: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#3370ff" d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136V232h752v560z"/></svg>',
+      folder: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M880 298.4H521L403.7 186.2c-1.5-1.4-3.5-2.2-5.5-2.2H144c-17.7 0-32 14.3-32 32v592c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V330.4c0-17.7-14.3-32-32-32zM840 768H184V256h256l112 112H840v400z"/></svg>',
+      tcm: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/><path fill="#909399" d="M512 288c-17.7 0-32 14.3-32 32v160H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h160v160c0 17.7 14.3 32 32 32s32-14.3 32-32V544h160c17.7 0 32-14.3 32-32s-14.3-32-32-32H544V320c0-17.7-14.3-32-32-32z"/></svg>',
+      users: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M678.3 642.4c24.2-13 51.9-20.4 81.4-20.4h61.1c17.7 0 32-14.3 32-32v-64c0-17.7-14.3-32-32-32h-61.1c-52.3 0-100.8 25.6-130.3 68-16.8 24.3-45 39.8-75.8 39.8h-16.6c-30.8 0-59-15.5-75.8-39.8C511.2 427.6 462.7 402 410.4 402h-61.1c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32h61.1c29.5 0 57.2 7.4 81.4 20.4 23.2 12.5 40 32.7 47.2 56.4h-16.6c-26 0-47.2 21.1-47.2 47.2v23.6c0 8.8 7.2 16 16 16h160.8c8.8 0 16-7.2 16-16v-23.6c0-26-21.1-47.2-47.2-47.2h-16.6c7.2-23.7 24-43.9 47.2-56.4zM512 616c-48.5 0-88-39.4-88-88s39.4-88 88-88 88 39.4 88 88-39.5 88-88 88z"/><path fill="#909399" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 152c79.5 0 144 64.5 144 144s-64.5 144-144 144-144-64.5-144-144 64.5-144 144-144z"/></svg>',
+    };
+
+    // 四方块图标（通用）
+    const gridIcon = icons.grid;
+    const gridIconBlue = icons.gridBlue;
+    const folderIcon = icons.folder;
+
+    const menuData = [
+      {
+        key: 'legal-person',
+        label: '多法人管理',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'legal-person-mgmt', label: '多法人管理', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'disease-class',
+        label: '疾病分类',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'disease-class-mgmt', label: '疾病分类', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'data-element',
+        label: '数据元',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'data-element-mgmt', label: '数据元', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'tcm-disease',
+        label: '中医疾病分类',
+        iconSvg: icons.tcm,
+        defaultChildIcon: icons.tcm,
+        children: [
+          { key: 'tcm-disease-mgmt', label: '中医疾病分类', iconSvg: icons.tcm },
+        ]
+      },
+      {
+        key: 'surgery-grade',
+        label: '手术分级',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'surgery-grade-mgmt', label: '手术分级', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'person-category',
+        label: '人员类别',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'person-class', label: '人员分类维护', iconSvg: gridIcon },
+          { key: 'dept-person', label: '科室分管人员维护', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'treatment-dir',
+        label: '诊疗目录',
+        iconSvg: folderIcon,
+        defaultChildIcon: folderIcon,
+        children: [
+          { key: 'treatment-item', label: '诊疗项目管理', iconSvg: folderIcon },
+        ]
+      },
+      {
+        key: 'organization',
+        label: '组织机构',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'org-mgmt', label: '组织机构', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'code-table',
+        label: '通用码表',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'general-code', label: '通用码表', iconSvg: gridIcon },
+          { key: 'national-code', label: '国标码表', iconSvg: gridIcon },
+          { key: 'industry-code', label: '行标码表', iconSvg: gridIcon },
+          { key: 'hospital-code', label: '院标码表', iconSvg: gridIcon },
+          { key: 'local-code', label: '地标码表', iconSvg: gridIcon },
+          { key: 'sengbohui-code', label: '盛博汇标码表', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'user-mgmt',
+        label: '用户管理',
+        iconSvg: icons.users,
+        defaultChildIcon: icons.users,
+        children: [
+          { key: 'hospital-staff', label: '医院职工管理', iconSvg: gridIconBlue },
+          { key: 'sansheng-staff', label: '三生人员管理', iconSvg: icons.users },
+          { key: 'sansheng-dept', label: '三生科室分布', iconSvg: icons.users },
+          { key: 'other-staff', label: '其他人员管理', iconSvg: icons.users },
+        ]
+      },
+      {
+        key: 'district',
+        label: '行政区划',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'district-mgmt', label: '行政区划', iconSvg: gridIcon },
+        ]
+      },
+      {
+        key: 'specialty',
+        label: '专科类别',
+        iconSvg: gridIcon,
+        defaultChildIcon: gridIcon,
+        children: [
+          { key: 'specialty-mgmt', label: '专科类别', iconSvg: gridIcon },
+        ]
+      },
+    ];
+
+    // 模拟表格数据
+    const tableDataMap = {
+      'hospital-staff': {
+        columns: [
+          { prop: 'employeeNo', label: '工号', width: 90 },
+          { prop: 'name', label: '姓名', width: 90 },
+          { prop: 'gender', label: '性别', width: 60 },
+          { prop: 'dept', label: '科室', width: 130 },
+          { prop: 'position', label: '职务', width: 100 },
+          { prop: 'title', label: '职称', width: 100 },
+          { prop: 'phone', label: '联系电话', width: 130 },
+          { prop: 'entryDate', label: '入职日期', width: 110 },
+          { prop: 'status', label: '状态', width: 80 },
+        ],
+        data: [
+          { employeeNo: 'E0001', name: '张伟', gender: '男', dept: '内科', position: '主任', title: '主任医师', phone: '138****1234', entryDate: '2015-03-10', status: '启用' },
+          { employeeNo: 'E0002', name: '李芳', gender: '女', dept: '外科', position: '副主任', title: '副主任医师', phone: '139****5678', entryDate: '2016-07-15', status: '启用' },
+          { employeeNo: 'E0003', name: '王丽', gender: '女', dept: '护理部', position: '护士长', title: '主管护师', phone: '137****9012', entryDate: '2017-01-20', status: '启用' },
+          { employeeNo: 'E0004', name: '陈静', gender: '女', dept: '药剂科', position: '主任', title: '主任药师', phone: '135****7890', entryDate: '2014-09-01', status: '启用' },
+          { employeeNo: 'E0005', name: '刘强', gender: '男', dept: '信息科', position: '工程师', title: '高级工程师', phone: '133****2345', entryDate: '2018-04-12', status: '启用' },
+          { employeeNo: 'E0006', name: '周明', gender: '男', dept: '妇产科', position: '医生', title: '主治医师', phone: '132****6789', entryDate: '2019-08-01', status: '停用' },
+          { employeeNo: 'E0007', name: '赵敏', gender: '女', dept: '儿科', position: '医生', title: '副主任医师', phone: '131****4567', entryDate: '2016-11-22', status: '启用' },
+          { employeeNo: 'E0008', name: '孙浩', gender: '男', dept: '骨科', position: '主任', title: '主任医师', phone: '136****8901', entryDate: '2013-05-18', status: '启用' },
+        ]
+      },
+      'legal-person-mgmt': {
+        columns: [
+          { prop: 'code', label: '法人编码', width: 110 },
+          { prop: 'name', label: '法人名称', width: 200 },
+          { prop: 'type', label: '法人类型', width: 120 },
+          { prop: 'leader', label: '法定代表人', width: 100 },
+          { prop: 'contact', label: '联系电话', width: 130 },
+          { prop: 'status', label: '状态', width: 80 },
+        ],
+        data: [
+          { code: 'LP001', name: 'XX市第一人民医院', type: '事业单位', leader: '张院长', contact: '0571-88880001', status: '启用' },
+          { code: 'LP002', name: 'XX市第一人民医院（南院区）', type: '事业单位', leader: '张院长', contact: '0571-88880002', status: '启用' },
+        ]
+      },
+      'disease-class-mgmt': {
+        columns: [
+          { prop: 'code', label: '疾病编码', width: 110 },
+          { prop: 'name', label: '疾病名称', width: 200 },
+          { prop: 'category', label: '分类', width: 120 },
+          { prop: 'icd', label: 'ICD编码', width: 120 },
+          { prop: 'status', label: '状态', width: 80 },
+        ],
+        data: [
+          { code: 'A00', name: '霍乱', category: '传染病', icd: 'ICD-10:A00', status: '启用' },
+          { code: 'B15', name: '急性甲型肝炎', category: '传染病', icd: 'ICD-10:B15', status: '启用' },
+          { code: 'I21', name: '急性心肌梗死', category: '循环系统', icd: 'ICD-10:I21', status: '启用' },
+          { code: 'J18', name: '肺炎', category: '呼吸系统', icd: 'ICD-10:J18', status: '启用' },
+          { code: 'K80', name: '胆石症', category: '消化系统', icd: 'ICD-10:K80', status: '启用' },
+          { code: 'E11', name: '2型糖尿病', category: '内分泌', icd: 'ICD-10:E11', status: '启用' },
+        ]
+      },
+    };
+
+    createApp({
+      setup() {
+        const searchText = ref('');
+        const expandedGroups = ref(['user-mgmt']); // 默认展开用户管理
+        const activeItem = ref('hospital-staff'); // 默认选中医院职工管理
+        const filterKeyword = ref('');
+        const currentChild = ref('医院职工管理');
+
+        const menu = ref(menuData);
+
+        // 搜索过滤
+        const filteredMenu = computed(() => {
+          if (!searchText.value) return menu.value;
+          const kw = searchText.value.toLowerCase();
+          return menu.value.filter(group => {
+            const groupMatch = group.label.toLowerCase().includes(kw);
+            const childMatch = group.children.some(c => {
+              const childHit = c.label.toLowerCase().includes(kw);
+              const subHit = c.children && c.children.some(s => s.label.toLowerCase().includes(kw));
+              return childHit || subHit;
+            });
+            return groupMatch || childMatch;
+          }).map(group => {
+            // 如果搜索匹配了，展开该组
+            if (!expandedGroups.value.includes(group.key)) {
+              expandedGroups.value.push(group.key);
+            }
+            return group;
+          });
+        });
+
+        const toggleGroup = (key) => {
+          const idx = expandedGroups.value.indexOf(key);
+          if (idx >= 0) {
+            expandedGroups.value.splice(idx, 1);
+          } else {
+            expandedGroups.value.push(key);
+          }
+        };
+
+        const selectItem = (groupKey, itemKey) => {
+          activeItem.value = itemKey;
+          // 查找子项标签
+          const group = menu.value.find(g => g.key === groupKey);
+          if (group) {
+            const child = group.children.find(c => c.key === itemKey);
+            if (child) {
+              currentChild.value = child.label;
+            } else {
+              // 三级
+              for (const c of group.children) {
+                if (c.children) {
+                  const sub = c.children.find(s => s.key === itemKey);
+                  if (sub) { currentChild.value = sub.label; break; }
+                }
+              }
+            }
+          }
+        };
+
+        const currentTitle = computed(() => {
+          return currentChild.value || '主数据管理系统';
+        });
+
+        // 当前表格数据
+        const currentColumns = computed(() => {
+          const td = tableDataMap[activeItem.value];
+          return td ? td.columns : [];
+        });
+        const currentTableData = computed(() => {
+          const td = tableDataMap[activeItem.value];
+          return td ? td.data : [];
+        });
+
+        const onSearch = () => {};
+
+        return {
+          searchText, expandedGroups, activeItem, filterKeyword,
+          filteredMenu, toggleGroup, selectItem, currentTitle, currentChild,
+          currentColumns, currentTableData, onSearch, menu,
+        };
+      }
+    }).use(ElementPlus).mount('#app');
+  </script>
+</body>
+</html>

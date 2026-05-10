@@ -1236,7 +1236,14 @@
           { key: 'fee', name: '收费财务', icon: '💳' },
         ];
 
-        const openSubsystem = (key) => { currentView.value = key; };
+        const openSubsystem = (key) => {
+          if (key === 'master-data') { window.location.href = 'master-data.html'; return; }
+          if (key === 'sys-mgmt') { window.location.href = 'sys-mgmt.html'; return; }
+          if (key === 'user-mgmt') { window.location.href = 'user-mgmt.html'; return; }
+          if (key === 'inp-doctor') { window.location.href = 'inp-doctor.html'; return; }
+          if (key === 'inp-nurse') { window.location.href = 'inp-nurse.html'; return; }
+          currentView.value = key;
+        };
         const goHome = () => { currentView.value = 'home'; };
 
         const handleLogout = () => {
