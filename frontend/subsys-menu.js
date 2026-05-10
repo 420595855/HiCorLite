@@ -127,8 +127,8 @@ function initSubsystemMenu(menuData) {
         <!-- 气泡 -->
         <div class="menu-popover" v-if="visible" @click.stop>
           <div class="menu-popover-header">{{ systemName }} · 功能导航</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
-            <div class="menu-popover-card" v-for="group in filteredGroups" :key="group.key">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <div class="menu-popover-card" v-for="group in filteredGroups" :key="group.key" style="flex:1 1 140px;max-width:220px;min-width:130px;">
               <div class="menu-popover-card-title">
                 <span>{{ group.icon }}</span> {{ group.label }}
               </div>

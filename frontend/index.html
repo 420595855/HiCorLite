@@ -526,8 +526,8 @@
             <!-- 子系统菜单下拉 - 气泡弹出框 -->
             <div class="subsys-dropdown" v-show="showSubsysMenu" @click.stop>
               <div class="subsys-dropdown-header">{{ currentSubsys.name }} · 功能导航</div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
-                <div class="subsys-menu-card" v-for="group in currentSubsysMenuGroups" :key="group.category">
+              <div style="display:flex;flex-wrap:wrap;gap:10px;">
+                <div class="subsys-menu-card" v-for="group in currentSubsysMenuGroups" :key="group.category" style="flex:1 1 140px;max-width:220px;min-width:130px;">
                   <div class="subsys-menu-card-title">
                     <span>{{ group.icon }}</span> {{ group.category }}
                   </div>
