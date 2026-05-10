@@ -6,460 +6,86 @@
   <title>HiCorLite - 应用系统管理</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow: hidden; }
-    body {
-      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-      background: #f0f2f5;
-      font-size: 14px;
-    }
-    #app { height: 100%; display: flex; flex-direction: column; }
-
-    /* ===== 顶部导航栏 ===== */
-    .topbar {
-      height: 56px;
-      background: linear-gradient(90deg, #4a6cf7 0%, #6366f1 50%, #8b5cf6 100%);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); z-index: 100;
-    }
-    .topbar-left { display: flex; align-items: center; gap: 16px; }
-    .logo-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .logo-area img { height: 32px; }
-    .logo-title { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px; }
-    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-left: 20px; }
-    .breadcrumb-item { color: rgba(255,255,255,0.6); font-size: 13px; }
-    .breadcrumb-sep { color: rgba(255,255,255,0.3); }
-    .breadcrumb-current { color: #fff; font-size: 14px; font-weight: 500; }
-    .topbar-right { display: flex; align-items: center; gap: 14px; }
-    .topbar-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.7); transition: all 0.2s; }
-    .topbar-icon:hover { background: rgba(255,255,255,0.15); color: #fff; }
-    .user-area { display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 20px; cursor: pointer; transition: background 0.2s; }
-    .user-area:hover { background: rgba(255,255,255,0.15); }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #60a5fa, #34d399); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; }
-    .user-name { color: #fff; font-size: 14px; }
-
-    /* ===== 主体布局 ===== */
-    .main-layout { flex: 1; display: flex; overflow: hidden; }
-
-    /* ===== 左侧菜单 ===== */
-    .sidebar {
-      width: 240px; background: #fff; border-right: 1px solid #e8ecf1;
-      display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden;
-    }
-    .sidebar-search {
-      padding: 16px 14px 12px; border-bottom: 1px solid #f0f2f5; flex-shrink: 0;
-    }
-    .search-input-wrap {
-      display: flex; align-items: center; background: #fff;
-      border: 1px solid #dcdfe6; border-radius: 6px; overflow: hidden; transition: border-color 0.2s;
-    }
-    .search-input-wrap:focus-within { border-color: #4a6cf7; }
-    .search-input-wrap input {
-      flex: 1; border: none; outline: none; padding: 8px 12px;
-      font-size: 13px; color: #303133; background: transparent;
-    }
-    .search-input-wrap input::placeholder { color: #c0c4cc; }
-    .search-btn {
-      padding: 8px 14px; background: #ecf5ff; color: #409eff;
-      border: none; cursor: pointer; font-size: 13px; transition: all 0.2s; white-space: nowrap;
-    }
-    .search-btn:hover { background: #d9ecff; }
-
-    .menu-list { flex: 1; overflow-y: auto; padding: 8px 0; }
-    .menu-list::-webkit-scrollbar { width: 4px; }
-    .menu-list::-webkit-scrollbar-thumb { background: #dcdfe6; border-radius: 2px; }
-
-    /* 模块标题（一级） */
-    .menu-group-title {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 16px 10px 14px; cursor: pointer;
-      transition: all 0.15s; user-select: none;
-    }
-    .menu-group-title:hover { background: #f5f7fa; }
-    .menu-group-title .menu-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .menu-group-title .menu-icon svg { width: 16px; height: 16px; }
-    .menu-group-title .menu-label {
-      flex: 1; font-size: 14px; font-weight: 500; color: #3370ff;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    /* 子项（二级） */
-    .menu-child-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 16px 9px 42px; cursor: pointer;
-      transition: all 0.15s; position: relative;
-    }
-    .menu-child-item:hover { background: #f5f7fa; }
-    .menu-child-item.active { background: #ecf5ff; }
-    .menu-child-item.active::before {
-      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-      width: 3px; background: #409eff; border-radius: 0 3px 3px 0;
-    }
-    .menu-child-item .child-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .menu-child-item .child-icon svg { width: 14px; height: 14px; }
-    .menu-child-item .child-label { font-size: 13px; color: #606266; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .menu-child-item.active .child-label { color: #303133; font-weight: 500; }
-
-    /* ===== 右侧内容区 ===== */
-    .content-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #f0f2f5; }
-    .content-header {
-      padding: 16px 24px 12px; background: #fff;
-      border-bottom: 1px solid #e8ecf1; flex-shrink: 0;
-    }
-    .content-header h2 { font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px; }
-    .filter-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-
-    .toolbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 24px; background: #fff; border-bottom: 1px solid #e8ecf1; flex-shrink: 0;
-    }
-    .toolbar-left { display: flex; gap: 10px; }
-    .toolbar-right { display: flex; gap: 10px; }
-
-    .table-area { flex: 1; padding: 16px 24px; overflow-y: auto; }
-    .table-area::-webkit-scrollbar { width: 6px; }
-    .table-area::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 3px; }
-
-    .pagination-bar {
-      padding: 12px 24px; background: #fff; border-top: 1px solid #e8ecf1;
-      display: flex; justify-content: flex-end; flex-shrink: 0;
-    }
-
-    .empty-state {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 120px 40px; color: #94a3b8;
-    }
-    .empty-icon { font-size: 56px; margin-bottom: 16px; opacity: 0.6; }
-    .empty-title { font-size: 17px; color: #606266; margin-bottom: 8px; }
-    .empty-desc { font-size: 14px; color: #94a3b8; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-in { animation: fadeIn 0.3s ease; }
+    *{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}body{font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;background:#f0f2f5;font-size:14px}#app{height:100%;display:flex;flex-direction:column}
+    .topbar{height:56px;background:linear-gradient(90deg,#4a6cf7 0%,#6366f1 50%,#8b5cf6 100%);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.2);z-index:100}
+    .topbar-left{display:flex;align-items:center;gap:0}
+    .logo-area{display:flex;align-items:center;gap:10px;cursor:pointer;padding-right:16px;border-right:1px solid rgba(255,255,255,.15)}.logo-area img{height:32px}.logo-title{font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+    .sys-name-area{display:flex;align-items:center;gap:6px;margin-left:16px}.sys-name{font-size:17px;font-weight:600;color:#fff;letter-spacing:1px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;margin-left:20px}.breadcrumb-item{color:rgba(255,255,255,.6);font-size:13px}.breadcrumb-sep{color:rgba(255,255,255,.3)}.breadcrumb-current{color:#fff;font-size:14px;font-weight:500}
+    .topbar-right{display:flex;align-items:center;gap:14px}.topbar-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s}.topbar-icon:hover{background:rgba(255,255,255,.15);color:#fff}
+    .user-area{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;cursor:pointer;transition:background .2s}.user-area:hover{background:rgba(255,255,255,.15)}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600}.user-name{color:#fff;font-size:14px}
+    .main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
+    .content-header{padding:16px 24px 12px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}.content-header h2{font-size:18px;font-weight:600;color:#1e293b;margin-bottom:12px}
+    .filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}.toolbar-left{display:flex;gap:10px}.toolbar-right{display:flex;gap:10px}
+    .table-area{flex:1;padding:16px 24px;overflow-y:auto}.table-area::-webkit-scrollbar{width:6px}.table-area::-webkit-scrollbar-thumb{background:#d0d5dd;border-radius:3px}
+    .pagination-bar{padding:12px 24px;background:#fff;border-top:1px solid #e8ecf1;display:flex;justify-content:flex-end;flex-shrink:0}
+    .welcome-page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+    .welcome-icon{font-size:72px;margin-bottom:20px;opacity:.7}.welcome-title{font-size:24px;font-weight:700;color:#1e293b;margin-bottom:8px}.welcome-desc{font-size:15px;color:#94a3b8;margin-bottom:24px}
+    .welcome-hint{font-size:13px;color:#94a3b8;display:flex;align-items:center;gap:6px}.welcome-hint kbd{padding:3px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:monospace;font-weight:600}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .3s ease}
   </style>
 </head>
 <body>
-  <div id="app">
-    <!-- 顶部导航 -->
-    <div class="topbar">
-      <div class="topbar-left">
-        <div class="logo-area" onclick="window.location.href='index.html'">
-          <img src="logo_icon.png" alt="HiCorLite">
-          <span class="logo-title">HiCorLite</span>
-        </div>
-        <div class="breadcrumb">
-          <span class="breadcrumb-item">总控中心</span>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">应用系统管理</span>
-          <template v-if="currentChild">
-            <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-current">{{ currentChild }}</span>
-          </template>
-        </div>
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-area" onclick="window.location.href='index.html'"><img src="logo_icon.png" alt="HiCorLite"><span class="logo-title">HiCorLite</span></div>
+      <div class="sys-name-area">
+        <span class="sys-name">应用系统管理</span>
+        <subsys-menu ref="menuRef" system-name="应用系统管理" :menu-data="menuData" @select="onMenuSelect"></subsys-menu>
       </div>
-      <div class="topbar-right">
-        <div class="topbar-icon" title="返回首页" onclick="window.location.href='index.html'">
-          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v320c0 17.7 14.3 32 32 32h256V736h128v256h256c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.2z"/></svg>
-        </div>
-        <div class="topbar-icon" title="消息">
-          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/></svg>
-        </div>
-        <div class="user-area">
-          <div class="user-avatar">管</div>
-          <span class="user-name">管理员</span>
-        </div>
-      </div>
+      <div class="breadcrumb" v-if="crumbChild"><span class="breadcrumb-item">应用系统管理</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbChild }}</span></div>
     </div>
-
-    <div class="main-layout">
-      <!-- 左侧菜单 -->
-      <div class="sidebar">
-        <div class="sidebar-search">
-          <div class="search-input-wrap">
-            <input type="text" v-model="searchText" placeholder="搜索菜单...">
-            <button class="search-btn">搜索</button>
-          </div>
-        </div>
-        <div class="menu-list">
-          <div class="menu-group" v-for="group in filteredMenu" :key="group.key">
-            <!-- 一级：模块名称 -->
-            <div class="menu-group-title">
-              <span class="menu-icon" v-html="group.iconSvg"></span>
-              <span class="menu-label">{{ group.label }}</span>
-            </div>
-            <!-- 二级子项 -->
-            <div class="menu-child-item"
-              v-for="child in group.children" :key="child.key"
-              :class="{ active: activeItem === child.key }"
-              @click="selectItem(child.key, child.label)">
-              <span class="child-icon" v-html="child.iconSvg || group.defaultChildIcon"></span>
-              <span class="child-label">{{ child.label }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 右侧内容区 -->
-      <div class="content-area">
-        <div class="content-header">
-          <h2>{{ currentTitle }}</h2>
-          <div class="filter-bar">
-            <el-input v-model="filterKeyword" :placeholder="'搜索' + currentTitle + '...'" style="width:280px;" clearable />
-            <el-select placeholder="状态" style="width:120px;" clearable>
-              <el-option label="全部" value="" />
-              <el-option label="启用" value="1" />
-              <el-option label="停用" value="0" />
-            </el-select>
-            <el-button type="primary">查询</el-button>
-            <el-button>重置</el-button>
-          </div>
-        </div>
-
-        <div class="toolbar">
-          <div class="toolbar-left">
-            <el-button type="primary">+ 新增</el-button>
-            <el-button>批量导入</el-button>
-          </div>
-          <div class="toolbar-right">
-            <el-button>导出</el-button>
-            <el-button>打印</el-button>
-          </div>
-        </div>
-
-        <div class="table-area" v-if="currentTableData.length">
-          <el-table :data="currentTableData" stripe border style="width:100%"
-            :header-cell-style="{ background:'#f5f7fa', color:'#303133', fontWeight:'600' }">
-            <el-table-column v-for="col in currentColumns" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
-            <el-table-column label="状态" width="80" fixed="right">
-              <template #default="scope">
-                <el-tag :type="scope.row.status === '启用' ? 'success' : scope.row.status === '运行中' ? 'primary' : 'info'" size="small">{{ scope.row.status }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="160" fixed="right">
-              <template #default>
-                <el-button type="primary" link size="small">编辑</el-button>
-                <el-button type="danger" link size="small">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-
-        <div class="empty-state fade-in" v-else>
-          <div class="empty-icon">📂</div>
-          <div class="empty-title">{{ currentTitle }}</div>
-          <div class="empty-desc">功能模块开发中，敬请期待</div>
-        </div>
-
-        <div class="pagination-bar" v-if="currentTableData.length">
-          <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10, 20, 50]" />
-        </div>
-      </div>
+    <div class="topbar-right">
+      <div class="topbar-icon" title="返回首页" onclick="window.location.href='index.html'"><svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v320c0 17.7 14.3 32 32 32h256V736h128v256h256c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.2z"/></svg></div>
+      <div class="user-area"><div class="user-avatar">管</div><span class="user-name">管理员</span></div>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
-  <script>
-    const { createApp, ref, computed } = Vue;
-
-    // SVG 图标
-    const icons = {
-      grid: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136V232h752v560z"/></svg>',
-      gridBlue: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#3370ff" d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136V232h752v560z"/></svg>',
-      system: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/><path fill="#909399" d="M464 352a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm0 0"/></svg>',
-      app: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M464 720a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm0 0"/><path fill="#909399" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/></svg>',
-      role: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M858.5 763.6a374 374 0 0 0-80.6-119.5 375.6 375.6 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.6 375.6 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"/></svg>',
-      params: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 0 0 9.3-35.2l-.9-2.6a443.74 443.74 0 0 0-79.7-137.9l-1.8-2.1a32.12 32.12 0 0 0-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 0 0-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 0 0-25.8 25.7l-15.8 85.4a351.9 351.9 0 0 0-99 57.4l-81.9-29.1a32 32 0 0 0-35.1 9.5l-1.8 2.1a446.02 446.02 0 0 0-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 0 0-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0 0 35.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0 0 25.8 25.7l2.7.5a449.4 449.4 0 0 0 159 0l2.7-.5a32.05 32.05 0 0 0 25.8-25.7l15.7-85a350 350 0 0 0 99.7-57.6l81.3 28.9a32 32 0 0 0 35.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 0 1-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 0 1-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L840 426l6.6 40z"/><path fill="#909399" d="M512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 0 1 512 632c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 0 1 400 520c0-29.9 11.7-58 32.8-79.2C454 419.6 482.1 408 512 408c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 0 1 624 520c0 29.9-11.7 58-32.8 79.2z"/></svg>',
-      error: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/><path fill="#909399" d="M464 688a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm0 0"/><path fill="#909399" d="M488 512v288c0 17.7 14.3 32 32 32s32-14.3 32-32V512c0-17.7-14.3-32-32-32s-32 14.3-32 32zm0 0"/></svg>',
-    };
-
-    const menuData = [
-      {
-        key: 'system-reg',
-        label: '系统注册',
-        iconSvg: icons.system,
-        defaultChildIcon: icons.grid,
-        children: [
-          { key: 'sys-register', label: '系统注册', iconSvg: icons.system },
-        ]
-      },
-      {
-        key: 'app-mgmt',
-        label: '应用管理',
-        iconSvg: icons.app,
-        defaultChildIcon: icons.grid,
-        children: [
-          { key: 'app-manage', label: '应用管理', iconSvg: icons.app },
-        ]
-      },
-      {
-        key: 'app-role',
-        label: '应用角色',
-        iconSvg: icons.role,
-        defaultChildIcon: icons.grid,
-        children: [
-          { key: 'app-role-mgmt', label: '应用角色', iconSvg: icons.role },
-        ]
-      },
-      {
-        key: 'sys-params',
-        label: '系统参数',
-        iconSvg: icons.params,
-        defaultChildIcon: icons.grid,
-        children: [
-          { key: 'sys-param-mgmt', label: '系统参数', iconSvg: icons.params },
-        ]
-      },
-      {
-        key: 'error-report',
-        label: '异常上报',
-        iconSvg: icons.error,
-        defaultChildIcon: icons.grid,
-        children: [
-          { key: 'issue-list', label: '问题列表', iconSvg: icons.error },
-        ]
-      },
-    ];
-
-    // 表格数据
-    const tableDataMap = {
-      'app-role-mgmt': {
-        columns: [
-          { prop: 'roleCode', label: '角色编码', width: 120 },
-          { prop: 'roleName', label: '角色名称', width: 150 },
-          { prop: 'appScope', label: '应用范围', width: 180 },
-          { prop: 'userCount', label: '用户数', width: 80 },
-          { prop: 'desc', label: '角色描述', minWidth: 200 },
-          { prop: 'createTime', label: '创建时间', width: 160 },
-          { prop: 'status', label: '状态', width: 80 },
-        ],
-        data: [
-          { roleCode: 'ROLE_ADMIN', roleName: '系统管理员', appScope: '全部应用', userCount: 5, desc: '拥有系统所有功能权限，负责系统配置与用户管理', createTime: '2025-01-15 10:00', status: '启用' },
-          { roleCode: 'ROLE_DOCTOR', roleName: '门诊医生', appScope: '门诊医生站、电子病历', userCount: 128, desc: '门诊诊疗相关功能权限，含开方、病历书写', createTime: '2025-01-15 10:00', status: '启用' },
-          { roleCode: 'ROLE_NURSE', roleName: '住院护士', appScope: '住院护士站、护理工作站', userCount: 96, desc: '住院护理相关功能权限，含医嘱执行、体征录入', createTime: '2025-01-15 10:00', status: '启用' },
-          { roleCode: 'ROLE_PHARM', roleName: '药剂师', appScope: '药库工作站、药房工作站', userCount: 24, desc: '药品管理相关功能权限，含入库、调配、发药', createTime: '2025-01-15 10:00', status: '启用' },
-          { roleCode: 'ROLE_FEE', roleName: '收费员', appScope: '门诊挂号收费、住院费用管理', userCount: 32, desc: '收费结算相关功能权限，含挂号、收费、退费', createTime: '2025-01-15 10:00', status: '启用' },
-          { roleCode: 'ROLE_LAB', roleName: '检验技师', appScope: '医技工作站', userCount: 18, desc: '检验相关功能权限，含标本接收、报告审核', createTime: '2025-02-20 14:30', status: '启用' },
-          { roleCode: 'ROLE_QC', roleName: '质控员', appScope: '病历质量管理', userCount: 12, desc: '质控相关功能权限，含病历审核、评分', createTime: '2025-03-01 09:00', status: '启用' },
-          { roleCode: 'ROLE_INTERN', roleName: '实习医生', appScope: '门诊医生站（只读）', userCount: 45, desc: '实习医生只读权限，仅可查看不可编辑', createTime: '2025-03-10 11:00', status: '停用' },
-        ]
-      },
-      'sys-register': {
-        columns: [
-          { prop: 'sysCode', label: '系统编码', width: 120 },
-          { prop: 'sysName', label: '系统名称', width: 180 },
-          { prop: 'version', label: '版本号', width: 100 },
-          { prop: 'vendor', label: '供应商', width: 140 },
-          { prop: 'contact', label: '联系人', width: 100 },
-          { prop: 'deployDate', label: '部署日期', width: 120 },
-          { prop: 'status', label: '状态', width: 80 },
-        ],
-        data: [
-          { sysCode: 'HIS-CORE', sysName: 'HiCorLite 核心系统', version: 'v1.0.0', vendor: '盛博汇', contact: '张工', deployDate: '2025-01-10', status: '运行中' },
-          { sysCode: 'LIS', sysName: '检验信息系统', version: 'v3.2.1', vendor: '某检验厂商', contact: '李工', deployDate: '2025-02-15', status: '运行中' },
-          { sysCode: 'PACS', sysName: '影像归档与通信系统', version: 'v5.0.0', vendor: '某影像厂商', contact: '王工', deployDate: '2025-02-15', status: '运行中' },
-          { sysCode: 'EMR', sysName: '电子病历系统', version: 'v2.1.0', vendor: '某EMR厂商', contact: '赵工', deployDate: '2025-03-01', status: '运行中' },
-          { sysCode: 'HRP', sysName: '医院资源规划系统', version: 'v4.0.0', vendor: '某HRP厂商', contact: '孙工', deployDate: '2025-03-20', status: '维护中' },
-        ]
-      },
-      'app-manage': {
-        columns: [
-          { prop: 'appCode', label: '应用编码', width: 120 },
-          { prop: 'appName', label: '应用名称', width: 180 },
-          { prop: 'category', label: '分类', width: 100 },
-          { prop: 'sysBelong', label: '所属系统', width: 140 },
-          { prop: 'accessUrl', label: '访问地址', width: 200 },
-          { prop: 'status', label: '状态', width: 80 },
-        ],
-        data: [
-          { appCode: 'APP-OUTDOC', appName: '门诊医生站', category: '临床业务', sysBelong: 'HIS-CORE', accessUrl: '/out-doctor', status: '启用' },
-          { appCode: 'APP-OUTNUR', appName: '门诊护士站', category: '临床业务', sysBelong: 'HIS-CORE', accessUrl: '/out-nurse', status: '启用' },
-          { appCode: 'APP-IMPDOC', appName: '住院医生站', category: '临床业务', sysBelong: 'HIS-CORE', accessUrl: '/inp-doctor', status: '启用' },
-          { appCode: 'APP-IMPNUR', appName: '住院护士站', category: '临床业务', sysBelong: 'HIS-CORE', accessUrl: '/inp-nurse', status: '启用' },
-          { appCode: 'APP-PHARM', appName: '药房工作站', category: '药品管理', sysBelong: 'HIS-CORE', accessUrl: '/pharmacy', status: '启用' },
-          { appCode: 'APP-FEE', appName: '收费工作站', category: '财务收费', sysBelong: 'HIS-CORE', accessUrl: '/fee', status: '启用' },
-          { appCode: 'APP-LIS', appName: '检验系统', category: '医技业务', sysBelong: 'LIS', accessUrl: '/lis', status: '启用' },
-          { appCode: 'APP-PACS', appName: '影像系统', category: '医技业务', sysBelong: 'PACS', accessUrl: '/pacs', status: '启用' },
-        ]
-      },
-      'sys-param-mgmt': {
-        columns: [
-          { prop: 'paramCode', label: '参数编码', width: 160 },
-          { prop: 'paramName', label: '参数名称', width: 180 },
-          { prop: 'paramValue', label: '参数值', width: 140 },
-          { prop: 'scope', label: '作用域', width: 100 },
-          { prop: 'desc', label: '说明', minWidth: 200 },
-          { prop: 'status', label: '状态', width: 80 },
-        ],
-        data: [
-          { paramCode: 'SYS.LOGIN_TIMEOUT', paramName: '登录超时时间', paramValue: '1800', scope: '全局', desc: '用户登录后无操作自动退出的时间（秒）', status: '启用' },
-          { paramCode: 'SYS.PWD_POLICY', paramName: '密码策略', paramValue: 'strong', scope: '全局', desc: '密码强度策略：simple/medium/strong', status: '启用' },
-          { paramCode: 'OUTPATIENT.MAX_PATIENTS', paramName: '门诊最大接诊数', paramValue: '60', scope: '门诊', desc: '单个医生单日最大接诊患者数', status: '启用' },
-          { paramCode: 'PHARM.STOCK_ALERT', paramName: '药品库存预警阈值', paramValue: '100', scope: '药品', desc: '药品库存低于此值时触发预警', status: '启用' },
-          { paramCode: 'EMR.AUTO_SAVE', paramName: '病历自动保存间隔', paramValue: '300', scope: '病历', desc: '病历编辑器自动保存间隔（秒）', status: '启用' },
-          { paramCode: 'FEE.INVOICE_PRINT', paramName: '发票自动打印', paramValue: 'true', scope: '收费', desc: '收费完成后是否自动打印发票', status: '停用' },
-        ]
-      },
-      'issue-list': {
-        columns: [
-          { prop: 'issueNo', label: '问题编号', width: 120 },
-          { prop: 'title', label: '问题标题', width: 200 },
-          { prop: 'module', label: '所属模块', width: 120 },
-          { prop: 'level', label: '严重程度', width: 100 },
-          { prop: 'reporter', label: '上报人', width: 90 },
-          { prop: 'reportTime', label: '上报时间', width: 160 },
-          { prop: 'status', label: '状态', width: 90 },
-        ],
-        data: [
-          { issueNo: 'ISS-2026001', title: '门诊收费结算页面偶发卡顿', module: '门诊收费', level: '一般', reporter: '收费员小王', reportTime: '2026-05-08 14:23', status: '处理中' },
-          { issueNo: 'ISS-2026002', title: '检验报告PDF导出格式错乱', module: '医技工作站', level: '严重', reporter: '检验科张三', reportTime: '2026-05-07 09:15', status: '已解决' },
-          { issueNo: 'ISS-2026003', title: '住院医嘱提交后未刷新列表', module: '住院医生站', level: '一般', reporter: '内科李医生', reportTime: '2026-05-06 16:40', status: '待处理' },
-          { issueNo: 'ISS-2026004', title: '药品库存预警通知未发送', module: '药库工作站', level: '轻微', reporter: '药剂科陈主任', reportTime: '2026-05-05 11:20', status: '已解决' },
-          { issueNo: 'ISS-2026005', title: '病历模板保存后内容丢失', module: '电子病历', level: '致命', reporter: '外科王医生', reportTime: '2026-05-04 08:50', status: '处理中' },
-        ]
-      },
-    };
-
-    createApp({
-      setup() {
-        const searchText = ref('');
-        const activeItem = ref('app-role-mgmt'); // 默认选中应用角色
-        const currentChild = ref('应用角色');
-        const filterKeyword = ref('');
-
-        const filteredMenu = computed(() => {
-          if (!searchText.value) return menuData;
-          const kw = searchText.value.toLowerCase();
-          return menuData.filter(group => {
-            const groupMatch = group.label.toLowerCase().includes(kw);
-            const childMatch = group.children.some(c => c.label.toLowerCase().includes(kw));
-            return groupMatch || childMatch;
-          });
-        });
-
-        const selectItem = (key, label) => {
-          activeItem.value = key;
-          currentChild.value = label;
-        };
-
-        const currentTitle = computed(() => currentChild.value || '应用系统管理');
-
-        const currentColumns = computed(() => {
-          const td = tableDataMap[activeItem.value];
-          return td ? td.columns : [];
-        });
-        const currentTableData = computed(() => {
-          const td = tableDataMap[activeItem.value];
-          return td ? td.data : [];
-        });
-
-        return {
-          searchText, activeItem, currentChild, filterKeyword,
-          filteredMenu, selectItem, currentTitle,
-          currentColumns, currentTableData, menu: menuData,
-        };
-      }
-    }).use(ElementPlus).mount('#app');
-  </script>
+  <div class="main-content" v-if="!activeItem"><div class="welcome-page fade-in"><div class="welcome-icon">⚙️</div><div class="welcome-title">应用系统管理</div><div class="welcome-desc">请点击右上角 <b style="color:#4a6cf7;">☰ 菜单图标</b> 选择功能模块</div><div class="welcome-hint">快捷键 <kbd>Ctrl</kbd> + <kbd>M</kbd> 打开菜单</div></div></div>
+  <div class="main-content" v-if="activeItem">
+    <div class="content-header"><h2>{{ crumbChild }}</h2><div class="filter-bar"><el-input v-model="filterKw" :placeholder="'搜索'+crumbChild+'...'" style="width:280px;" clearable /><el-select placeholder="状态" style="width:120px;" clearable><el-option label="全部" value="" /><el-option label="启用" value="1" /><el-option label="停用" value="0" /></el-select><el-button type="primary">查询</el-button><el-button>重置</el-button></div></div>
+    <div class="toolbar"><div class="toolbar-left"><el-button type="primary">+ 新增</el-button></div><div class="toolbar-right"><el-button>导出</el-button></div></div>
+    <div class="table-area" v-if="tableData.length">
+      <el-table :data="tableData" stripe border style="width:100%" :header-cell-style="{background:'#f5f7fa',color:'#303133',fontWeight:'600'}">
+        <el-table-column v-for="col in tableCols" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
+        <el-table-column label="状态" width="80" fixed="right"><template #default="s"><el-tag :type="s.row.status==='启用'||s.row.status==='运行中'?'success':'info'" size="small">{{ s.row.status }}</el-tag></template></el-table-column>
+        <el-table-column label="操作" width="160" fixed="right"><template #default><el-button type="primary" link size="small">编辑</el-button><el-button type="danger" link size="small">删除</el-button></template></el-table-column>
+      </el-table>
+    </div>
+    <div v-else style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;" class="fade-in"><div style="font-size:56px;margin-bottom:16px;opacity:.6">📂</div><div style="font-size:17px;color:#606266;margin-bottom:8px">{{ crumbChild }}</div><div style="font-size:14px">功能模块开发中，敬请期待</div></div>
+    <div class="pagination-bar" v-if="tableData.length"><el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10,20,50]" /></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+<script src="subsys-menu.js"></script>
+<script>
+const{createApp,ref,computed}=Vue;
+const menuData=[
+  {key:'system-reg',icon:'📝',label:'系统注册',items:[{key:'sys-register',label:'系统注册'}]},
+  {key:'app-mgmt',icon:'📱',label:'应用管理',items:[{key:'app-manage',label:'应用管理'}]},
+  {key:'app-role',icon:'🎭',label:'应用角色',items:[{key:'app-role-mgmt',label:'应用角色'}]},
+  {key:'sys-params',icon:'⚙️',label:'系统参数',items:[{key:'sys-param-mgmt',label:'系统参数'}]},
+  {key:'error-report',icon:'⚠️',label:'异常上报',items:[{key:'issue-list',label:'问题列表'}]},
+];
+const tableDataMap={
+  'app-role-mgmt':{cols:[{prop:'roleCode',label:'角色编码',width:120},{prop:'roleName',label:'角色名称',width:150},{prop:'appScope',label:'应用范围',width:180},{prop:'userCount',label:'用户数',width:80},{prop:'desc',label:'角色描述',minWidth:200},{prop:'createTime',label:'创建时间',width:160},{prop:'status',label:'状态',width:80}],data:[{roleCode:'ROLE_ADMIN',roleName:'系统管理员',appScope:'全部应用',userCount:5,desc:'拥有系统所有功能权限',createTime:'2025-01-15 10:00',status:'启用'},{roleCode:'ROLE_DOCTOR',roleName:'门诊医生',appScope:'门诊医生站、电子病历',userCount:128,desc:'门诊诊疗相关功能权限',createTime:'2025-01-15 10:00',status:'启用'},{roleCode:'ROLE_NURSE',roleName:'住院护士',appScope:'住院护士站、护理工作站',userCount:96,desc:'住院护理相关功能权限',createTime:'2025-01-15 10:00',status:'启用'},{roleCode:'ROLE_PHARM',roleName:'药剂师',appScope:'药库工作站、药房工作站',userCount:24,desc:'药品管理相关功能权限',createTime:'2025-01-15 10:00',status:'启用'},{roleCode:'ROLE_FEE',roleName:'收费员',appScope:'门诊挂号收费、住院费用管理',userCount:32,desc:'收费结算相关功能权限',createTime:'2025-01-15 10:00',status:'启用'},{roleCode:'ROLE_LAB',roleName:'检验技师',appScope:'医技工作站',userCount:18,desc:'检验相关功能权限',createTime:'2025-02-20 14:30',status:'启用'}]},
+  'sys-register':{cols:[{prop:'sysCode',label:'系统编码',width:120},{prop:'sysName',label:'系统名称',width:180},{prop:'version',label:'版本号',width:100},{prop:'vendor',label:'供应商',width:140},{prop:'contact',label:'联系人',width:100},{prop:'deployDate',label:'部署日期',width:120},{prop:'status',label:'状态',width:80}],data:[{sysCode:'HIS-CORE',sysName:'HiCorLite 核心系统',version:'v1.0.0',vendor:'盛博汇',contact:'张工',deployDate:'2025-01-10',status:'运行中'},{sysCode:'LIS',sysName:'检验信息系统',version:'v3.2.1',vendor:'某检验厂商',contact:'李工',deployDate:'2025-02-15',status:'运行中'},{sysCode:'PACS',sysName:'影像归档与通信系统',version:'v5.0.0',vendor:'某影像厂商',contact:'王工',deployDate:'2025-02-15',status:'运行中'},{sysCode:'EMR',sysName:'电子病历系统',version:'v2.1.0',vendor:'某EMR厂商',contact:'赵工',deployDate:'2025-03-01',status:'运行中'}]},
+  'app-manage':{cols:[{prop:'appCode',label:'应用编码',width:120},{prop:'appName',label:'应用名称',width:180},{prop:'category',label:'分类',width:100},{prop:'sysBelong',label:'所属系统',width:140},{prop:'accessUrl',label:'访问地址',width:200},{prop:'status',label:'状态',width:80}],data:[{appCode:'APP-OUTDOC',appName:'门诊医生站',category:'临床业务',sysBelong:'HIS-CORE',accessUrl:'/out-doctor',status:'启用'},{appCode:'APP-IMPDOC',appName:'住院医生站',category:'临床业务',sysBelong:'HIS-CORE',accessUrl:'/inp-doctor',status:'启用'},{appCode:'APP-PHARM',appName:'药房工作站',category:'药品管理',sysBelong:'HIS-CORE',accessUrl:'/pharmacy',status:'启用'},{appCode:'APP-LIS',appName:'检验系统',category:'医技业务',sysBelong:'LIS',accessUrl:'/lis',status:'启用'}]},
+  'sys-param-mgmt':{cols:[{prop:'paramCode',label:'参数编码',width:160},{prop:'paramName',label:'参数名称',width:180},{prop:'paramValue',label:'参数值',width:140},{prop:'scope',label:'作用域',width:100},{prop:'desc',label:'说明',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{paramCode:'SYS.LOGIN_TIMEOUT',paramName:'登录超时时间',paramValue:'1800',scope:'全局',desc:'用户登录后无操作自动退出的时间（秒）',status:'启用'},{paramCode:'SYS.PWD_POLICY',paramName:'密码策略',paramValue:'strong',scope:'全局',desc:'密码强度策略',status:'启用'},{paramCode:'OUTPATIENT.MAX_PATIENTS',paramName:'门诊最大接诊数',paramValue:'60',scope:'门诊',desc:'单个医生单日最大接诊患者数',status:'启用'},{paramCode:'PHARM.STOCK_ALERT',paramName:'药品库存预警阈值',paramValue:'100',scope:'药品',desc:'药品库存低于此值时触发预警',status:'启用'}]},
+  'issue-list':{cols:[{prop:'issueNo',label:'问题编号',width:120},{prop:'title',label:'问题标题',width:200},{prop:'module',label:'所属模块',width:120},{prop:'level',label:'严重程度',width:100},{prop:'reporter',label:'上报人',width:90},{prop:'reportTime',label:'上报时间',width:160},{prop:'status',label:'状态',width:90}],data:[{issueNo:'ISS-2026001',title:'门诊收费结算页面偶发卡顿',module:'门诊收费',level:'一般',reporter:'收费员小王',reportTime:'2026-05-08 14:23',status:'处理中'},{issueNo:'ISS-2026002',title:'检验报告PDF导出格式错乱',module:'医技工作站',level:'严重',reporter:'检验科张三',reportTime:'2026-05-07 09:15',status:'已解决'},{issueNo:'ISS-2026005',title:'病历模板保存后内容丢失',module:'电子病历',level:'致命',reporter:'外科王医生',reportTime:'2026-05-04 08:50',status:'处理中'}]},
+};
+createApp({
+  setup(){
+    const activeItem=ref('');const crumbGroup=ref('');const crumbChild=ref('');const filterKw=ref('');
+    const onMenuSelect=({key,groupLabel,itemLabel})=>{activeItem.value=key;crumbGroup.value=groupLabel;crumbChild.value=itemLabel};
+    const tableCols=computed(()=>(tableDataMap[activeItem.value]||{}).cols||[]);
+    const tableData=computed(()=>(tableDataMap[activeItem.value]||{}).data||[]);
+    return{menuData,activeItem,crumbGroup,crumbChild,filterKw,onMenuSelect,tableCols,tableData};
+  }
+}).component('subsys-menu',initSubsystemMenu(menuData)).use(ElementPlus).mount('#app');
+</script>
 </body>
 </html>

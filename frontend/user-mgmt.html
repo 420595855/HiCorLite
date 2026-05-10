@@ -6,667 +6,109 @@
   <title>HiCorLite - 统一用户管理</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow: hidden; }
-    body {
-      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-      background: #f0f2f5; font-size: 14px;
-    }
-    #app { height: 100%; display: flex; flex-direction: column; }
-
-    /* ===== 顶部导航栏 ===== */
-    .topbar {
-      height: 56px;
-      background: linear-gradient(90deg, #4a6cf7 0%, #6366f1 50%, #8b5cf6 100%);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2); z-index: 100;
-    }
-    .topbar-left { display: flex; align-items: center; gap: 16px; }
-    .logo-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .logo-area img { height: 32px; }
-    .logo-title { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: 1px; }
-    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-left: 20px; }
-    .breadcrumb-item { color: rgba(255,255,255,0.6); font-size: 13px; }
-    .breadcrumb-sep { color: rgba(255,255,255,0.3); }
-    .breadcrumb-current { color: #fff; font-size: 14px; font-weight: 500; }
-    .topbar-right { display: flex; align-items: center; gap: 14px; }
-    .topbar-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; color: rgba(255,255,255,0.7); transition: all 0.2s; }
-    .topbar-icon:hover { background: rgba(255,255,255,0.15); color: #fff; }
-    .user-area { display: flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 20px; cursor: pointer; transition: background 0.2s; }
-    .user-area:hover { background: rgba(255,255,255,0.15); }
-    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #60a5fa, #34d399); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; }
-    .user-name { color: #fff; font-size: 14px; }
-
-    /* ===== 主体布局 ===== */
-    .main-layout { flex: 1; display: flex; overflow: hidden; }
-
-    /* ===== 左侧菜单 ===== */
-    .sidebar {
-      width: 240px; background: #fff; border-right: 1px solid #e8ecf1;
-      display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden;
-    }
-    .sidebar-search { padding: 16px 14px 12px; border-bottom: 1px solid #f0f2f5; flex-shrink: 0; }
-    .search-input-wrap {
-      display: flex; align-items: center; background: #fff;
-      border: 1px solid #dcdfe6; border-radius: 6px; overflow: hidden; transition: border-color 0.2s;
-    }
-    .search-input-wrap:focus-within { border-color: #4a6cf7; }
-    .search-input-wrap input { flex: 1; border: none; outline: none; padding: 8px 12px; font-size: 13px; color: #303133; background: transparent; }
-    .search-input-wrap input::placeholder { color: #c0c4cc; }
-    .search-btn { padding: 8px 14px; background: #ecf5ff; color: #409eff; border: none; cursor: pointer; font-size: 13px; transition: all 0.2s; white-space: nowrap; }
-    .search-btn:hover { background: #d9ecff; }
-
-    .menu-list { flex: 1; overflow-y: auto; padding: 8px 0; }
-    .menu-list::-webkit-scrollbar { width: 4px; }
-    .menu-list::-webkit-scrollbar-thumb { background: #dcdfe6; border-radius: 2px; }
-
-    .menu-group-title {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 16px 10px 14px; cursor: pointer;
-      transition: all 0.15s; user-select: none;
-    }
-    .menu-group-title:hover { background: #f5f7fa; }
-    .menu-group-title .menu-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .menu-group-title .menu-icon svg { width: 16px; height: 16px; }
-    .menu-group-title .menu-label { flex: 1; font-size: 14px; font-weight: 500; color: #3370ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .menu-child-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 9px 16px 9px 42px; cursor: pointer;
-      transition: all 0.15s; position: relative;
-    }
-    .menu-child-item:hover { background: #f5f7fa; }
-    .menu-child-item.active { background: #ecf5ff; }
-    .menu-child-item.active::before {
-      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-      width: 3px; background: #409eff; border-radius: 0 3px 3px 0;
-    }
-    .menu-child-item .child-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .menu-child-item .child-icon svg { width: 14px; height: 14px; }
-    .menu-child-item .child-label { font-size: 13px; color: #606266; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .menu-child-item.active .child-label { color: #303133; font-weight: 500; }
-
-    /* ===== 右侧内容区 ===== */
-    .content-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #f0f2f5; }
-    .content-header { padding: 16px 24px 12px; background: #fff; border-bottom: 1px solid #e8ecf1; flex-shrink: 0; }
-    .content-header h2 { font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 12px; }
-    .filter-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-
-    .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #fff; border-bottom: 1px solid #e8ecf1; flex-shrink: 0; }
-    .toolbar-left { display: flex; gap: 10px; }
-    .toolbar-right { display: flex; gap: 10px; }
-
-    .table-area { flex: 1; padding: 16px 24px; overflow-y: auto; }
-    .table-area::-webkit-scrollbar { width: 6px; }
-    .table-area::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 3px; }
-
-    .pagination-bar { padding: 12px 24px; background: #fff; border-top: 1px solid #e8ecf1; display: flex; justify-content: flex-end; flex-shrink: 0; }
-
-    /* ===== 个性化设置页面样式 ===== */
-    .settings-page { flex: 1; overflow-y: auto; padding: 24px; }
-    .settings-page::-webkit-scrollbar { width: 6px; }
-    .settings-page::-webkit-scrollbar-thumb { background: #d0d5dd; border-radius: 3px; }
-
-    .settings-card {
-      background: #fff; border-radius: 12px; margin-bottom: 20px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.04);
-      overflow: hidden;
-    }
-    .settings-card-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 18px 24px; border-bottom: 1px solid #f0f2f5;
-    }
-    .settings-card-header .sc-icon { font-size: 20px; }
-    .settings-card-header .sc-title { font-size: 16px; font-weight: 600; color: #1e293b; }
-    .settings-card-header .sc-desc { font-size: 13px; color: #94a3b8; margin-left: 12px; }
-    .settings-card-body { padding: 20px 24px; }
-
-    .setting-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 0; border-bottom: 1px solid #f5f7fa;
-    }
-    .setting-row:last-child { border-bottom: none; }
-    .setting-info { flex: 1; }
-    .setting-label { font-size: 14px; font-weight: 500; color: #303133; margin-bottom: 4px; }
-    .setting-desc { font-size: 13px; color: #94a3b8; line-height: 1.5; }
-    .setting-control { flex-shrink: 0; margin-left: 24px; }
-
-    /* 预览卡片 */
-    .theme-preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 12px; }
-    .theme-card {
-      border: 2px solid #e8ecf1; border-radius: 10px; padding: 12px;
-      cursor: pointer; transition: all 0.2s; text-align: center;
-    }
-    .theme-card:hover { border-color: #a0cfff; }
-    .theme-card.selected { border-color: #409eff; background: #ecf5ff; }
-    .theme-card .theme-bar { height: 6px; border-radius: 3px; margin-bottom: 8px; }
-    .theme-card .theme-name { font-size: 13px; color: #606266; }
-    .theme-card.selected .theme-name { color: #409eff; font-weight: 500; }
-
-    /* 头像选择 */
-    .avatar-grid { display: flex; gap: 14px; margin-top: 12px; }
-    .avatar-option {
-      width: 56px; height: 56px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; cursor: pointer; border: 2px solid #e8ecf1;
-      transition: all 0.2s;
-    }
-    .avatar-option:hover { border-color: #a0cfff; transform: scale(1.05); }
-    .avatar-option.selected { border-color: #409eff; box-shadow: 0 0 0 3px rgba(64,158,255,0.15); }
-
-    /* ===== 用户授权 - 角色矩阵 ===== */
-    .auth-matrix { margin-top: 16px; }
-    .auth-matrix table { width: 100%; border-collapse: collapse; }
-    .auth-matrix th, .auth-matrix td { padding: 10px 14px; text-align: center; border: 1px solid #ebeef5; font-size: 13px; }
-    .auth-matrix th { background: #f5f7fa; color: #303133; font-weight: 600; }
-    .auth-matrix td { color: #606266; }
-    .auth-matrix tr:hover td { background: #f5f7fa; }
-    .auth-check { color: #67c23a; font-size: 18px; }
-    .auth-uncheck { color: #dcdfe6; font-size: 18px; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-in { animation: fadeIn 0.3s ease; }
+    *{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}body{font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;background:#f0f2f5;font-size:14px}#app{height:100%;display:flex;flex-direction:column}
+    .topbar{height:56px;background:linear-gradient(90deg,#4a6cf7 0%,#6366f1 50%,#8b5cf6 100%);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.2);z-index:100}
+    .topbar-left{display:flex;align-items:center;gap:0}.logo-area{display:flex;align-items:center;gap:10px;cursor:pointer;padding-right:16px;border-right:1px solid rgba(255,255,255,.15)}.logo-area img{height:32px}.logo-title{font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+    .sys-name-area{display:flex;align-items:center;gap:6px;margin-left:16px}.sys-name{font-size:17px;font-weight:600;color:#fff;letter-spacing:1px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;margin-left:20px}.breadcrumb-item{color:rgba(255,255,255,.6);font-size:13px}.breadcrumb-sep{color:rgba(255,255,255,.3)}.breadcrumb-current{color:#fff;font-size:14px;font-weight:500}
+    .topbar-right{display:flex;align-items:center;gap:14px}.topbar-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s}.topbar-icon:hover{background:rgba(255,255,255,.15);color:#fff}
+    .user-area{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;cursor:pointer;transition:background .2s}.user-area:hover{background:rgba(255,255,255,.15)}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600}.user-name{color:#fff;font-size:14px}
+    .main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
+    .content-header{padding:16px 24px 12px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}.content-header h2{font-size:18px;font-weight:600;color:#1e293b;margin-bottom:12px}.filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}.toolbar-left{display:flex;gap:10px}.toolbar-right{display:flex;gap:10px}
+    .table-area{flex:1;padding:16px 24px;overflow-y:auto}.table-area::-webkit-scrollbar{width:6px}.table-area::-webkit-scrollbar-thumb{background:#d0d5dd;border-radius:3px}
+    .pagination-bar{padding:12px 24px;background:#fff;border-top:1px solid #e8ecf1;display:flex;justify-content:flex-end;flex-shrink:0}
+    .welcome-page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+    .welcome-icon{font-size:72px;margin-bottom:20px;opacity:.7}.welcome-title{font-size:24px;font-weight:700;color:#1e293b;margin-bottom:8px}.welcome-desc{font-size:15px;color:#94a3b8;margin-bottom:24px}
+    .welcome-hint{font-size:13px;color:#94a3b8;display:flex;align-items:center;gap:6px}.welcome-hint kbd{padding:3px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:monospace;font-weight:600}
+    /* 个性化设置页面 */
+    .settings-page{flex:1;overflow-y:auto;padding:24px}.settings-page::-webkit-scrollbar{width:6px}.settings-page::-webkit-scrollbar-thumb{background:#d0d5dd;border-radius:3px}
+    .settings-card{background:#fff;border-radius:12px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.04);overflow:hidden}
+    .settings-card-header{display:flex;align-items:center;gap:10px;padding:18px 24px;border-bottom:1px solid #f0f2f5}
+    .settings-card-header .sc-icon{font-size:20px}.settings-card-header .sc-title{font-size:16px;font-weight:600;color:#1e293b}.settings-card-header .sc-desc{font-size:13px;color:#94a3b8;margin-left:12px}
+    .settings-card-body{padding:20px 24px}
+    .setting-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid #f5f7fa}.setting-row:last-child{border-bottom:none}
+    .setting-info{flex:1}.setting-label{font-size:14px;font-weight:500;color:#303133;margin-bottom:4px}.setting-desc{font-size:13px;color:#94a3b8;line-height:1.5}
+    .setting-control{flex-shrink:0;margin-left:24px}
+    .theme-preview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:12px}
+    .theme-card{border:2px solid #e8ecf1;border-radius:10px;padding:12px;cursor:pointer;transition:all .2s;text-align:center}.theme-card:hover{border-color:#a0cfff}.theme-card.selected{border-color:#409eff;background:#ecf5ff}
+    .theme-card .theme-bar{height:6px;border-radius:3px;margin-bottom:8px}.theme-card .theme-name{font-size:13px;color:#606266}.theme-card.selected .theme-name{color:#409eff;font-weight:500}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .3s ease}
   </style>
 </head>
 <body>
-  <div id="app">
-    <!-- 顶部导航 -->
-    <div class="topbar">
-      <div class="topbar-left">
-        <div class="logo-area" onclick="window.location.href='index.html'">
-          <img src="logo_icon.png" alt="HiCorLite">
-          <span class="logo-title">HiCorLite</span>
-        </div>
-        <div class="breadcrumb">
-          <span class="breadcrumb-item">总控中心</span>
-          <span class="breadcrumb-sep">/</span>
-          <span class="breadcrumb-current">统一用户管理</span>
-          <template v-if="currentChild">
-            <span class="breadcrumb-sep">/</span>
-            <span class="breadcrumb-current">{{ currentChild }}</span>
-          </template>
-        </div>
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="logo-area" onclick="window.location.href='index.html'"><img src="logo_icon.png" alt="HiCorLite"><span class="logo-title">HiCorLite</span></div>
+      <div class="sys-name-area">
+        <span class="sys-name">统一用户管理</span>
+        <subsys-menu ref="menuRef" system-name="统一用户管理" :menu-data="menuData" @select="onMenuSelect"></subsys-menu>
       </div>
-      <div class="topbar-right">
-        <div class="topbar-icon" title="返回首页" onclick="window.location.href='index.html'">
-          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v320c0 17.7 14.3 32 32 32h256V736h128v256h256c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.2z"/></svg>
-        </div>
-        <div class="topbar-icon" title="消息">
-          <svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"/></svg>
-        </div>
-        <div class="user-area">
-          <div class="user-avatar">管</div>
-          <span class="user-name">管理员</span>
-        </div>
-      </div>
+      <div class="breadcrumb" v-if="crumbChild"><span class="breadcrumb-item">统一用户管理</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbChild }}</span></div>
     </div>
-
-    <div class="main-layout">
-      <!-- 左侧菜单 -->
-      <div class="sidebar">
-        <div class="sidebar-search">
-          <div class="search-input-wrap">
-            <input type="text" v-model="searchText" placeholder="搜索菜单...">
-            <button class="search-btn">搜索</button>
-          </div>
-        </div>
-        <div class="menu-list">
-          <div class="menu-group" v-for="group in filteredMenu" :key="group.key">
-            <div class="menu-group-title">
-              <span class="menu-icon" v-html="group.iconSvg"></span>
-              <span class="menu-label">{{ group.label }}</span>
-            </div>
-            <div class="menu-child-item"
-              v-for="child in group.children" :key="child.key"
-              :class="{ active: activeItem === child.key }"
-              @click="selectItem(child.key, child.label)">
-              <span class="child-icon" v-html="child.iconSvg || group.defaultChildIcon"></span>
-              <span class="child-label">{{ child.label }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 右侧内容区 -->
-      <div class="content-area">
-
-        <!-- ===== 个性化设置页面 ===== -->
-        <template v-if="activeItem === 'personal-settings'">
-          <div class="settings-page">
-            <!-- 主题外观 -->
-            <div class="settings-card fade-in">
-              <div class="settings-card-header">
-                <span class="sc-icon">🎨</span>
-                <span class="sc-title">主题外观</span>
-                <span class="sc-desc">选择您喜欢的界面主题风格</span>
-              </div>
-              <div class="settings-card-body">
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">主题配色</div>
-                    <div class="setting-desc">系统提供四种预设配色方案，选择后全局生效</div>
-                    <div class="theme-preview-grid">
-                      <div class="theme-card" v-for="t in themes" :key="t.key"
-                        :class="{ selected: selectedTheme === t.key }"
-                        @click="selectedTheme = t.key">
-                        <div class="theme-bar" :style="{ background: t.color }"></div>
-                        <div class="theme-name">{{ t.name }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">侧边栏位置</div>
-                    <div class="setting-desc">切换侧边栏显示在左侧或右侧</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-radio-group v-model="sidebarPos">
-                      <el-radio-button label="left">左侧</el-radio-button>
-                      <el-radio-button label="right">右侧</el-radio-button>
-                    </el-radio-group>
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">菜单折叠</div>
-                    <div class="setting-desc">默认折叠侧边栏菜单，仅显示图标</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-switch v-model="menuCollapsed" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 界面显示 -->
-            <div class="settings-card fade-in" style="animation-delay:0.1s">
-              <div class="settings-card-header">
-                <span class="sc-icon">🖥️</span>
-                <span class="sc-title">界面显示</span>
-                <span class="sc-desc">调整界面元素的显示方式</span>
-              </div>
-              <div class="settings-card-body">
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">字体大小</div>
-                    <div class="setting-desc">调整系统全局字体大小，范围 12px ~ 18px</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-slider v-model="fontSize" :min="12" :max="18" :step="1" style="width:180px;" show-stops />
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">表格密度</div>
-                    <div class="setting-desc">设置数据表格的行间距密度</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-radio-group v-model="tableDensity">
-                      <el-radio-button label="loose">宽松</el-radio-button>
-                      <el-radio-button label="default">默认</el-radio-button>
-                      <el-radio-button label="compact">紧凑</el-radio-button>
-                    </el-radio-group>
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">显示面包屑导航</div>
-                    <div class="setting-desc">在页面顶部显示当前位置的面包屑路径</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-switch v-model="showBreadcrumb" />
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">显示标签页</div>
-                    <div class="setting-desc">多页面打开时以标签页形式展示，方便切换</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-switch v-model="showTabs" />
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">动画效果</div>
-                    <div class="setting-desc">开启页面切换和交互的动画效果</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-switch v-model="enableAnimation" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 通知偏好 -->
-            <div class="settings-card fade-in" style="animation-delay:0.2s">
-              <div class="settings-card-header">
-                <span class="sc-icon">🔔</span>
-                <span class="sc-title">通知偏好</span>
-                <span class="sc-desc">设置消息通知的方式和频率</span>
-              </div>
-              <div class="settings-card-body">
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">桌面通知</div>
-                    <div class="setting-desc">允许系统发送浏览器桌面通知</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-switch v-model="desktopNotify" />
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">消息提示音</div>
-                    <div class="setting-desc">收到新消息时播放提示音</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-switch v-model="notifySound" />
-                  </div>
-                </div>
-                <div class="setting-row">
-                  <div class="setting-info">
-                    <div class="setting-label">待办提醒</div>
-                    <div class="setting-desc">设置待办任务提前提醒的时间</div>
-                  </div>
-                  <div class="setting-control">
-                    <el-select v-model="remindBefore" style="width:140px;">
-                      <el-option label="5 分钟前" value="5" />
-                      <el-option label="15 分钟前" value="15" />
-                      <el-option label="30 分钟前" value="30" />
-                      <el-option label="1 小时前" value="60" />
-                    </el-select>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 个人头像 -->
-            <div class="settings-card fade-in" style="animation-delay:0.3s">
-              <div class="settings-card-header">
-                <span class="sc-icon">👤</span>
-                <span class="sc-title">个人头像</span>
-                <span class="sc-desc">选择系统默认头像样式</span>
-              </div>
-              <div class="settings-card-body">
-                <div class="avatar-grid">
-                  <div class="avatar-option" v-for="av in avatarOptions" :key="av.key"
-                    :class="{ selected: selectedAvatar === av.key }"
-                    :style="{ background: av.bg }"
-                    @click="selectedAvatar = av.key">
-                    {{ av.emoji }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 保存按钮 -->
-            <div style="text-align:right;padding:8px 0 20px;">
-              <el-button>重置默认</el-button>
-              <el-button type="primary" size="large">保存设置</el-button>
-            </div>
-          </div>
-        </template>
-
-        <!-- ===== 工作组管理 ===== -->
-        <template v-if="activeItem === 'work-group'">
-          <div class="content-header">
-            <h2>工作组管理</h2>
-            <div class="filter-bar">
-              <el-input v-model="filterKeyword" placeholder="搜索工作组名称..." style="width:280px;" clearable />
-              <el-select placeholder="所属部门" style="width:150px;" clearable>
-                <el-option label="全部" value="" />
-                <el-option label="临床科室" value="clinical" />
-                <el-option label="医技科室" value="tech" />
-                <el-option label="行政后勤" value="admin" />
-                <el-option label="药学部" value="pharmacy" />
-              </el-select>
-              <el-button type="primary">查询</el-button>
-              <el-button>重置</el-button>
-            </div>
-          </div>
-          <div class="toolbar">
-            <div class="toolbar-left">
-              <el-button type="primary">+ 新建工作组</el-button>
-            </div>
-            <div class="toolbar-right">
-              <el-button>导出</el-button>
-            </div>
-          </div>
-          <div class="table-area">
-            <el-table :data="workGroupData" stripe border style="width:100%"
-              :header-cell-style="{ background:'#f5f7fa', color:'#303133', fontWeight:'600' }">
-              <el-table-column prop="groupCode" label="工作组编码" width="130" />
-              <el-table-column prop="groupName" label="工作组名称" width="180" />
-              <el-table-column prop="department" label="所属部门" width="130" />
-              <el-table-column prop="leader" label="负责人" width="90" />
-              <el-table-column prop="memberCount" label="成员数" width="80" align="center" />
-              <el-table-column prop="scope" label="权限范围" min-width="200" show-overflow-tooltip />
-              <el-table-column prop="createTime" label="创建时间" width="160" />
-              <el-table-column label="状态" width="80" fixed="right">
-                <template #default="scope">
-                  <el-tag :type="scope.row.status === '启用' ? 'success' : 'info'" size="small">{{ scope.row.status }}</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="180" fixed="right">
-                <template #default>
-                  <el-button type="primary" link size="small">成员</el-button>
-                  <el-button type="primary" link size="small">编辑</el-button>
-                  <el-button type="danger" link size="small">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-          <div class="pagination-bar">
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="20" :page-sizes="[10, 20, 50]" />
-          </div>
-        </template>
-
-        <!-- ===== 用户授权 ===== -->
-        <template v-if="activeItem === 'user-auth'">
-          <div class="content-header">
-            <h2>用户授权</h2>
-            <div class="filter-bar">
-              <el-input v-model="filterKeyword" placeholder="搜索用户名 / 工号 / 姓名..." style="width:280px;" clearable />
-              <el-select placeholder="用户角色" style="width:150px;" clearable>
-                <el-option label="全部" value="" />
-                <el-option label="系统管理员" value="admin" />
-                <el-option label="门诊医生" value="doctor" />
-                <el-option label="住院护士" value="nurse" />
-                <el-option label="药剂师" value="pharm" />
-                <el-option label="收费员" value="fee" />
-              </el-select>
-              <el-select placeholder="所属工作组" style="width:160px;" clearable>
-                <el-option label="全部" value="" />
-                <el-option label="内科工作组" value="neike" />
-                <el-option label="外科工作组" value="waike" />
-                <el-option label="药学工作组" value="yaoxue" />
-                <el-option label="信息科工作组" value="info" />
-              </el-select>
-              <el-button type="primary">查询</el-button>
-              <el-button>重置</el-button>
-            </div>
-          </div>
-          <div class="toolbar">
-            <div class="toolbar-left">
-              <el-button type="primary">+ 授权用户</el-button>
-              <el-button>批量授权</el-button>
-            </div>
-            <div class="toolbar-right">
-              <el-button>导出授权清单</el-button>
-            </div>
-          </div>
-          <div class="table-area">
-            <el-table :data="userAuthData" stripe border style="width:100%"
-              :header-cell-style="{ background:'#f5f7fa', color:'#303133', fontWeight:'600' }">
-              <el-table-column prop="employeeNo" label="工号" width="90" />
-              <el-table-column prop="name" label="姓名" width="90" />
-              <el-table-column prop="dept" label="科室" width="120" />
-              <el-table-column prop="roles" label="授权角色" width="160">
-                <template #default="scope">
-                  <el-tag v-for="r in scope.row.roles" :key="r" size="small" style="margin:2px 4px 2px 0;" :type="r === '系统管理员' ? 'danger' : r === '门诊医生' ? '' : 'success'">{{ r }}</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="workGroup" label="所属工作组" width="130" />
-              <el-table-column prop="authLevel" label="授权级别" width="100">
-                <template #default="scope">
-                  <el-tag :type="scope.row.authLevel === '全部' ? 'danger' : scope.row.authLevel === '部分' ? 'warning' : 'info'" size="small" effect="plain">{{ scope.row.authLevel }}</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="validFrom" label="授权起始" width="110" />
-              <el-table-column prop="validTo" label="授权截止" width="110" />
-              <el-table-column label="状态" width="80" fixed="right">
-                <template #default="scope">
-                  <el-tag :type="scope.row.status === '有效' ? 'success' : 'info'" size="small">{{ scope.row.status }}</el-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" width="180" fixed="right">
-                <template #default>
-                  <el-button type="primary" link size="small">权限</el-button>
-                  <el-button type="primary" link size="small">编辑</el-button>
-                  <el-button type="warning" link size="small">回收</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-          <div class="pagination-bar">
-            <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10, 20, 50]" />
-          </div>
-        </template>
-
-      </div>
+    <div class="topbar-right">
+      <div class="topbar-icon" title="返回首页" onclick="window.location.href='index.html'"><svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v320c0 17.7 14.3 32 32 32h256V736h128v256h256c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.2z"/></svg></div>
+      <div class="user-area"><div class="user-avatar">管</div><span class="user-name">管理员</span></div>
     </div>
   </div>
+  <div class="main-content" v-if="!activeItem"><div class="welcome-page fade-in"><div class="welcome-icon">👥</div><div class="welcome-title">统一用户管理</div><div class="welcome-desc">请点击右上角 <b style="color:#4a6cf7;">☰ 菜单图标</b> 选择功能模块</div><div class="welcome-hint">快捷键 <kbd>Ctrl</kbd> + <kbd>M</kbd> 打开菜单</div></div></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
-  <script>
-    const { createApp, ref, computed } = Vue;
+  <!-- 个性化设置页面 -->
+  <template v-if="activeItem==='personal-settings'">
+    <div class="settings-page">
+      <div class="settings-card fade-in">
+        <div class="settings-card-header"><span class="sc-icon">🎨</span><span class="sc-title">主题外观</span><span class="sc-desc">选择您喜欢的界面主题风格</span></div>
+        <div class="settings-card-body">
+          <div class="setting-row"><div class="setting-info"><div class="setting-label">主题配色</div><div class="setting-desc">系统提供四种预设配色方案</div><div class="theme-preview-grid"><div class="theme-card" v-for="t in themes" :key="t.key" :class="{selected:selectedTheme===t.key}" @click="selectedTheme=t.key"><div class="theme-bar" :style="{background:t.color}"></div><div class="theme-name">{{ t.name }}</div></div></div></div></div>
+          <div class="setting-row"><div class="setting-info"><div class="setting-label">字体大小</div><div class="setting-desc">调整系统全局字体大小</div></div><div class="setting-control"><el-slider v-model="fontSize" :min="12" :max="18" :step="1" style="width:180px;" show-stops /></div></div>
+          <div class="setting-row"><div class="setting-info"><div class="setting-label">消息提示音</div><div class="setting-desc">收到新消息时播放提示音</div></div><div class="setting-control"><el-switch v-model="notifySound" /></div></div>
+        </div>
+      </div>
+      <div style="text-align:right;padding:8px 0 20px;"><el-button>重置默认</el-button><el-button type="primary" size="large">保存设置</el-button></div>
+    </div>
+  </template>
 
-    const icons = {
-      settings: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M924.8 625.7l-65.5-56c3.1-19 4.7-38.4 4.7-57.8s-1.6-38.8-4.7-57.8l65.5-56a32.03 32.03 0 0 0 9.3-35.2l-.9-2.6a443.74 443.74 0 0 0-79.7-137.9l-1.8-2.1a32.12 32.12 0 0 0-35.1-9.5l-81.3 28.9c-30-24.6-63.5-44-99.7-57.6l-15.7-85a32.05 32.05 0 0 0-25.8-25.7l-2.7-.5c-52.1-9.4-106.9-9.4-159 0l-2.7.5a32.05 32.05 0 0 0-25.8 25.7l-15.8 85.4a351.9 351.9 0 0 0-99 57.4l-81.9-29.1a32 32 0 0 0-35.1 9.5l-1.8 2.1a446.02 446.02 0 0 0-79.7 137.9l-.9 2.6c-4.5 12.5-.8 26.5 9.3 35.2l66.3 56.6c-3.1 18.8-4.6 38-4.6 57.1 0 19.2 1.5 38.4 4.6 57.1L99 625.5a32.03 32.03 0 0 0-9.3 35.2l.9 2.6c18.1 50.4 44.9 96.9 79.7 137.9l1.8 2.1a32.12 32.12 0 0 0 35.1 9.5l81.9-29.1c29.8 24.5 63.1 43.9 99 57.4l15.8 85.4a32.05 32.05 0 0 0 25.8 25.7l2.7.5a449.4 449.4 0 0 0 159 0l2.7-.5a32.05 32.05 0 0 0 25.8-25.7l15.7-85a350 350 0 0 0 99.7-57.6l81.3 28.9a32 32 0 0 0 35.1-9.5l1.8-2.1c34.8-41.1 61.6-87.5 79.7-137.9l.9-2.6c4.5-12.3.8-26.3-9.3-35zM788.3 465.9c2.5 15.1 3.8 30.6 3.8 46.1s-1.3 31-3.8 46.1l-6.6 40.1 74.7 63.9a370.03 370.03 0 0 1-42.6 73.6L721 702.8l-31.4 25.8c-23.9 19.6-50.5 35-79.3 45.8l-38.1 14.3-17.9 97a377.5 377.5 0 0 1-85 0l-17.9-97.2-37.8-14.5c-28.5-10.8-55-26.2-78.7-45.7l-31.4-25.9-93.4 33.2c-17-22.9-31.2-47.6-42.6-73.6l75.5-64.5-6.5-40c-2.4-14.9-3.7-30.3-3.7-45.5 0-15.3 1.2-30.6 3.7-45.5l6.5-40-75.5-64.5c11.3-26.1 25.6-50.7 42.6-73.6l93.4 33.2 31.4-25.9c23.7-19.5 50.2-34.9 78.7-45.7l37.9-14.3 17.9-97.2c28.1-3.2 56.8-3.2 85 0l17.9 97 38.1 14.3c28.7 10.8 55.4 26.2 79.3 45.8l31.4 25.8 92.8-32.9c17 22.9 31.2 47.6 42.6 73.6L840 426l6.6 40z"/><path fill="#909399" d="M512 326c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176-78.8-176-176-176zm79.2 255.2A111.6 111.6 0 0 1 512 632c-29.9 0-58-11.7-79.2-32.8A111.6 111.6 0 0 1 400 520c0-29.9 11.7-58 32.8-79.2C454 419.6 482.1 408 512 408c29.9 0 58 11.6 79.2 32.8A111.6 111.6 0 0 1 624 520c0 29.9-11.7 58-32.8 79.2z"/></svg>',
-      grid: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M928 160H96c-17.7 0-32 14.3-32 32v640c0 17.7 14.3 32 32 32h832c17.7 0 32-14.3 32-32V192c0-17.7-14.3-32-32-32zm-40 632H136V232h752v560z"/></svg>',
-      auth: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm193.5 301.7l-210.6 292a31.8 31.8 0 0 1-51.7 0.9L308.5 484.9c-3.8-5.3 0-12.7 6.5-12.7h46.9c10.3 0 19.9 5 25.9 13.3l71.2 98.8 157.2-218c6-8.3 15.6-13.3 25.9-13.3h46.9c6.5 0 10.4 7.4 6.5 12.7z"/></svg>',
-      users: '<svg viewBox="0 0 1024 1024" width="16" height="16"><path fill="#909399" d="M858.5 763.6a374 374 0 0 0-80.6-119.5 375.6 375.6 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.6 375.6 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"/></svg>',
-    };
-
-    const menuData = [
-      {
-        key: 'personal',
-        label: '个性化设置',
-        iconSvg: icons.settings,
-        defaultChildIcon: icons.settings,
-        children: [
-          { key: 'personal-settings', label: '个性化设置', iconSvg: icons.settings },
-        ]
-      },
-      {
-        key: 'authorization',
-        label: '分级授权',
-        iconSvg: icons.auth,
-        defaultChildIcon: icons.grid,
-        children: [
-          { key: 'work-group', label: '工作组管理', iconSvg: icons.grid },
-          { key: 'user-auth', label: '用户授权', iconSvg: icons.auth },
-        ]
-      },
-    ];
-
-    // 工作组数据
-    const workGroupData = [
-      { groupCode: 'WG-NEIKE', groupName: '内科工作组', department: '内科', leader: '张伟', memberCount: 28, scope: '门诊医生站、住院医生站、电子病历、检验报告', createTime: '2025-01-20 10:00', status: '启用' },
-      { groupCode: 'WG-WAIKE', groupName: '外科工作组', department: '外科', leader: '孙浩', memberCount: 22, scope: '门诊医生站、住院医生站、电子病历、手术管理', createTime: '2025-01-20 10:00', status: '启用' },
-      { groupCode: 'WG-FUKE', groupName: '妇产科工作组', department: '妇产科', leader: '周明', memberCount: 15, scope: '门诊医生站、住院医生站、电子病历', createTime: '2025-01-20 10:00', status: '启用' },
-      { groupCode: 'WG-ERKE', groupName: '儿科工作组', department: '儿科', leader: '赵敏', memberCount: 12, scope: '门诊医生站、住院医生站、电子病历', createTime: '2025-02-01 14:00', status: '启用' },
-      { groupCode: 'WG-HULI', groupName: '护理工作组', department: '护理部', leader: '王丽', memberCount: 96, scope: '住院护士站、护理工作站、护理PDA', createTime: '2025-01-25 09:00', status: '启用' },
-      { groupCode: 'WG-YAOXUE', groupName: '药学工作组', department: '药学部', leader: '陈静', memberCount: 24, scope: '药库工作站、药房工作站、用药监控', createTime: '2025-01-25 09:00', status: '启用' },
-      { groupCode: 'WG-YINGXIANG', groupName: '影像工作组', department: '影像科', leader: '钱进', memberCount: 10, scope: '医技工作站（PACS）、影像报告', createTime: '2025-03-01 10:00', status: '启用' },
-      { groupCode: 'WG-SHOUFEI', groupName: '收费工作组', department: '财务科', leader: '吴芳', memberCount: 18, scope: '门诊挂号收费、住院费用管理、票据管理', createTime: '2025-01-28 11:00', status: '启用' },
-      { groupCode: 'WG-XXK', groupName: '信息科工作组', department: '信息科', leader: '刘强', memberCount: 6, scope: '全部应用（系统管理员权限）', createTime: '2025-01-15 08:00', status: '启用' },
-      { groupCode: 'WG-ZHIKONG', groupName: '质控工作组', department: '质控办', leader: '郑华', memberCount: 8, scope: '病历质量管理、医疗质量平台', createTime: '2025-04-01 09:00', status: '停用' },
-    ];
-
-    // 用户授权数据
-    const userAuthData = [
-      { employeeNo: 'E0001', name: '张伟', dept: '内科', roles: ['门诊医生'], workGroup: '内科工作组', authLevel: '部分', validFrom: '2025-01-20', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0002', name: '李芳', dept: '外科', roles: ['门诊医生'], workGroup: '外科工作组', authLevel: '部分', validFrom: '2025-01-20', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0003', name: '王丽', dept: '护理部', roles: ['住院护士'], workGroup: '护理工作组', authLevel: '部分', validFrom: '2025-01-25', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0004', name: '陈静', dept: '药剂科', roles: ['药剂师'], workGroup: '药学工作组', authLevel: '部分', validFrom: '2025-01-25', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0005', name: '刘强', dept: '信息科', roles: ['系统管理员'], workGroup: '信息科工作组', authLevel: '全部', validFrom: '2025-01-15', validTo: '2099-12-31', status: '有效' },
-      { employeeNo: 'E0006', name: '周明', dept: '妇产科', roles: ['门诊医生', '住院医生'], workGroup: '妇产科工作组', authLevel: '部分', validFrom: '2025-01-20', validTo: '2026-06-30', status: '有效' },
-      { employeeNo: 'E0007', name: '赵敏', dept: '儿科', roles: ['门诊医生'], workGroup: '儿科工作组', authLevel: '部分', validFrom: '2025-02-01', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0008', name: '孙浩', dept: '骨科', roles: ['门诊医生', '住院医生'], workGroup: '外科工作组', authLevel: '部分', validFrom: '2025-01-20', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0009', name: '吴芳', dept: '财务科', roles: ['收费员'], workGroup: '收费工作组', authLevel: '部分', validFrom: '2025-01-28', validTo: '2026-12-31', status: '有效' },
-      { employeeNo: 'E0010', name: '郑华', dept: '质控办', roles: ['质控员'], workGroup: '质控工作组', authLevel: '部分', validFrom: '2025-04-01', validTo: '2025-12-31', status: '过期' },
-    ];
-
-    createApp({
-      setup() {
-        const searchText = ref('');
-        const activeItem = ref('personal-settings');
-        const currentChild = ref('个性化设置');
-        const filterKeyword = ref('');
-
-        // 个性化设置状态
-        const selectedTheme = ref('blue');
-        const sidebarPos = ref('left');
-        const menuCollapsed = ref(false);
-        const fontSize = ref(14);
-        const tableDensity = ref('default');
-        const showBreadcrumb = ref(true);
-        const showTabs = ref(true);
-        const enableAnimation = ref(true);
-        const desktopNotify = ref(true);
-        const notifySound = ref(true);
-        const remindBefore = ref('15');
-        const selectedAvatar = ref('a1');
-
-        const themes = [
-          { key: 'blue', name: '经典蓝', color: 'linear-gradient(90deg, #4a6cf7, #6366f1)' },
-          { key: 'green', name: '清新绿', color: 'linear-gradient(90deg, #10b981, #34d399)' },
-          { key: 'orange', name: '活力橙', color: 'linear-gradient(90deg, #f59e0b, #fbbf24)' },
-          { key: 'dark', name: '暗夜黑', color: 'linear-gradient(90deg, #1e293b, #334155)' },
-        ];
-
-        const avatarOptions = [
-          { key: 'a1', emoji: '👨‍⚕️', bg: '#eff6ff' },
-          { key: 'a2', emoji: '👩‍⚕️', bg: '#f0fdf4' },
-          { key: 'a3', emoji: '🧑‍💼', bg: '#fffbeb' },
-          { key: 'a4', emoji: '👨‍💻', bg: '#fef2f2' },
-          { key: 'a5', emoji: '👩‍🔬', bg: '#f5f3ff' },
-          { key: 'a6', emoji: '🧑‍🎓', bg: '#ecfdf5' },
-          { key: 'a7', emoji: '🐼', bg: '#f1f5f9' },
-          { key: 'a8', emoji: '🦊', bg: '#fff7ed' },
-        ];
-
-        const filteredMenu = computed(() => {
-          if (!searchText.value) return menuData;
-          const kw = searchText.value.toLowerCase();
-          return menuData.filter(group => {
-            const groupMatch = group.label.toLowerCase().includes(kw);
-            const childMatch = group.children.some(c => c.label.toLowerCase().includes(kw));
-            return groupMatch || childMatch;
-          });
-        });
-
-        const selectItem = (key, label) => {
-          activeItem.value = key;
-          currentChild.value = label;
-        };
-
-        return {
-          searchText, activeItem, currentChild, filterKeyword,
-          filteredMenu, selectItem, menu: menuData,
-          selectedTheme, sidebarPos, menuCollapsed, fontSize, tableDensity,
-          showBreadcrumb, showTabs, enableAnimation,
-          desktopNotify, notifySound, remindBefore, selectedAvatar,
-          themes, avatarOptions,
-          workGroupData, userAuthData,
-        };
-      }
-    }).use(ElementPlus).mount('#app');
-  </script>
+  <!-- 工作组管理 / 用户授权 -->
+  <div class="main-content" v-if="activeItem&&activeItem!=='personal-settings'">
+    <div class="content-header"><h2>{{ crumbChild }}</h2><div class="filter-bar"><el-input v-model="filterKw" :placeholder="'搜索'+crumbChild+'...'" style="width:280px;" clearable /><el-select placeholder="状态" style="width:120px;" clearable><el-option label="全部" value="" /><el-option label="启用" value="1" /><el-option label="停用" value="0" /></el-select><el-button type="primary">查询</el-button><el-button>重置</el-button></div></div>
+    <div class="toolbar"><div class="toolbar-left"><el-button type="primary">+ 新增</el-button></div><div class="toolbar-right"><el-button>导出</el-button></div></div>
+    <div class="table-area" v-if="tableData.length">
+      <el-table :data="tableData" stripe border style="width:100%" :header-cell-style="{background:'#f5f7fa',color:'#303133',fontWeight:'600'}">
+        <el-table-column v-for="col in tableCols" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
+        <el-table-column label="状态" width="80" fixed="right"><template #default="s"><el-tag :type="s.row.status==='启用'||s.row.status==='有效'?'success':'info'" size="small">{{ s.row.status }}</el-tag></template></el-table-column>
+        <el-table-column label="操作" width="160" fixed="right"><template #default><el-button type="primary" link size="small">编辑</el-button><el-button type="danger" link size="small">删除</el-button></template></el-table-column>
+      </el-table>
+    </div>
+    <div v-else style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;" class="fade-in"><div style="font-size:56px;margin-bottom:16px;opacity:.6">📂</div><div style="font-size:17px;color:#606266;margin-bottom:8px">{{ crumbChild }}</div><div style="font-size:14px">功能模块开发中，敬请期待</div></div>
+    <div class="pagination-bar" v-if="tableData.length"><el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10,20,50]" /></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+<script src="subsys-menu.js"></script>
+<script>
+const{createApp,ref,computed}=Vue;
+const menuData=[
+  {key:'personal',icon:'⚙️',label:'个性化设置',items:[{key:'personal-settings',label:'个性化设置'}]},
+  {key:'authorization',icon:'🔐',label:'分级授权',items:[{key:'work-group',label:'工作组管理'},{key:'user-auth',label:'用户授权'}]},
+];
+const tableDataMap={
+  'work-group':{cols:[{prop:'groupCode',label:'工作组编码',width:130},{prop:'groupName',label:'工作组名称',width:180},{prop:'department',label:'所属部门',width:130},{prop:'leader',label:'负责人',width:90},{prop:'memberCount',label:'成员数',width:80},{prop:'scope',label:'权限范围',minWidth:200},{prop:'createTime',label:'创建时间',width:160},{prop:'status',label:'状态',width:80}],data:[{groupCode:'WG-NEIKE',groupName:'内科工作组',department:'内科',leader:'张伟',memberCount:28,scope:'门诊医生站、住院医生站、电子病历',createTime:'2025-01-20 10:00',status:'启用'},{groupCode:'WG-WAIKE',groupName:'外科工作组',department:'外科',leader:'孙浩',memberCount:22,scope:'门诊医生站、住院医生站、手术管理',createTime:'2025-01-20 10:00',status:'启用'},{groupCode:'WG-HULI',groupName:'护理工作组',department:'护理部',leader:'王丽',memberCount:96,scope:'住院护士站、护理工作站、护理PDA',createTime:'2025-01-25 09:00',status:'启用'},{groupCode:'WG-YAOXUE',groupName:'药学工作组',department:'药学部',leader:'陈静',memberCount:24,scope:'药库工作站、药房工作站、用药监控',createTime:'2025-01-25 09:00',status:'启用'},{groupCode:'WG-XXK',groupName:'信息科工作组',department:'信息科',leader:'刘强',memberCount:6,scope:'全部应用（系统管理员权限）',createTime:'2025-01-15 08:00',status:'启用'}]},
+  'user-auth':{cols:[{prop:'employeeNo',label:'工号',width:90},{prop:'name',label:'姓名',width:90},{prop:'dept',label:'科室',width:120},{prop:'roles',label:'授权角色',width:160},{prop:'workGroup',label:'所属工作组',width:130},{prop:'authLevel',label:'授权级别',width:100},{prop:'validFrom',label:'授权起始',width:110},{prop:'validTo',label:'授权截止',width:110},{prop:'status',label:'状态',width:80}],data:[{employeeNo:'E0001',name:'张伟',dept:'内科',roles:'门诊医生',workGroup:'内科工作组',authLevel:'部分',validFrom:'2025-01-20',validTo:'2026-12-31',status:'有效'},{employeeNo:'E0003',name:'王丽',dept:'护理部',roles:'住院护士',workGroup:'护理工作组',authLevel:'部分',validFrom:'2025-01-25',validTo:'2026-12-31',status:'有效'},{employeeNo:'E0005',name:'刘强',dept:'信息科',roles:'系统管理员',workGroup:'信息科工作组',authLevel:'全部',validFrom:'2025-01-15',validTo:'2099-12-31',status:'有效'},{employeeNo:'E0006',name:'周明',dept:'妇产科',roles:'门诊医生、住院医生',workGroup:'妇产科工作组',authLevel:'部分',validFrom:'2025-01-20',validTo:'2026-06-30',status:'有效'}]},
+};
+createApp({
+  setup(){
+    const activeItem=ref('');const crumbGroup=ref('');const crumbChild=ref('');const filterKw=ref('');
+    const selectedTheme=ref('blue');const fontSize=ref(14);const notifySound=ref(true);
+    const themes=[{key:'blue',name:'经典蓝',color:'linear-gradient(90deg,#4a6cf7,#6366f1)'},{key:'green',name:'清新绿',color:'linear-gradient(90deg,#10b981,#34d399)'},{key:'orange',name:'活力橙',color:'linear-gradient(90deg,#f59e0b,#fbbf24)'},{key:'dark',name:'暗夜黑',color:'linear-gradient(90deg,#1e293b,#334155)'}];
+    const onMenuSelect=({key,groupLabel,itemLabel})=>{activeItem.value=key;crumbGroup.value=groupLabel;crumbChild.value=itemLabel};
+    const tableCols=computed(()=>(tableDataMap[activeItem.value]||{}).cols||[]);
+    const tableData=computed(()=>(tableDataMap[activeItem.value]||{}).data||[]);
+    return{menuData,activeItem,crumbGroup,crumbChild,filterKw,onMenuSelect,tableCols,tableData,selectedTheme,fontSize,notifySound,themes};
+  }
+}).component('subsys-menu',initSubsystemMenu(menuData)).use(ElementPlus).mount('#app');
+</script>
 </body>
 </html>

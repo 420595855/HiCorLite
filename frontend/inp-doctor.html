@@ -10,15 +10,25 @@
     html,body{height:100%;overflow:hidden}
     body{font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;background:#f0f2f5;font-size:14px}
     #app{height:100%;display:flex;flex-direction:column}
-    .topbar{height:56px;background:linear-gradient(90deg,#4a6cf7 0%,#6366f1 50%,#8b5cf6 100%);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.2);z-index:100}
-    .topbar-left{display:flex;align-items:center;gap:16px}
-    .logo-area{display:flex;align-items:center;gap:10px;cursor:pointer}
+
+    .topbar{
+      height:56px;background:linear-gradient(90deg,#4a6cf7 0%,#6366f1 50%,#8b5cf6 100%);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 24px;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.2);z-index:100;
+    }
+    .topbar-left{display:flex;align-items:center;gap:0}
+    .logo-area{display:flex;align-items:center;gap:10px;cursor:pointer;padding-right:16px;border-right:1px solid rgba(255,255,255,.15);margin-right:0}
     .logo-area img{height:32px}
     .logo-title{font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+
+    .sys-name-area{display:flex;align-items:center;gap:6px;margin-left:16px}
+    .sys-name{font-size:17px;font-weight:600;color:#fff;letter-spacing:1px}
+
     .breadcrumb{display:flex;align-items:center;gap:8px;margin-left:20px}
     .breadcrumb-item{color:rgba(255,255,255,.6);font-size:13px}
     .breadcrumb-sep{color:rgba(255,255,255,.3)}
     .breadcrumb-current{color:#fff;font-size:14px;font-weight:500}
+
     .topbar-right{display:flex;align-items:center;gap:14px}
     .topbar-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s}
     .topbar-icon:hover{background:rgba(255,255,255,.15);color:#fff}
@@ -26,38 +36,9 @@
     .user-area:hover{background:rgba(255,255,255,.15)}
     .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600}
     .user-name{color:#fff;font-size:14px}
-    .main-layout{flex:1;display:flex;overflow:hidden}
 
-    .sidebar{width:260px;background:#fff;border-right:1px solid #e8ecf1;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
-    .sidebar-search{padding:16px 14px 12px;border-bottom:1px solid #f0f2f5;flex-shrink:0}
-    .search-input-wrap{display:flex;align-items:center;background:#fff;border:1px solid #dcdfe6;border-radius:6px;overflow:hidden;transition:border-color .2s}
-    .search-input-wrap:focus-within{border-color:#4a6cf7}
-    .search-input-wrap input{flex:1;border:none;outline:none;padding:8px 12px;font-size:13px;color:#303133;background:transparent}
-    .search-input-wrap input::placeholder{color:#c0c4cc}
-    .search-btn{padding:8px 14px;background:#ecf5ff;color:#409eff;border:none;cursor:pointer;font-size:13px;transition:all .2s;white-space:nowrap}
-    .search-btn:hover{background:#d9ecff}
-    .menu-list{flex:1;overflow-y:auto;padding:6px 0}
-    .menu-list::-webkit-scrollbar{width:4px}
-    .menu-list::-webkit-scrollbar-thumb{background:#dcdfe6;border-radius:2px}
-
-    .menu-section{margin-bottom:2px}
-    .menu-section-title{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;transition:all .15s;user-select:none}
-    .menu-section-title:hover{background:#f5f7fa}
-    .menu-section-title .section-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-    .menu-section-title .section-label{flex:1;font-size:13px;font-weight:600;color:#3370ff;letter-spacing:.5px}
-    .menu-section-title .expand-arrow{width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#c0c4cc;transition:transform .2s;flex-shrink:0}
-    .menu-section-title .expand-arrow.expanded{transform:rotate(90deg)}
-
-    .menu-item{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 36px;cursor:pointer;transition:all .15s;position:relative}
-    .menu-item:hover{background:#f5f7fa}
-    .menu-item.active{background:#ecf5ff}
-    .menu-item.active::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:3px;background:#409eff;border-radius:0 3px 3px 0}
-    .menu-item .item-dot{width:5px;height:5px;border-radius:50%;background:#c0c4cc;flex-shrink:0}
-    .menu-item.active .item-dot{background:#409eff}
-    .menu-item .item-label{font-size:13px;color:#606266;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .menu-item.active .item-label{color:#303133;font-weight:500}
-
-    .content-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
+    /* ===== 主内容区 ===== */
+    .main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
     .content-header{padding:16px 24px 12px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}
     .content-header h2{font-size:18px;font-weight:600;color:#1e293b;margin-bottom:12px}
     .filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -68,6 +49,15 @@
     .table-area::-webkit-scrollbar{width:6px}
     .table-area::-webkit-scrollbar-thumb{background:#d0d5dd;border-radius:3px}
     .pagination-bar{padding:12px 24px;background:#fff;border-top:1px solid #e8ecf1;display:flex;justify-content:flex-end;flex-shrink:0}
+
+    /* 欢迎页 */
+    .welcome-page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+    .welcome-icon{font-size:72px;margin-bottom:20px;opacity:.7}
+    .welcome-title{font-size:24px;font-weight:700;color:#1e293b;margin-bottom:8px}
+    .welcome-desc{font-size:15px;color:#94a3b8;margin-bottom:24px}
+    .welcome-hint{font-size:13px;color:#94a3b8;display:flex;align-items:center;gap:6px}
+    .welcome-hint kbd{padding:3px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:monospace;font-weight:600}
+
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
     .fade-in{animation:fadeIn .3s ease}
   </style>
@@ -76,12 +66,20 @@
 <div id="app">
   <div class="topbar">
     <div class="topbar-left">
-      <div class="logo-area" onclick="window.location.href='index.html'"><img src="logo_icon.png" alt="HiCorLite"><span class="logo-title">HiCorLite</span></div>
-      <div class="breadcrumb">
-        <span class="breadcrumb-item">总控中心</span><span class="breadcrumb-sep">/</span>
-        <span class="breadcrumb-current">住院医生站</span>
-        <template v-if="crumbGroup"><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbGroup }}</span></template>
-        <template v-if="crumbChild"><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbChild }}</span></template>
+      <div class="logo-area" onclick="window.location.href='index.html'">
+        <img src="logo_icon.png" alt="HiCorLite"><span class="logo-title">HiCorLite</span>
+      </div>
+      <div class="sys-name-area">
+        <span class="sys-name">住院医生站</span>
+        <!-- 菜单触发图标 -->
+        <subsys-menu ref="menuRef" system-name="住院医生站" :menu-data="menuData" @select="onMenuSelect"></subsys-menu>
+      </div>
+      <div class="breadcrumb" v-if="crumbChild">
+        <span class="breadcrumb-item">住院医生站</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-item">{{ crumbGroup }}</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{{ crumbChild }}</span>
       </div>
     </div>
     <div class="topbar-right">
@@ -90,69 +88,53 @@
     </div>
   </div>
 
-  <div class="main-layout">
-    <div class="sidebar">
-      <div class="sidebar-search">
-        <div class="search-input-wrap"><input type="text" v-model="searchText" placeholder="搜索功能..."><button class="search-btn">搜索</button></div>
-      </div>
-      <div class="menu-list">
-        <template v-for="sec in filteredMenu" :key="sec.key">
-          <div class="menu-section">
-            <div class="menu-section-title" @click="toggleSection(sec.key)">
-              <span class="section-icon">{{ sec.icon }}</span>
-              <span class="section-label">{{ sec.label }}</span>
-              <span class="expand-arrow" :class="{expanded:expandedSections.includes(sec.key)}"><svg viewBox="0 0 1024 1024" width="11" height="11"><path fill="currentColor" d="M384 192v640l384-320z"/></svg></span>
-            </div>
-            <div v-show="expandedSections.includes(sec.key)">
-              <div class="menu-item" v-for="item in sec.items" :key="item.key"
-                :class="{active:activeItem===item.key}"
-                @click="selectItem(item.key,sec.label,item.label)">
-                <span class="item-dot"></span>
-                <span class="item-label">{{ item.label }}</span>
-              </div>
-            </div>
-          </div>
-        </template>
+  <!-- 欢迎页 -->
+  <div class="main-content" v-if="!activeItem">
+    <div class="welcome-page fade-in">
+      <div class="welcome-icon">📋</div>
+      <div class="welcome-title">住院医生站</div>
+      <div class="welcome-desc">请点击右上角 <b style="color:#4a6cf7;">☰ 菜单图标</b> 选择功能模块</div>
+      <div class="welcome-hint">快捷键 <kbd>Ctrl</kbd> + <kbd>M</kbd> 打开菜单</div>
+    </div>
+  </div>
+
+  <!-- 功能页 -->
+  <div class="main-content" v-if="activeItem">
+    <div class="content-header">
+      <h2>{{ crumbChild }}</h2>
+      <div class="filter-bar">
+        <el-input v-model="filterKw" :placeholder="'搜索'+crumbChild+'...'" style="width:260px;" clearable />
+        <el-select placeholder="状态" style="width:120px;" clearable><el-option label="全部" value="" /><el-option label="启用" value="1" /><el-option label="停用" value="0" /></el-select>
+        <el-button type="primary">查询</el-button><el-button>重置</el-button>
       </div>
     </div>
-
-    <div class="content-area">
-      <div class="content-header">
-        <h2>{{ currentTitle }}</h2>
-        <div class="filter-bar">
-          <el-input v-model="filterKw" :placeholder="'搜索'+currentTitle+'...'" style="width:260px;" clearable />
-          <el-select placeholder="状态" style="width:120px;" clearable><el-option label="全部" value="" /><el-option label="启用" value="1" /><el-option label="停用" value="0" /></el-select>
-          <el-button type="primary">查询</el-button><el-button>重置</el-button>
-        </div>
-      </div>
-      <div class="toolbar">
-        <div class="toolbar-left"><el-button type="primary">+ 新增</el-button><el-button>批量导入</el-button></div>
-        <div class="toolbar-right"><el-button>导出</el-button><el-button>打印</el-button></div>
-      </div>
-
-      <div class="table-area" v-if="tableData.length">
-        <el-table :data="tableData" stripe border style="width:100%" :header-cell-style="{background:'#f5f7fa',color:'#303133',fontWeight:'600'}">
-          <el-table-column v-for="col in tableCols" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
-          <el-table-column label="状态" width="80" fixed="right">
-            <template #default="s"><el-tag :type="['启用','正常','有效','已完成'].includes(s.row.status)?'success':['停用','已锁定'].includes(s.row.status)?'info':'warning'" size="small">{{ s.row.status }}</el-tag></template>
-          </el-table-column>
-          <el-table-column label="操作" width="160" fixed="right">
-            <template #default><el-button type="primary" link size="small">编辑</el-button><el-button type="danger" link size="small">删除</el-button></template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div v-else style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;" class="fade-in">
-        <div style="font-size:56px;margin-bottom:16px;opacity:.6">📂</div>
-        <div style="font-size:17px;color:#606266;margin-bottom:8px">{{ currentTitle }}</div>
-        <div style="font-size:14px">功能模块开发中，敬请期待</div>
-      </div>
-      <div class="pagination-bar" v-if="tableData.length"><el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10,20,50]" /></div>
+    <div class="toolbar">
+      <div class="toolbar-left"><el-button type="primary">+ 新增</el-button><el-button>批量导入</el-button></div>
+      <div class="toolbar-right"><el-button>导出</el-button><el-button>打印</el-button></div>
     </div>
+    <div class="table-area" v-if="tableData.length">
+      <el-table :data="tableData" stripe border style="width:100%" :header-cell-style="{background:'#f5f7fa',color:'#303133',fontWeight:'600'}">
+        <el-table-column v-for="col in tableCols" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
+        <el-table-column label="状态" width="80" fixed="right">
+          <template #default="s"><el-tag :type="['启用','正常','有效','已完成'].includes(s.row.status)?'success':['停用','已锁定'].includes(s.row.status)?'info':'warning'" size="small">{{ s.row.status }}</el-tag></template>
+        </el-table-column>
+        <el-table-column label="操作" width="160" fixed="right">
+          <template #default><el-button type="primary" link size="small">编辑</el-button><el-button type="danger" link size="small">删除</el-button></template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div v-else style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;" class="fade-in">
+      <div style="font-size:56px;margin-bottom:16px;opacity:.6">📂</div>
+      <div style="font-size:17px;color:#606266;margin-bottom:8px">{{ crumbChild }}</div>
+      <div style="font-size:14px">功能模块开发中，敬请期待</div>
+    </div>
+    <div class="pagination-bar" v-if="tableData.length"><el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10,20,50]" /></div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+<script src="subsys-menu.js"></script>
 <script>
 const{createApp,ref,computed}=Vue;
 
@@ -172,8 +154,7 @@ const menuData=[
     {key:'visit-history',label:'历次就诊记录(住院)'},
   ]},
   {key:'reports',icon:'📊',label:'报表查询',items:[
-    {key:'hrp-material',label:'HRP材料二级库'},{key:'dept-revenue',label:'开单科室收入统计'},
-    {key:'discharge-fee',label:'出院患者费用明细'},
+    {key:'hrp-material',label:'HRP材料二级库'},{key:'dept-revenue',label:'开单科室收入统计'},{key:'discharge-fee',label:'出院患者费用明细'},
   ]},
   {key:'integrated-visit',icon:'🏥',label:'一体化看诊',items:[
     {key:'day-treatment',label:'日间诊疗'},{key:'inp-visit',label:'住院看诊'},
@@ -198,14 +179,12 @@ const menuData=[
     {key:'path-tpl-rule',label:'模板规则配置'},{key:'path-tpl-update',label:'模板更新任务'},
   ]},
   {key:'handover',icon:'🔄',label:'住院交班管理',items:[
-    {key:'handover-input',label:'交班信息录入'},{key:'doctor-takeover',label:'医生接班'},
-    {key:'handover-detail',label:'交接班明细'},
+    {key:'handover-input',label:'交班信息录入'},{key:'doctor-takeover',label:'医生接班'},{key:'handover-detail',label:'交接班明细'},
   ]},
   {key:'order-tpl',icon:'📄',label:'住院医嘱模板管理',items:[
     {key:'day-master-tpl',label:'日间诊疗母版管理'},{key:'day-common-tpl',label:'日间诊疗通用模板'},
     {key:'common-phrase',label:'常用语维护'},{key:'common-tpl',label:'通用模板'},
-    {key:'special-tpl',label:'专科模板'},{key:'emr-catalog',label:'病历目录'},
-    {key:'emr-type',label:'病历类型'},
+    {key:'special-tpl',label:'专科模板'},{key:'emr-catalog',label:'病历目录'},{key:'emr-type',label:'病历类型'},
   ]},
   {key:'doctor-config',icon:'⚙️',label:'住院医生配置管理',items:[
     {key:'order-display',label:'医嘱显示配置'},{key:'order-base-config',label:'医嘱基础配置维护'},
@@ -222,86 +201,38 @@ const menuData=[
   ]},
 ];
 
-// 表格数据
 const tableDataMap={
-  'duty-sched':{
-    cols:[{prop:'week',label:'星期',width:80},{prop:'dept',label:'科室',width:120},{prop:'doctor',label:'值班医生',width:100},{prop:'nurse',label:'值班护士',width:100},{prop:'shift',label:'班次',width:100},{prop:'timeRange',label:'时间段',width:140},{prop:'status',label:'状态',width:80}],
-    data:[{week:'周一',dept:'内科病区',doctor:'张伟',nurse:'王丽',shift:'白班',timeRange:'08:00-17:00',status:'正常'},{week:'周一',dept:'内科病区',doctor:'李明',nurse:'赵红',shift:'夜班',timeRange:'17:00-08:00',status:'正常'},{week:'周一',dept:'外科病区',doctor:'孙浩',nurse:'刘芳',shift:'白班',timeRange:'08:00-17:00',status:'正常'},{week:'周二',dept:'ICU',doctor:'赵敏',nurse:'李娜',shift:'白班',timeRange:'08:00-17:00',status:'正常'},{week:'周二',dept:'外科病区',doctor:'孙浩',nurse:'陈静',shift:'白班',timeRange:'08:00-17:00',status:'换班'}],
-  },
-  'surgery-sched':{
-    cols:[{prop:'surgeryDate',label:'手术日期',width:110},{prop:'room',label:'手术室',width:100},{prop:'patient',label:'患者',width:90},{prop:'surgeryName',label:'手术名称',width:180},{prop:'surgeon',label:'主刀医生',width:100},{prop:'anesthesia',label:'麻醉方式',width:110},{prop:'status',label:'状态',width:80}],
-    data:[{surgeryDate:'2026-05-12',room:'手术室1',patient:'陈大明',surgeryName:'腹腔镜胆囊切除术',surgeon:'孙浩',anesthesia:'全麻',status:'已排期'},{surgeryDate:'2026-05-12',room:'手术室2',patient:'赵小红',surgeryName:'子宫肌瘤切除术',surgeon:'周明',anesthesia:'全麻',status:'已排期'},{surgeryDate:'2026-05-13',room:'手术室1',patient:'王建国',surgeryName:'下肢血管介入术',surgeon:'张伟',anesthesia:'局麻',status:'待确认'}],
-  },
-  'visit-history':{
-    cols:[{prop:'visitNo',label:'就诊号',width:120},{prop:'patient',label:'患者',width:90},{prop:'dept',label:'科室',width:100},{prop:'diag',label:'诊断',width:160},{prop:'doctor',label:'主治医生',width:100},{prop:'admitDate',label:'入院日期',width:110},{prop:'dischargeDate',label:'出院日期',width:110},{prop:'outcome',label:'转归',width:80}],
-    data:[{visitNo:'ZY20250089',patient:'王建国',dept:'内科',diag:'2型糖尿病',doctor:'张伟',admitDate:'2025-11-10',dischargeDate:'2025-11-20',outcome:'好转'},{visitNo:'ZY20250156',patient:'王建国',dept:'内科',diag:'糖尿病酮症',doctor:'张伟',admitDate:'2026-02-15',dischargeDate:'2026-02-25',outcome:'治愈'},{visitNo:'ZY20260001',patient:'王建国',dept:'内科',diag:'2型糖尿病',doctor:'张伟',admitDate:'2026-05-01',dischargeDate:'',outcome:'在院'}],
-  },
-  'order-pack':{
-    cols:[{prop:'packCode',label:'套餐编码',width:120},{prop:'packName',label:'套餐名称',width:200},{prop:'dept',label:'适用科室',width:120},{prop:'category',label:'分类',width:100},{prop:'itemCount',label:'项目数',width:80},{prop:'status',label:'状态',width:80}],
-    data:[{packCode:'OC-001',packName:'内科常规入院套餐',dept:'内科',category:'入院',itemCount:12,status:'启用'},{packCode:'OC-002',packName:'外科术前准备套餐',dept:'外科',category:'术前',itemCount:8,status:'启用'},{packCode:'OC-003',packName:'糖尿病管理套餐',dept:'内科',category:'慢性病',itemCount:15,status:'启用'},{packCode:'OC-004',packName:'术后抗感染套餐',dept:'外科',category:'术后',itemCount:6,status:'启用'}],
-  },
-  'emr-data':{
-    cols:[{prop:'emrNo',label:'病历号',width:120},{prop:'patient',label:'患者',width:90},{prop:'emrType',label:'病历类型',width:130},{prop:'dept',label:'科室',width:100},{prop:'author',label:'书写人',width:90},{prop:'writeTime',label:'书写时间',width:160},{prop:'lockStatus',label:'锁定状态',width:100},{prop:'status',label:'状态',width:80}],
-    data:[{emrNo:'BL-20260001',patient:'王建国',emrType:'入院记录',dept:'内科',author:'张伟',writeTime:'2026-05-01 10:30',lockStatus:'已锁定',status:'正常'},{emrNo:'BL-20260002',patient:'王建国',emrType:'首次病程记录',dept:'内科',author:'张伟',writeTime:'2026-05-01 14:00',lockStatus:'已锁定',status:'正常'},{emrNo:'BL-20260003',patient:'陈大明',emrType:'术前小结',dept:'外科',author:'孙浩',writeTime:'2026-05-04 16:00',lockStatus:'未锁定',status:'待审核'},{emrNo:'BL-20260004',patient:'吴强',emrType:'抢救记录',dept:'ICU',author:'张伟',writeTime:'2026-05-07 22:30',lockStatus:'已锁定',status:'正常'}],
-  },
-  'path-list':{
-    cols:[{prop:'pathCode',label:'路径编码',width:110},{prop:'pathName',label:'路径名称',width:220},{prop:'disease',label:'适用病种',width:150},{prop:'duration',label:'标准住院日',width:100},{prop:'stageCount',label:'阶段数',width:80},{prop:'version',label:'版本',width:80},{prop:'status',label:'状态',width:80}],
-    data:[{pathCode:'CP-001',pathName:'急性阑尾炎临床路径',disease:'急性阑尾炎',duration:'5天',stageCount:4,version:'v2.0',status:'启用'},{pathCode:'CP-002',pathName:'腹股沟疝临床路径',disease:'腹股沟疝',duration:'3天',stageCount:3,version:'v1.5',status:'启用'},{pathCode:'CP-003',pathName:'2型糖尿病临床路径',disease:'2型糖尿病',duration:'10天',stageCount:5,version:'v3.0',status:'启用'},{pathCode:'CP-004',pathName:'社区获得性肺炎临床路径',disease:'肺炎',duration:'7天',stageCount:4,version:'v2.1',status:'启用'}],
-  },
-  'handover-input':{
-    cols:[{prop:'date',label:'日期',width:110},{prop:'shift',label:'班次',width:110},{prop:'dept',label:'科室',width:100},{prop:'outDoctor',label:'交班医生',width:100},{prop:'inDoctor',label:'接班医生',width:100},{prop:'patientCount',label:'在院患者',width:90},{prop:'keyNote',label:'重点事项',minWidth:200},{prop:'status',label:'状态',width:80}],
-    data:[{date:'2026-05-09',shift:'白班→夜班',dept:'内科病区',outDoctor:'张伟',inDoctor:'李明',patientCount:28,keyNote:'12床王建国血糖波动需关注',status:'已完成'},{date:'2026-05-09',shift:'白班→夜班',dept:'外科病区',outDoctor:'孙浩',inDoctor:'钱进',patientCount:22,keyNote:'3床陈大明明日手术',status:'已完成'},{date:'2026-05-10',shift:'夜班→白班',dept:'内科病区',outDoctor:'李明',inDoctor:'张伟',patientCount:28,keyNote:'夜间无特殊事件',status:'进行中'}],
-  },
-  'day-master-tpl':{
-    cols:[{prop:'tplCode',label:'模板编码',width:110},{prop:'tplName',label:'模板名称',width:220},{prop:'category',label:'分类',width:110},{prop:'dept',label:'适用科室',width:120},{prop:'version',label:'版本',width:80},{prop:'updateTime',label:'更新时间',width:160},{prop:'status',label:'状态',width:80}],
-    data:[{tplCode:'DM-001',tplName:'日间手术入院记录母版',category:'入院记录',dept:'通用',version:'v2.0',updateTime:'2026-04-15 10:00',status:'启用'},{tplCode:'DM-002',tplName:'日间手术出院小结母版',category:'出院小结',dept:'通用',version:'v1.5',updateTime:'2026-04-10 14:00',status:'启用'},{tplCode:'DM-003',tplName:'日间化疗记录母版',category:'治疗记录',dept:'肿瘤科',version:'v1.0',updateTime:'2026-03-20 09:00',status:'启用'}],
-  },
-  'order-display':{
-    cols:[{prop:'configCode',label:'配置编码',width:160},{prop:'configName',label:'配置名称',width:200},{prop:'scope',label:'作用域',width:100},{prop:'configValue',label:'配置值',width:140},{prop:'desc',label:'说明',minWidth:200},{prop:'status',label:'状态',width:80}],
-    data:[{configCode:'OD-SORT-FIELD',configName:'医嘱默认排序字段',scope:'全局',configValue:'开立时间',desc:'医嘱列表默认按此字段排序',status:'启用'},{configCode:'OD-SORT-DIR',configName:'医嘱排序方向',scope:'全局',configValue:'降序',desc:'升序/降序',status:'启用'},{configCode:'OD-SHOW-STOP',configName:'显示已停止医嘱',scope:'全局',configValue:'true',desc:'是否在列表中显示已停止的医嘱',status:'启用'},{configCode:'OD-COLOR-CRITICAL',configName:'危急值高亮颜色',scope:'全局',configValue:'#ef4444',desc:'危急值医嘱的高亮显示颜色',status:'启用'},{configCode:'OD-GROUP-BY',configName:'医嘱分组方式',scope:'科室',configValue:'类型',desc:'分组方式：类型/日期/状态',status:'启用'}],
-  },
-  'path-term':{
-    cols:[{prop:'termCode',label:'术语编码',width:110},{prop:'termName',label:'术语名称',width:180},{prop:'category',label:'分类',width:120},{prop:'desc',label:'描述',minWidth:200},{prop:'status',label:'状态',width:80}],
-    data:[{termCode:'PT-001',termName:'入院评估',category:'评估阶段',desc:'患者入院时的初始评估',status:'启用'},{termCode:'PT-002',termName:'术前准备',category:'术前阶段',desc:'手术前的各项准备工作',status:'启用'},{termCode:'PT-003',termName:'术后观察',category:'术后阶段',desc:'手术后的观察与监测',status:'启用'},{termCode:'PT-004',termName:'康复指导',category:'出院阶段',desc:'出院前的康复指导与教育',status:'启用'},{termCode:'PT-005',termName:'变异处理',category:'变异管理',desc:'临床路径偏离时的处理流程',status:'启用'}],
-  },
-  'common-phrase':{
-    cols:[{prop:'phraseCode',label:'编码',width:100},{prop:'phrase',label:'常用语',width:280},{prop:'category',label:'分类',width:110},{prop:'usageCount',label:'使用次数',width:90},{prop:'status',label:'状态',width:80}],
-    data:[{phraseCode:'CP-001',phrase:'继续当前治疗方案，观察病情变化',category:'内科',usageCount:156,status:'启用'},{phraseCode:'CP-002',phrase:'今日复查血常规+肝肾电解质',category:'检验',usageCount:234,status:'启用'},{phraseCode:'CP-003',phrase:'明日拟行手术，已完成术前讨论',category:'外科',usageCount:89,status:'启用'},{phraseCode:'CP-004',phrase:'患者一般情况好，生命体征平稳',category:'通用',usageCount:312,status:'启用'},{phraseCode:'CP-005',phrase:'予以抗感染、补液等对症支持治疗',category:'通用',usageCount:198,status:'启用'},{phraseCode:'CP-006',phrase:'嘱患者低盐低脂糖尿病饮食',category:'饮食',usageCount:145,status:'启用'}],
-  },
-  'treat-group':{
-    cols:[{prop:'groupCode',label:'小组编码',width:110},{prop:'groupName',label:'小组名称',width:160},{prop:'dept',label:'科室',width:120},{prop:'leader',label:'组长',width:90},{prop:'memberCount',label:'成员数',width:80},{prop:'scope',label:'负责范围',minWidth:200},{prop:'status',label:'状态',width:80}],
-    data:[{groupCode:'TG-001',groupName:'内科一组',dept:'内科',leader:'张伟',memberCount:6,scope:'A区1-15床',status:'启用'},{groupCode:'TG-002',groupName:'内科二组',dept:'内科',leader:'李明',memberCount:5,scope:'A区16-28床',status:'启用'},{groupCode:'TG-003',groupName:'外科一组',dept:'外科',leader:'孙浩',memberCount:7,scope:'B区1-12床',status:'启用'},{groupCode:'TG-004',groupName:'ICU组',dept:'ICU',leader:'赵敏',memberCount:8,scope:'F区全部床位',status:'启用'}],
-  },
+  'duty-sched':{cols:[{prop:'week',label:'星期',width:80},{prop:'dept',label:'科室',width:120},{prop:'doctor',label:'值班医生',width:100},{prop:'nurse',label:'值班护士',width:100},{prop:'shift',label:'班次',width:100},{prop:'timeRange',label:'时间段',width:140},{prop:'status',label:'状态',width:80}],data:[{week:'周一',dept:'内科病区',doctor:'张伟',nurse:'王丽',shift:'白班',timeRange:'08:00-17:00',status:'正常'},{week:'周一',dept:'内科病区',doctor:'李明',nurse:'赵红',shift:'夜班',timeRange:'17:00-08:00',status:'正常'},{week:'周一',dept:'外科病区',doctor:'孙浩',nurse:'刘芳',shift:'白班',timeRange:'08:00-17:00',status:'正常'},{week:'周二',dept:'ICU',doctor:'赵敏',nurse:'李娜',shift:'白班',timeRange:'08:00-17:00',status:'正常'}]},
+  'surgery-sched':{cols:[{prop:'surgeryDate',label:'手术日期',width:110},{prop:'room',label:'手术室',width:100},{prop:'patient',label:'患者',width:90},{prop:'surgeryName',label:'手术名称',width:180},{prop:'surgeon',label:'主刀医生',width:100},{prop:'anesthesia',label:'麻醉方式',width:110},{prop:'status',label:'状态',width:80}],data:[{surgeryDate:'2026-05-12',room:'手术室1',patient:'陈大明',surgeryName:'腹腔镜胆囊切除术',surgeon:'孙浩',anesthesia:'全麻',status:'已排期'},{surgeryDate:'2026-05-12',room:'手术室2',patient:'赵小红',surgeryName:'子宫肌瘤切除术',surgeon:'周明',anesthesia:'全麻',status:'已排期'},{surgeryDate:'2026-05-13',room:'手术室1',patient:'王建国',surgeryName:'下肢血管介入术',surgeon:'张伟',anesthesia:'局麻',status:'待确认'}]},
+  'visit-history':{cols:[{prop:'visitNo',label:'就诊号',width:120},{prop:'patient',label:'患者',width:90},{prop:'dept',label:'科室',width:100},{prop:'diag',label:'诊断',width:160},{prop:'doctor',label:'主治医生',width:100},{prop:'admitDate',label:'入院日期',width:110},{prop:'dischargeDate',label:'出院日期',width:110},{prop:'outcome',label:'转归',width:80}],data:[{visitNo:'ZY20250089',patient:'王建国',dept:'内科',diag:'2型糖尿病',doctor:'张伟',admitDate:'2025-11-10',dischargeDate:'2025-11-20',outcome:'好转'},{visitNo:'ZY20250156',patient:'王建国',dept:'内科',diag:'糖尿病酮症',doctor:'张伟',admitDate:'2026-02-15',dischargeDate:'2026-02-25',outcome:'治愈'},{visitNo:'ZY20260001',patient:'王建国',dept:'内科',diag:'2型糖尿病',doctor:'张伟',admitDate:'2026-05-01',dischargeDate:'',outcome:'在院'}]},
+  'order-pack':{cols:[{prop:'packCode',label:'套餐编码',width:120},{prop:'packName',label:'套餐名称',width:200},{prop:'dept',label:'适用科室',width:120},{prop:'category',label:'分类',width:100},{prop:'itemCount',label:'项目数',width:80},{prop:'status',label:'状态',width:80}],data:[{packCode:'OC-001',packName:'内科常规入院套餐',dept:'内科',category:'入院',itemCount:12,status:'启用'},{packCode:'OC-002',packName:'外科术前准备套餐',dept:'外科',category:'术前',itemCount:8,status:'启用'},{packCode:'OC-003',packName:'糖尿病管理套餐',dept:'内科',category:'慢性病',itemCount:15,status:'启用'},{packCode:'OC-004',packName:'术后抗感染套餐',dept:'外科',category:'术后',itemCount:6,status:'启用'}]},
+  'emr-data':{cols:[{prop:'emrNo',label:'病历号',width:120},{prop:'patient',label:'患者',width:90},{prop:'emrType',label:'病历类型',width:130},{prop:'dept',label:'科室',width:100},{prop:'author',label:'书写人',width:90},{prop:'writeTime',label:'书写时间',width:160},{prop:'lockStatus',label:'锁定状态',width:100},{prop:'status',label:'状态',width:80}],data:[{emrNo:'BL-20260001',patient:'王建国',emrType:'入院记录',dept:'内科',author:'张伟',writeTime:'2026-05-01 10:30',lockStatus:'已锁定',status:'正常'},{emrNo:'BL-20260002',patient:'王建国',emrType:'首次病程记录',dept:'内科',author:'张伟',writeTime:'2026-05-01 14:00',lockStatus:'已锁定',status:'正常'},{emrNo:'BL-20260003',patient:'陈大明',emrType:'术前小结',dept:'外科',author:'孙浩',writeTime:'2026-05-04 16:00',lockStatus:'未锁定',status:'待审核'},{emrNo:'BL-20260004',patient:'吴强',emrType:'抢救记录',dept:'ICU',author:'张伟',writeTime:'2026-05-07 22:30',lockStatus:'已锁定',status:'正常'}]},
+  'path-list':{cols:[{prop:'pathCode',label:'路径编码',width:110},{prop:'pathName',label:'路径名称',width:220},{prop:'disease',label:'适用病种',width:150},{prop:'duration',label:'标准住院日',width:100},{prop:'stageCount',label:'阶段数',width:80},{prop:'version',label:'版本',width:80},{prop:'status',label:'状态',width:80}],data:[{pathCode:'CP-001',pathName:'急性阑尾炎临床路径',disease:'急性阑尾炎',duration:'5天',stageCount:4,version:'v2.0',status:'启用'},{pathCode:'CP-002',pathName:'腹股沟疝临床路径',disease:'腹股沟疝',duration:'3天',stageCount:3,version:'v1.5',status:'启用'},{pathCode:'CP-003',pathName:'2型糖尿病临床路径',disease:'2型糖尿病',duration:'10天',stageCount:5,version:'v3.0',status:'启用'},{pathCode:'CP-004',pathName:'社区获得性肺炎临床路径',disease:'肺炎',duration:'7天',stageCount:4,version:'v2.1',status:'启用'}]},
+  'handover-input':{cols:[{prop:'date',label:'日期',width:110},{prop:'shift',label:'班次',width:110},{prop:'dept',label:'科室',width:100},{prop:'outDoctor',label:'交班医生',width:100},{prop:'inDoctor',label:'接班医生',width:100},{prop:'patientCount',label:'在院患者',width:90},{prop:'keyNote',label:'重点事项',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{date:'2026-05-09',shift:'白班→夜班',dept:'内科病区',outDoctor:'张伟',inDoctor:'李明',patientCount:28,keyNote:'12床王建国血糖波动需关注',status:'已完成'},{date:'2026-05-09',shift:'白班→夜班',dept:'外科病区',outDoctor:'孙浩',inDoctor:'钱进',patientCount:22,keyNote:'3床陈大明明日手术',status:'已完成'},{date:'2026-05-10',shift:'夜班→白班',dept:'内科病区',outDoctor:'李明',inDoctor:'张伟',patientCount:28,keyNote:'夜间无特殊事件',status:'进行中'}]},
+  'day-master-tpl':{cols:[{prop:'tplCode',label:'模板编码',width:110},{prop:'tplName',label:'模板名称',width:220},{prop:'category',label:'分类',width:110},{prop:'dept',label:'适用科室',width:120},{prop:'version',label:'版本',width:80},{prop:'updateTime',label:'更新时间',width:160},{prop:'status',label:'状态',width:80}],data:[{tplCode:'DM-001',tplName:'日间手术入院记录母版',category:'入院记录',dept:'通用',version:'v2.0',updateTime:'2026-04-15 10:00',status:'启用'},{tplCode:'DM-002',tplName:'日间手术出院小结母版',category:'出院小结',dept:'通用',version:'v1.5',updateTime:'2026-04-10 14:00',status:'启用'},{tplCode:'DM-003',tplName:'日间化疗记录母版',category:'治疗记录',dept:'肿瘤科',version:'v1.0',updateTime:'2026-03-20 09:00',status:'启用'}]},
+  'order-display':{cols:[{prop:'configCode',label:'配置编码',width:160},{prop:'configName',label:'配置名称',width:200},{prop:'scope',label:'作用域',width:100},{prop:'configValue',label:'配置值',width:140},{prop:'desc',label:'说明',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{configCode:'OD-SORT-FIELD',configName:'医嘱默认排序字段',scope:'全局',configValue:'开立时间',desc:'医嘱列表默认按此字段排序',status:'启用'},{configCode:'OD-SORT-DIR',configName:'医嘱排序方向',scope:'全局',configValue:'降序',desc:'升序/降序',status:'启用'},{configCode:'OD-SHOW-STOP',configName:'显示已停止医嘱',scope:'全局',configValue:'true',desc:'是否在列表中显示已停止的医嘱',status:'启用'},{configCode:'OD-COLOR-CRITICAL',configName:'危急值高亮颜色',scope:'全局',configValue:'#ef4444',desc:'危急值医嘱的高亮显示颜色',status:'启用'},{configCode:'OD-GROUP-BY',configName:'医嘱分组方式',scope:'科室',configValue:'类型',desc:'分组方式：类型/日期/状态',status:'启用'}]},
+  'path-term':{cols:[{prop:'termCode',label:'术语编码',width:110},{prop:'termName',label:'术语名称',width:180},{prop:'category',label:'分类',width:120},{prop:'desc',label:'描述',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{termCode:'PT-001',termName:'入院评估',category:'评估阶段',desc:'患者入院时的初始评估',status:'启用'},{termCode:'PT-002',termName:'术前准备',category:'术前阶段',desc:'手术前的各项准备工作',status:'启用'},{termCode:'PT-003',termName:'术后观察',category:'术后阶段',desc:'手术后的观察与监测',status:'启用'},{termCode:'PT-004',termName:'康复指导',category:'出院阶段',desc:'出院前的康复指导与教育',status:'启用'},{termCode:'PT-005',termName:'变异处理',category:'变异管理',desc:'临床路径偏离时的处理流程',status:'启用'}]},
+  'common-phrase':{cols:[{prop:'phraseCode',label:'编码',width:100},{prop:'phrase',label:'常用语',width:280},{prop:'category',label:'分类',width:110},{prop:'usageCount',label:'使用次数',width:90},{prop:'status',label:'状态',width:80}],data:[{phraseCode:'CP-001',phrase:'继续当前治疗方案，观察病情变化',category:'内科',usageCount:156,status:'启用'},{phraseCode:'CP-002',phrase:'今日复查血常规+肝肾电解质',category:'检验',usageCount:234,status:'启用'},{phraseCode:'CP-003',phrase:'明日拟行手术，已完成术前讨论',category:'外科',usageCount:89,status:'启用'},{phraseCode:'CP-004',phrase:'患者一般情况好，生命体征平稳',category:'通用',usageCount:312,status:'启用'},{phraseCode:'CP-005',phrase:'予以抗感染、补液等对症支持治疗',category:'通用',usageCount:198,status:'启用'},{phraseCode:'CP-006',phrase:'嘱患者低盐低脂糖尿病饮食',category:'饮食',usageCount:145,status:'启用'}]},
+  'treat-group':{cols:[{prop:'groupCode',label:'小组编码',width:110},{prop:'groupName',label:'小组名称',width:160},{prop:'dept',label:'科室',width:120},{prop:'leader',label:'组长',width:90},{prop:'memberCount',label:'成员数',width:80},{prop:'scope',label:'负责范围',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{groupCode:'TG-001',groupName:'内科一组',dept:'内科',leader:'张伟',memberCount:6,scope:'A区1-15床',status:'启用'},{groupCode:'TG-002',groupName:'内科二组',dept:'内科',leader:'李明',memberCount:5,scope:'A区16-28床',status:'启用'},{groupCode:'TG-003',groupName:'外科一组',dept:'外科',leader:'孙浩',memberCount:7,scope:'B区1-12床',status:'启用'},{groupCode:'TG-004',groupName:'ICU组',dept:'ICU',leader:'赵敏',memberCount:8,scope:'F区全部床位',status:'启用'}]},
 };
 
 createApp({
   setup(){
-    const searchText=ref('');
-    const expandedSections=ref(['inp-patient','inp-order']);
-    const activeItem=ref('visit-history');
-    const crumbGroup=ref('住院患者管理');
-    const crumbChild=ref('历次就诊记录(住院)');
+    const activeItem=ref('');
+    const crumbGroup=ref('');
+    const crumbChild=ref('');
     const filterKw=ref('');
 
-    const filteredMenu=computed(()=>{
-      if(!searchText.value)return menuData;
-      const kw=searchText.value.toLowerCase();
-      return menuData.map(s=>{
-        const items=s.items.filter(i=>i.label.toLowerCase().includes(kw));
-        if(items.length||s.label.toLowerCase().includes(kw))return{...s,items:s.label.toLowerCase().includes(kw)?s.items:items};
-        return null;
-      }).filter(Boolean);
-    });
+    const onMenuSelect=({key,groupLabel,itemLabel})=>{
+      activeItem.value=key;crumbGroup.value=groupLabel;crumbChild.value=itemLabel;
+    };
 
-    const toggleSection=k=>{const i=expandedSections.value.indexOf(k);i>=0?expandedSections.value.splice(i,1):expandedSections.value.push(k)};
-    const selectItem=(key,group,label)=>{activeItem.value=key;crumbGroup.value=group;crumbChild.value=label};
-    const currentTitle=computed(()=>crumbChild.value||'住院医生站');
     const tableCols=computed(()=>(tableDataMap[activeItem.value]||{}).cols||[]);
     const tableData=computed(()=>(tableDataMap[activeItem.value]||{}).data||[]);
 
-    return{searchText,expandedSections,activeItem,crumbGroup,crumbChild,filterKw,filteredMenu,toggleSection,selectItem,currentTitle,tableCols,tableData};
+    return{menuData,activeItem,crumbGroup,crumbChild,filterKw,onMenuSelect,tableCols,tableData};
   }
-}).use(ElementPlus).mount('#app');
+}).component('subsys-menu',initSubsystemMenu(menuData)).use(ElementPlus).mount('#app');
 </script>
 </body>
 </html>

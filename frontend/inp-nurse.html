@@ -6,70 +6,23 @@
   <title>HiCorLite - 住院护士站</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.css">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%;overflow:hidden}
-    body{font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;background:#f0f2f5;font-size:14px}
-    #app{height:100%;display:flex;flex-direction:column}
+    *{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;overflow:hidden}body{font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif;background:#f0f2f5;font-size:14px}#app{height:100%;display:flex;flex-direction:column}
     .topbar{height:56px;background:linear-gradient(90deg,#4a6cf7 0%,#6366f1 50%,#8b5cf6 100%);display:flex;align-items:center;justify-content:space-between;padding:0 24px;flex-shrink:0;box-shadow:0 2px 8px rgba(99,102,241,.2);z-index:100}
-    .topbar-left{display:flex;align-items:center;gap:16px}
-    .logo-area{display:flex;align-items:center;gap:10px;cursor:pointer}
-    .logo-area img{height:32px}
-    .logo-title{font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
-    .breadcrumb{display:flex;align-items:center;gap:8px;margin-left:20px}
-    .breadcrumb-item{color:rgba(255,255,255,.6);font-size:13px}
-    .breadcrumb-sep{color:rgba(255,255,255,.3)}
-    .breadcrumb-current{color:#fff;font-size:14px;font-weight:500}
-    .topbar-right{display:flex;align-items:center;gap:14px}
-    .topbar-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s}
-    .topbar-icon:hover{background:rgba(255,255,255,.15);color:#fff}
-    .user-area{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;cursor:pointer;transition:background .2s}
-    .user-area:hover{background:rgba(255,255,255,.15)}
-    .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600}
-    .user-name{color:#fff;font-size:14px}
-    .main-layout{flex:1;display:flex;overflow:hidden}
-
-    .sidebar{width:260px;background:#fff;border-right:1px solid #e8ecf1;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
-    .sidebar-search{padding:16px 14px 12px;border-bottom:1px solid #f0f2f5;flex-shrink:0}
-    .search-input-wrap{display:flex;align-items:center;background:#fff;border:1px solid #dcdfe6;border-radius:6px;overflow:hidden;transition:border-color .2s}
-    .search-input-wrap:focus-within{border-color:#4a6cf7}
-    .search-input-wrap input{flex:1;border:none;outline:none;padding:8px 12px;font-size:13px;color:#303133;background:transparent}
-    .search-input-wrap input::placeholder{color:#c0c4cc}
-    .search-btn{padding:8px 14px;background:#ecf5ff;color:#409eff;border:none;cursor:pointer;font-size:13px;transition:all .2s;white-space:nowrap}
-    .search-btn:hover{background:#d9ecff}
-    .menu-list{flex:1;overflow-y:auto;padding:6px 0}
-    .menu-list::-webkit-scrollbar{width:4px}
-    .menu-list::-webkit-scrollbar-thumb{background:#dcdfe6;border-radius:2px}
-
-    .menu-section{margin-bottom:2px}
-    .menu-section-title{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;transition:all .15s;user-select:none}
-    .menu-section-title:hover{background:#f5f7fa}
-    .menu-section-title .section-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-    .menu-section-title .section-label{flex:1;font-size:13px;font-weight:600;color:#3370ff;letter-spacing:.5px}
-    .menu-section-title .expand-arrow{width:16px;height:16px;display:flex;align-items:center;justify-content:center;color:#c0c4cc;transition:transform .2s;flex-shrink:0}
-    .menu-section-title .expand-arrow.expanded{transform:rotate(90deg)}
-
-    .menu-item{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 36px;cursor:pointer;transition:all .15s;position:relative}
-    .menu-item:hover{background:#f5f7fa}
-    .menu-item.active{background:#ecf5ff}
-    .menu-item.active::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:3px;background:#409eff;border-radius:0 3px 3px 0}
-    .menu-item .item-dot{width:5px;height:5px;border-radius:50%;background:#c0c4cc;flex-shrink:0}
-    .menu-item.active .item-dot{background:#409eff}
-    .menu-item .item-label{font-size:13px;color:#606266;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .menu-item.active .item-label{color:#303133;font-weight:500}
-
-    .content-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
-    .content-header{padding:16px 24px 12px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}
-    .content-header h2{font-size:18px;font-weight:600;color:#1e293b;margin-bottom:12px}
-    .filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-    .toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}
-    .toolbar-left{display:flex;gap:10px}
-    .toolbar-right{display:flex;gap:10px}
-    .table-area{flex:1;padding:16px 24px;overflow-y:auto}
-    .table-area::-webkit-scrollbar{width:6px}
-    .table-area::-webkit-scrollbar-thumb{background:#d0d5dd;border-radius:3px}
+    .topbar-left{display:flex;align-items:center;gap:0}.logo-area{display:flex;align-items:center;gap:10px;cursor:pointer;padding-right:16px;border-right:1px solid rgba(255,255,255,.15)}.logo-area img{height:32px}.logo-title{font-size:18px;font-weight:700;color:#fff;letter-spacing:1px}
+    .sys-name-area{display:flex;align-items:center;gap:6px;margin-left:16px}.sys-name{font-size:17px;font-weight:600;color:#fff;letter-spacing:1px}
+    .breadcrumb{display:flex;align-items:center;gap:8px;margin-left:20px}.breadcrumb-item{color:rgba(255,255,255,.6);font-size:13px}.breadcrumb-sep{color:rgba(255,255,255,.3)}.breadcrumb-current{color:#fff;font-size:14px;font-weight:500}
+    .topbar-right{display:flex;align-items:center;gap:14px}.topbar-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.7);transition:all .2s}.topbar-icon:hover{background:rgba(255,255,255,.15);color:#fff}
+    .user-area{display:flex;align-items:center;gap:8px;padding:4px 12px 4px 4px;border-radius:20px;cursor:pointer;transition:background .2s}.user-area:hover{background:rgba(255,255,255,.15)}
+    .user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#34d399);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600}.user-name{color:#fff;font-size:14px}
+    .main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#f0f2f5}
+    .content-header{padding:16px 24px 12px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}.content-header h2{font-size:18px;font-weight:600;color:#1e293b;margin-bottom:12px}.filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;background:#fff;border-bottom:1px solid #e8ecf1;flex-shrink:0}.toolbar-left{display:flex;gap:10px}.toolbar-right{display:flex;gap:10px}
+    .table-area{flex:1;padding:16px 24px;overflow-y:auto}.table-area::-webkit-scrollbar{width:6px}.table-area::-webkit-scrollbar-thumb{background:#d0d5dd;border-radius:3px}
     .pagination-bar{padding:12px 24px;background:#fff;border-top:1px solid #e8ecf1;display:flex;justify-content:flex-end;flex-shrink:0}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .fade-in{animation:fadeIn .3s ease}
+    .welcome-page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px}
+    .welcome-icon{font-size:72px;margin-bottom:20px;opacity:.7}.welcome-title{font-size:24px;font-weight:700;color:#1e293b;margin-bottom:8px}.welcome-desc{font-size:15px;color:#94a3b8;margin-bottom:24px}
+    .welcome-hint{font-size:13px;color:#94a3b8;display:flex;align-items:center;gap:6px}.welcome-hint kbd{padding:3px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;font-size:12px;font-family:monospace;font-weight:600}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .3s ease}
   </style>
 </head>
 <body>
@@ -77,297 +30,72 @@
   <div class="topbar">
     <div class="topbar-left">
       <div class="logo-area" onclick="window.location.href='index.html'"><img src="logo_icon.png" alt="HiCorLite"><span class="logo-title">HiCorLite</span></div>
-      <div class="breadcrumb">
-        <span class="breadcrumb-item">总控中心</span><span class="breadcrumb-sep">/</span>
-        <span class="breadcrumb-current">住院护士站</span>
-        <template v-if="crumbGroup"><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbGroup }}</span></template>
-        <template v-if="crumbChild"><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbChild }}</span></template>
+      <div class="sys-name-area">
+        <span class="sys-name">住院护士站</span>
+        <subsys-menu ref="menuRef" system-name="住院护士站" :menu-data="menuData" @select="onMenuSelect"></subsys-menu>
       </div>
+      <div class="breadcrumb" v-if="crumbChild"><span class="breadcrumb-item">住院护士站</span><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">{{ crumbChild }}</span></div>
     </div>
     <div class="topbar-right">
       <div class="topbar-icon" title="返回首页" onclick="window.location.href='index.html'"><svg viewBox="0 0 1024 1024" width="18" height="18"><path fill="currentColor" d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v320c0 17.7 14.3 32 32 32h256V736h128v256h256c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.2z"/></svg></div>
       <div class="user-area"><div class="user-avatar">护</div><span class="user-name">护士长</span></div>
     </div>
   </div>
-
-  <div class="main-layout">
-    <div class="sidebar">
-      <div class="sidebar-search">
-        <div class="search-input-wrap"><input type="text" v-model="searchText" placeholder="搜索功能..."><button class="search-btn">搜索</button></div>
-      </div>
-      <div class="menu-list">
-        <template v-for="sec in filteredMenu" :key="sec.key">
-          <div class="menu-section">
-            <div class="menu-section-title" @click="toggleSection(sec.key)">
-              <span class="section-icon">{{ sec.icon }}</span>
-              <span class="section-label">{{ sec.label }}</span>
-              <span class="expand-arrow" :class="{expanded:expandedSections.includes(sec.key)}"><svg viewBox="0 0 1024 1024" width="11" height="11"><path fill="currentColor" d="M384 192v640l384-320z"/></svg></span>
-            </div>
-            <div v-show="expandedSections.includes(sec.key)">
-              <div class="menu-item" v-for="item in sec.items" :key="item.key"
-                :class="{active:activeItem===item.key}"
-                @click="selectItem(item.key,sec.label,item.label)">
-                <span class="item-dot"></span>
-                <span class="item-label">{{ item.label }}</span>
-              </div>
-            </div>
-          </div>
-        </template>
-      </div>
+  <div class="main-content" v-if="!activeItem"><div class="welcome-page fade-in"><div class="welcome-icon">💉</div><div class="welcome-title">住院护士站</div><div class="welcome-desc">请点击右上角 <b style="color:#4a6cf7;">☰ 菜单图标</b> 选择功能模块</div><div class="welcome-hint">快捷键 <kbd>Ctrl</kbd> + <kbd>M</kbd> 打开菜单</div></div></div>
+  <div class="main-content" v-if="activeItem">
+    <div class="content-header"><h2>{{ crumbChild }}</h2><div class="filter-bar"><el-input v-model="filterKw" :placeholder="'搜索'+crumbChild+'...'" style="width:260px;" clearable /><el-select placeholder="状态" style="width:120px;" clearable><el-option label="全部" value="" /><el-option label="启用" value="1" /><el-option label="停用" value="0" /></el-select><el-button type="primary">查询</el-button><el-button>重置</el-button></div></div>
+    <div class="toolbar"><div class="toolbar-left"><el-button type="primary">+ 新增</el-button><el-button>批量导入</el-button></div><div class="toolbar-right"><el-button>导出</el-button><el-button>打印</el-button></div></div>
+    <div class="table-area" v-if="tableData.length">
+      <el-table :data="tableData" stripe border style="width:100%" :header-cell-style="{background:'#f5f7fa',color:'#303133',fontWeight:'600'}">
+        <el-table-column v-for="col in tableCols" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
+        <el-table-column label="状态" width="80" fixed="right"><template #default="s"><el-tag :type="['启用','正常','有效','已完成','已执行'].includes(s.row.status)?'success':['停用','已出院','已取消'].includes(s.row.status)?'info':'warning'" size="small">{{ s.row.status }}</el-tag></template></el-table-column>
+        <el-table-column label="操作" width="160" fixed="right"><template #default><el-button type="primary" link size="small">编辑</el-button><el-button type="danger" link size="small">删除</el-button></template></el-table-column>
+      </el-table>
     </div>
-
-    <div class="content-area">
-      <div class="content-header">
-        <h2>{{ currentTitle }}</h2>
-        <div class="filter-bar">
-          <el-input v-model="filterKw" :placeholder="'搜索'+currentTitle+'...'" style="width:260px;" clearable />
-          <el-select placeholder="状态" style="width:120px;" clearable><el-option label="全部" value="" /><el-option label="启用" value="1" /><el-option label="停用" value="0" /></el-select>
-          <el-button type="primary">查询</el-button><el-button>重置</el-button>
-        </div>
-      </div>
-      <div class="toolbar">
-        <div class="toolbar-left"><el-button type="primary">+ 新增</el-button><el-button>批量导入</el-button></div>
-        <div class="toolbar-right"><el-button>导出</el-button><el-button>打印</el-button></div>
-      </div>
-
-      <div class="table-area" v-if="tableData.length">
-        <el-table :data="tableData" stripe border style="width:100%" :header-cell-style="{background:'#f5f7fa',color:'#303133',fontWeight:'600'}">
-          <el-table-column v-for="col in tableCols" :key="col.prop" :prop="col.prop" :label="col.label" :width="col.width" :min-width="col.minWidth" show-overflow-tooltip />
-          <el-table-column label="状态" width="80" fixed="right">
-            <template #default="s"><el-tag :type="['启用','正常','有效','已完成'].includes(s.row.status)?'success':['停用','已出院','已取消'].includes(s.row.status)?'info':'warning'" size="small">{{ s.row.status }}</el-tag></template>
-          </el-table-column>
-          <el-table-column label="操作" width="160" fixed="right">
-            <template #default><el-button type="primary" link size="small">编辑</el-button><el-button type="danger" link size="small">删除</el-button></template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div v-else style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;" class="fade-in">
-        <div style="font-size:56px;margin-bottom:16px;opacity:.6">📂</div>
-        <div style="font-size:17px;color:#606266;margin-bottom:8px">{{ currentTitle }}</div>
-        <div style="font-size:14px">功能模块开发中，敬请期待</div>
-      </div>
-      <div class="pagination-bar" v-if="tableData.length"><el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10,20,50]" /></div>
-    </div>
+    <div v-else style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;" class="fade-in"><div style="font-size:56px;margin-bottom:16px;opacity:.6">📂</div><div style="font-size:17px;color:#606266;margin-bottom:8px">{{ crumbChild }}</div><div style="font-size:14px">功能模块开发中，敬请期待</div></div>
+    <div class="pagination-bar" v-if="tableData.length"><el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="50" :page-sizes="[10,20,50]" /></div>
   </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/element-plus@2.9.1/dist/index.full.min.js"></script>
+<script src="subsys-menu.js"></script>
 <script>
 const{createApp,ref,computed}=Vue;
-
 const menuData=[
-  {key:'patient',icon:'👤',label:'住院患者管理',items:[
-    {key:'cancel-transfer',label:'取消出入转'},{key:'transfer-log',label:'患者流转日志'},{key:'delivery-reg',label:'分娩登记'},
-    {key:'admit-mgmt',label:'入院登记管理'},{key:'ins-admit-discharge',label:'医保入出院管理'},{key:'patient-archive',label:'患者档案管理'},
-    {key:'day-bed-card',label:'日间诊疗床卡一览表'},{key:'pre-bed-card',label:'预住院床卡一览表'},
-    {key:'archive-check',label:'归档核对'},{key:'bed-card',label:'床卡一览表'},
-  ]},
-  {key:'fixed-fee',icon:'💰',label:'固定费用管理',items:[
-    {key:'fixed-fee-tpl',label:'固定费用模板'},{key:'fixed-fee-fill',label:'固定费用补录'},
-  ]},
-  {key:'dispense-query',icon:'💊',label:'摆药结果查询',items:[
-    {key:'dispense-result',label:'摆药结果查询'},
-  ]},
-  {key:'nursing-emr',icon:'📝',label:'护理病历',items:[
-    {key:'nursing-emr-main',label:'护理病历'},
-  ]},
-  {key:'inp-fee',icon:'💳',label:'住院费用管理',items:[
-    {key:'order-fee-confirm',label:'医嘱费用确认'},{key:'daily-fee',label:'住院日清单'},{key:'settle-record',label:'住院结算记录'},
-    {key:'fee-list',label:'住院费用清单'},{key:'deposit-urge',label:'预交金催缴'},{key:'dept-consumable',label:'科室耗材对照'},
-    {key:'apply-pricing',label:'住院申请单计价'},{key:'pricing-tpl',label:'计价模板维护'},
-    {key:'high-consumable-refund',label:'高值耗材退费'},{key:'inp-order-fee',label:'住院医嘱确费'},
-    {key:'day-order-fee',label:'日间医嘱确费'},{key:'day-fee-list',label:'日间费用清单'},{key:'material-fill',label:'材料补录'},
-  ]},
-  {key:'report',icon:'📊',label:'报表查询',items:[
-    {key:'hrp-material',label:'HRP材料二级库报表'},{key:'inp-daily-stat',label:'住院患者日统计'},
-    {key:'discharge-fee-detail',label:'出院患者费用明细'},{key:'inp-settle-info',label:'住院患者结算信息'},
-    {key:'patient-fee-slip',label:'病人费用清单'},{key:'batch-dispense',label:'住院批量发药单'},
-    {key:'iv-infusion',label:'护士站 - 静脉输液'},{key:'ward-treatment',label:'护理部 - 病区治疗'},
-    {key:'dept-item-out1',label:'科室开立项目(一)'},{key:'dept-item-out2',label:'科室开立项目(二)'},
-  ]},
-  {key:'nursing-kb',icon:'📚',label:'护理知识库',items:[
-    {key:'nursing-action-type',label:'护理措施类型维护'},{key:'nursing-action',label:'护理措施维护'},
-    {key:'nursing-diag-def',label:'护理诊断定义'},{key:'nursing-factor',label:'护理相关因素维护'},
-    {key:'nursing-diag-disease',label:'护理诊断与病种'},{key:'health-edu-tpl',label:'健康教育模板维护'},
-    {key:'handover-script',label:'交接班话术模板维护'},
-  ]},
-  {key:'ward-cabinet',icon:'🗄️',label:'病区药柜',items:[
-    {key:'cabinet-in',label:'备药入库'},{key:'drug-apply',label:'药品申请管理'},{key:'cabinet-dispense',label:'药柜摆药'},
-    {key:'stock-query',label:'库存查询'},{key:'in-out-doc',label:'出入库单据查询'},{key:'drug-apply-out',label:'领药申请'},
-    {key:'cabinet-attr',label:'药柜库存属性定义'},{key:'drug-apply-mgmt',label:'领药申请管理'},{key:'return-confirm',label:'退药确认'},
-  ]},
-  {key:'nurse-config',icon:'⚙️',label:'住院护士配置维护',items:[
-    {key:'exec-print-config',label:'执行单打印配置'},{key:'patient-flow-config',label:'患者流转配置'},
-  ]},
-  {key:'bed-mgmt',icon:'🛏️',label:'住院床位管理',items:[
-    {key:'bed-list',label:'床位列表'},{key:'bed-price',label:'床位价格维护（弃用）'},
-  ]},
-  {key:'order-exec',icon:'💉',label:'医嘱核对执行',items:[
-    {key:'nurse-check-exec',label:'住院护士核对&执行'},{key:'order-print',label:'医嘱单打印'},
-    {key:'exam-appt-print',label:'检查预约打印'},{key:'exam-item-info',label:'检查项目信息维护'},
-    {key:'lab-item-info',label:'检验项目信息维护'},{key:'lab-barcode-print',label:'检验条码打印'},
-    {key:'blood-exec',label:'输血执行'},{key:'cross-dept-order',label:'跨科治疗医嘱执行'},
-    {key:'surgery-sched',label:'手术排班'},{key:'blood-slip-print',label:'取血单打印'},
-    {key:'day-check',label:'日间诊疗核对'},{key:'inp-skin-test',label:'住院皮试管理'},{key:'dept-item',label:'科内项目信息'},
-  ]},
-  {key:'drug-mgmt',icon:'💊',label:'药品管理',items:[
-    {key:'drug-request',label:'药品请领'},{key:'request-result',label:'请领结果查询'},
-    {key:'nurse-return-drug',label:'护士退药申请'},{key:'ampoule-pack',label:'空安瓿登记打包'},
-    {key:'ampoule-query',label:'空安瓿查询'},
-  ]},
-  {key:'nursing-mgmt',icon:'🩺',label:'护理管理',items:[
-    {key:'health-edu',label:'健康教育'},{key:'nursing-plan',label:'护理计划'},
-    {key:'handover-report',label:'交接班报告'},{key:'todo-list',label:'待办事项'},
-  ]},
-  {key:'material-mgmt',icon:'📦',label:'材料管理',items:[
-    {key:'outpatient-writeoff',label:'门诊核销记录查询'},{key:'material-pre-order',label:'材料预点管理'},
-  ]},
+  {key:'patient',icon:'👤',label:'住院患者管理',items:[{key:'cancel-transfer',label:'取消出入转'},{key:'transfer-log',label:'患者流转日志'},{key:'delivery-reg',label:'分娩登记'},{key:'admit-mgmt',label:'入院登记管理'},{key:'ins-admit-discharge',label:'医保入出院管理'},{key:'patient-archive',label:'患者档案管理'},{key:'day-bed-card',label:'日间诊疗床卡一览表'},{key:'pre-bed-card',label:'预住院床卡一览表'},{key:'archive-check',label:'归档核对'},{key:'bed-card',label:'床卡一览表'}]},
+  {key:'fixed-fee',icon:'💰',label:'固定费用管理',items:[{key:'fixed-fee-tpl',label:'固定费用模板'},{key:'fixed-fee-fill',label:'固定费用补录'}]},
+  {key:'dispense-query',icon:'💊',label:'摆药结果查询',items:[{key:'dispense-result',label:'摆药结果查询'}]},
+  {key:'nursing-emr',icon:'📝',label:'护理病历',items:[{key:'nursing-emr-main',label:'护理病历'}]},
+  {key:'inp-fee',icon:'💳',label:'住院费用管理',items:[{key:'order-fee-confirm',label:'医嘱费用确认'},{key:'daily-fee',label:'住院日清单'},{key:'settle-record',label:'住院结算记录'},{key:'fee-list',label:'住院费用清单'},{key:'deposit-urge',label:'预交金催缴'},{key:'dept-consumable',label:'科室耗材对照'},{key:'apply-pricing',label:'住院申请单计价'},{key:'pricing-tpl',label:'计价模板维护'},{key:'high-consumable-refund',label:'高值耗材退费'},{key:'inp-order-fee',label:'住院医嘱确费'},{key:'day-order-fee',label:'日间医嘱确费'},{key:'day-fee-list',label:'日间费用清单'},{key:'material-fill',label:'材料补录'}]},
+  {key:'report',icon:'📊',label:'报表查询',items:[{key:'hrp-material',label:'HRP材料二级库报表'},{key:'inp-daily-stat',label:'住院患者日统计'},{key:'discharge-fee-detail',label:'出院患者费用明细'},{key:'inp-settle-info',label:'住院患者结算信息'},{key:'patient-fee-slip',label:'病人费用清单'},{key:'batch-dispense',label:'住院批量发药单'},{key:'iv-infusion',label:'护士站 - 静脉输液'},{key:'ward-treatment',label:'护理部 - 病区治疗'},{key:'dept-item-out1',label:'科室开立项目(一)'},{key:'dept-item-out2',label:'科室开立项目(二)'}]},
+  {key:'nursing-kb',icon:'📚',label:'护理知识库',items:[{key:'nursing-action-type',label:'护理措施类型维护'},{key:'nursing-action',label:'护理措施维护'},{key:'nursing-diag-def',label:'护理诊断定义'},{key:'nursing-factor',label:'护理相关因素维护'},{key:'nursing-diag-disease',label:'护理诊断与病种'},{key:'health-edu-tpl',label:'健康教育模板维护'},{key:'handover-script',label:'交接班话术模板维护'}]},
+  {key:'ward-cabinet',icon:'🗄️',label:'病区药柜',items:[{key:'cabinet-in',label:'备药入库'},{key:'drug-apply',label:'药品申请管理'},{key:'cabinet-dispense',label:'药柜摆药'},{key:'stock-query',label:'库存查询'},{key:'in-out-doc',label:'出入库单据查询'},{key:'drug-apply-out',label:'领药申请'},{key:'cabinet-attr',label:'药柜库存属性定义'},{key:'drug-apply-mgmt',label:'领药申请管理'},{key:'return-confirm',label:'退药确认'}]},
+  {key:'nurse-config',icon:'⚙️',label:'住院护士配置维护',items:[{key:'exec-print-config',label:'执行单打印配置'},{key:'patient-flow-config',label:'患者流转配置'}]},
+  {key:'bed-mgmt',icon:'🛏️',label:'住院床位管理',items:[{key:'bed-list',label:'床位列表'},{key:'bed-price',label:'床位价格维护（弃用）'}]},
+  {key:'order-exec',icon:'💉',label:'医嘱核对执行',items:[{key:'nurse-check-exec',label:'住院护士核对&执行'},{key:'order-print',label:'医嘱单打印'},{key:'exam-appt-print',label:'检查预约打印'},{key:'exam-item-info',label:'检查项目信息维护'},{key:'lab-item-info',label:'检验项目信息维护'},{key:'lab-barcode-print',label:'检验条码打印'},{key:'blood-exec',label:'输血执行'},{key:'cross-dept-order',label:'跨科治疗医嘱执行'},{key:'surgery-sched',label:'手术排班'},{key:'blood-slip-print',label:'取血单打印'},{key:'day-check',label:'日间诊疗核对'},{key:'inp-skin-test',label:'住院皮试管理'},{key:'dept-item',label:'科内项目信息'}]},
+  {key:'drug-mgmt',icon:'💊',label:'药品管理',items:[{key:'drug-request',label:'药品请领'},{key:'request-result',label:'请领结果查询'},{key:'nurse-return-drug',label:'护士退药申请'},{key:'ampoule-pack',label:'空安瓿登记打包'},{key:'ampoule-query',label:'空安瓿查询'}]},
+  {key:'nursing-mgmt',icon:'🩺',label:'护理管理',items:[{key:'health-edu',label:'健康教育'},{key:'nursing-plan',label:'护理计划'},{key:'handover-report',label:'交接班报告'},{key:'todo-list',label:'待办事项'}]},
+  {key:'material-mgmt',icon:'📦',label:'材料管理',items:[{key:'outpatient-writeoff',label:'门诊核销记录查询'},{key:'material-pre-order',label:'材料预点管理'}]},
 ];
-
 const tableDataMap={
-  'bed-card':{
-    cols:[
-      {prop:'bedNo',label:'床位号',width:80},{prop:'dept',label:'科室',width:100},{prop:'ward',label:'病区',width:90},
-      {prop:'patient',label:'患者',width:90},{prop:'diag',label:'诊断',width:140},{prop:'doctor',label:'主治医生',width:100},
-      {prop:'nurse',label:'责任护士',width:100},{prop:'admitDate',label:'入院日期',width:110},{prop:'level',label:'护理等级',width:90},
-      {prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {bedNo:'A-01',dept:'内科',ward:'内科病区',patient:'王建国',diag:'2型糖尿病',doctor:'张伟',nurse:'王丽',admitDate:'2026-05-01',level:'二级护理',status:'占用'},
-      {bedNo:'A-02',dept:'内科',ward:'内科病区',patient:'李秀英',diag:'高血压3级',doctor:'张伟',nurse:'王丽',admitDate:'2026-05-02',level:'二级护理',status:'占用'},
-      {bedNo:'A-03',dept:'内科',ward:'内科病区',patient:'',diag:'',doctor:'',nurse:'',admitDate:'',level:'',status:'空闲'},
-      {bedNo:'B-01',dept:'外科',ward:'外科病区',patient:'陈大明',diag:'胆石症',doctor:'孙浩',nurse:'刘芳',admitDate:'2026-05-03',level:'一级护理',status:'占用'},
-      {bedNo:'B-02',dept:'外科',ward:'外科病区',patient:'刘德华',diag:'腰椎间盘突出',doctor:'孙浩',nurse:'刘芳',admitDate:'2026-05-05',level:'特级护理',status:'占用'},
-      {bedNo:'B-03',dept:'外科',ward:'外科病区',patient:'',diag:'',doctor:'',nurse:'',admitDate:'',level:'',status:'空闲'},
-      {bedNo:'C-01',dept:'妇产科',ward:'妇产病区',patient:'赵小红',diag:'子宫肌瘤',doctor:'周明',nurse:'陈静',admitDate:'2026-05-04',level:'二级护理',status:'占用'},
-      {bedNo:'F-01',dept:'ICU',ward:'ICU',patient:'吴强',diag:'急性心肌梗死',doctor:'张伟',nurse:'李娜',admitDate:'2026-05-07',level:'特级护理',status:'占用'},
-    ]
-  },
-  'fixed-fee-tpl':{
-    cols:[
-      {prop:'tplCode',label:'模板编码',width:110},{prop:'tplName',label:'模板名称',width:180},{prop:'dept',label:'适用科室',width:120},
-      {prop:'feeCount',label:'费用项数',width:90},{prop:'totalAmount',label:'合计金额',width:100},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {tplCode:'FT-001',tplName:'内科常规护理费模板',dept:'内科',feeCount:5,totalAmount:'¥128.00',status:'启用'},
-      {tplCode:'FT-002',tplName:'外科术后护理费模板',dept:'外科',feeCount:8,totalAmount:'¥256.00',status:'启用'},
-      {tplCode:'FT-003',tplName:'ICU特护费模板',dept:'ICU',feeCount:12,totalAmount:'¥580.00',status:'启用'},
-      {tplCode:'FT-004',tplName:'儿科普通护理模板',dept:'儿科',feeCount:4,totalAmount:'¥96.00',status:'停用'},
-    ]
-  },
-  'fee-list':{
-    cols:[
-      {prop:'inpNo',label:'住院号',width:110},{prop:'patient',label:'患者',width:90},{prop:'dept',label:'科室',width:100},
-      {prop:'totalFee',label:'总费用',width:100},{prop:'drugFee',label:'药品费',width:100},{prop:'examFee',label:'检查费',width:100},
-      {prop:'treatFee',label:'治疗费',width:100},{prop:'nursingFee',label:'护理费',width:90},{prop:'bedFee',label:'床位费',width:90},
-      {prop:'insurancePay',label:'医保支付',width:100},{prop:'selfPay',label:'自付金额',width:100},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {inpNo:'ZY20260001',patient:'王建国',dept:'内科',totalFee:'¥12,580.00',drugFee:'¥4,320.00',examFee:'¥2,100.00',treatFee:'¥3,400.00',nursingFee:'¥640.00',bedFee:'¥1,120.00',insurancePay:'¥8,806.00',selfPay:'¥3,774.00',status:'在院'},
-      {inpNo:'ZY20260002',patient:'李秀英',dept:'内科',totalFee:'¥8,960.00',drugFee:'¥3,100.00',examFee:'¥1,800.00',treatFee:'¥2,200.00',nursingFee:'¥480.00',bedFee:'¥880.00',insurancePay:'¥6,272.00',selfPay:'¥2,688.00',status:'在院'},
-      {inpNo:'ZY20260003',patient:'陈大明',dept:'外科',totalFee:'¥25,800.00',drugFee:'¥6,500.00',examFee:'¥4,200.00',treatFee:'¥10,800.00',nursingFee:'¥960.00',bedFee:'¥1,340.00',insurancePay:'¥18,060.00',selfPay:'¥7,740.00',status:'在院'},
-      {inpNo:'ZY20260005',patient:'刘德华',dept:'骨科',totalFee:'¥32,100.00',drugFee:'¥8,200.00',examFee:'¥5,600.00',treatFee:'¥12,400.00',nursingFee:'¥1,200.00',bedFee:'¥1,700.00',insurancePay:'¥22,470.00',selfPay:'¥9,630.00',status:'在院'},
-      {inpNo:'ZY20260007',patient:'吴强',dept:'ICU',totalFee:'¥58,600.00',drugFee:'¥18,400.00',examFee:'¥12,800.00',treatFee:'¥18,600.00',nursingFee:'¥3,200.00',bedFee:'¥3,600.00',insurancePay:'¥41,020.00',selfPay:'¥17,580.00',status:'在院'},
-    ]
-  },
-  'nursing-action':{
-    cols:[
-      {prop:'code',label:'措施编码',width:110},{prop:'name',label:'措施名称',width:180},{prop:'category',label:'类型',width:100},
-      {prop:'scope',label:'适用范围',width:120},{prop:'desc',label:'描述',minWidth:200},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {code:'NC-001',name:'生命体征监测',category:'基础护理',scope:'全科室',desc:'定时监测体温、脉搏、呼吸、血压等生命体征',status:'启用'},
-      {code:'NC-002',name:'口腔护理',category:'基础护理',scope:'全科室',desc:'每日口腔清洁护理，预防口腔感染',status:'启用'},
-      {code:'NC-003',name:'管道护理',category:'专科护理',scope:'外科/ICU',desc:'各类引流管、导管的日常维护与观察',status:'启用'},
-      {code:'NC-004',name:'压疮预防',category:'基础护理',scope:'全科室',desc:'定时翻身、皮肤检查，预防压疮发生',status:'启用'},
-      {code:'NC-005',name:'血糖监测',category:'专科护理',scope:'内科',desc:'糖尿病患者血糖定时监测与记录',status:'启用'},
-      {code:'NC-006',name:'心理护理',category:'心理护理',scope:'全科室',desc:'患者心理状态评估与疏导',status:'启用'},
-    ]
-  },
-  'cabinet-dispense':{
-    cols:[
-      {prop:'dispenseNo',label:'摆药单号',width:120},{prop:'drugName',label:'药品名称',width:160},{prop:'spec',label:'规格',width:100},
-      {prop:'quantity',label:'数量',width:80},{prop:'unit',label:'单位',width:70},{prop:'patient',label:'患者',width:90},
-      {prop:'bedNo',label:'床位',width:80},{prop:'dispenseTime',label:'摆药时间',width:160},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {dispenseNo:'BY20260510001',drugName:'阿莫西林胶囊',spec:'0.5g*24粒',quantity:2,unit:'盒',patient:'王建国',bedNo:'A-01',dispenseTime:'2026-05-10 08:30',status:'已完成'},
-      {dispenseNo:'BY20260510002',drugName:'二甲双胍片',spec:'0.5g*30片',quantity:1,unit:'盒',patient:'王建国',bedNo:'A-01',dispenseTime:'2026-05-10 08:30',status:'已完成'},
-      {dispenseNo:'BY20260510003',drugName:'头孢克肟分散片',spec:'0.1g*6片',quantity:3,unit:'盒',patient:'陈大明',bedNo:'B-01',dispenseTime:'2026-05-10 09:00',status:'待摆药'},
-      {dispenseNo:'BY20260510004',drugName:'硝苯地平控释片',spec:'30mg*7片',quantity:2,unit:'盒',patient:'李秀英',bedNo:'A-02',dispenseTime:'2026-05-10 09:15',status:'已完成'},
-    ]
-  },
-  'handover-report':{
-    cols:[
-      {prop:'reportNo',label:'报告编号',width:120},{prop:'date',label:'日期',width:110},{prop:'shift',label:'班次',width:100},
-      {prop:'ward',label:'病区',width:100},{prop:'outNurse',label:'交班护士',width:100},{prop:'inNurse',label:'接班护士',width:100},
-      {prop:'patientCount',label:'在院人数',width:90},{prop:'keyNotes',label:'重点事项',minWidth:200},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {reportNo:'HB20260510001',date:'2026-05-10',shift:'夜班→白班',ward:'内科病区',outNurse:'赵红',inNurse:'王丽',patientCount:28,keyNotes:'12床血糖波动，已通知医生',status:'已完成'},
-      {reportNo:'HB20260510002',date:'2026-05-10',shift:'夜班→白班',ward:'外科病区',outNurse:'刘芳',inNurse:'刘芳',patientCount:22,keyNotes:'3床明日手术，术前准备已就绪',status:'已完成'},
-      {reportNo:'HB20260510003',date:'2026-05-10',shift:'夜班→白班',ward:'ICU',outNurse:'李娜',inNurse:'李娜',patientCount:6,keyNotes:'1床病情稳定，继续特级护理',status:'进行中'},
-    ]
-  },
-  'nurse-check-exec':{
-    cols:[
-      {prop:'orderNo',label:'医嘱号',width:120},{prop:'patient',label:'患者',width:90},{prop:'bedNo',label:'床位',width:80},
-      {prop:'orderContent',label:'医嘱内容',width:200},{prop:'type',label:'类型',width:90},{prop:'startTime',label:'开始时间',width:160},
-      {prop:'nurse',label:'执行护士',width:100},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {orderNo:'YZ20260510001',patient:'王建国',bedNo:'A-01',orderContent:'二甲双胍片 0.5g 口服 tid',type:'长期',startTime:'2026-05-10 08:00',nurse:'王丽',status:'已执行'},
-      {orderNo:'YZ20260510002',patient:'王建国',bedNo:'A-01',orderContent:'生理盐水250ml+头孢呋辛1.5g 静脉滴注 bid',type:'长期',startTime:'2026-05-10 08:00',nurse:'王丽',status:'已执行'},
-      {orderNo:'YZ20260510003',patient:'陈大明',bedNo:'B-01',orderContent:'术前备皮',type:'临时',startTime:'2026-05-10 09:00',nurse:'刘芳',status:'待执行'},
-      {orderNo:'YZ20260510004',patient:'李秀英',bedNo:'A-02',orderContent:'硝苯地平控释片 30mg 口服 qd',type:'长期',startTime:'2026-05-10 08:00',nurse:'王丽',status:'已执行'},
-      {orderNo:'YZ20260510005',patient:'吴强',bedNo:'F-01',orderContent:'多巴胺注射液 持续泵入',type:'长期',startTime:'2026-05-10 07:00',nurse:'李娜',status:'执行中'},
-      {orderNo:'YZ20260510006',patient:'吴强',bedNo:'F-01',orderContent:'心电监护 持续',type:'长期',startTime:'2026-05-07 22:00',nurse:'李娜',status:'执行中'},
-    ]
-  },
-  'drug-request':{
-    cols:[
-      {prop:'requestNo',label:'请领单号',width:130},{prop:'drugName',label:'药品名称',width:160},{prop:'spec',label:'规格',width:100},
-      {prop:'quantity',label:'请领数量',width:90},{prop:'unit',label:'单位',width:70},{prop:'requester',label:'请领人',width:90},
-      {prop:'requestTime',label:'请领时间',width:160},{prop:'status',label:'状态',width:80},
-    ],
-    data:[
-      {requestNo:'QL20260510001',drugName:'阿莫西林胶囊',spec:'0.5g*24粒',quantity:10,unit:'盒',requester:'王丽',requestTime:'2026-05-10 07:30',status:'已到货'},
-      {requestNo:'QL20260510002',drugName:'二甲双胍片',spec:'0.5g*30片',quantity:5,unit:'盒',requester:'王丽',requestTime:'2026-05-10 07:30',status:'已到货'},
-      {requestNo:'QL20260510003',drugName:'头孢克肟分散片',spec:'0.1g*6片',quantity:20,unit:'盒',requester:'刘芳',requestTime:'2026-05-10 08:00',status:'待配送'},
-      {requestNo:'QL20260510004',drugName:'注射用头孢呋辛',spec:'1.5g',quantity:30,unit:'支',requester:'王丽',requestTime:'2026-05-10 08:15',status:'待配送'},
-    ]
-  },
+  'bed-card':{cols:[{prop:'bedNo',label:'床位号',width:80},{prop:'dept',label:'科室',width:100},{prop:'ward',label:'病区',width:90},{prop:'patient',label:'患者',width:90},{prop:'diag',label:'诊断',width:140},{prop:'doctor',label:'主治医生',width:100},{prop:'nurse',label:'责任护士',width:100},{prop:'admitDate',label:'入院日期',width:110},{prop:'level',label:'护理等级',width:90},{prop:'status',label:'状态',width:80}],data:[{bedNo:'A-01',dept:'内科',ward:'内科病区',patient:'王建国',diag:'2型糖尿病',doctor:'张伟',nurse:'王丽',admitDate:'2026-05-01',level:'二级护理',status:'占用'},{bedNo:'A-02',dept:'内科',ward:'内科病区',patient:'李秀英',diag:'高血压3级',doctor:'张伟',nurse:'王丽',admitDate:'2026-05-02',level:'二级护理',status:'占用'},{bedNo:'A-03',dept:'内科',ward:'内科病区',patient:'',diag:'',doctor:'',nurse:'',admitDate:'',level:'',status:'空闲'},{bedNo:'B-01',dept:'外科',ward:'外科病区',patient:'陈大明',diag:'胆石症',doctor:'孙浩',nurse:'刘芳',admitDate:'2026-05-03',level:'一级护理',status:'占用'},{bedNo:'F-01',dept:'ICU',ward:'ICU',patient:'吴强',diag:'急性心肌梗死',doctor:'张伟',nurse:'李娜',admitDate:'2026-05-07',level:'特级护理',status:'占用'}]},
+  'fee-list':{cols:[{prop:'inpNo',label:'住院号',width:110},{prop:'patient',label:'患者',width:90},{prop:'dept',label:'科室',width:100},{prop:'totalFee',label:'总费用',width:100},{prop:'drugFee',label:'药品费',width:100},{prop:'examFee',label:'检查费',width:100},{prop:'treatFee',label:'治疗费',width:100},{prop:'insurancePay',label:'医保支付',width:100},{prop:'selfPay',label:'自付金额',width:100},{prop:'status',label:'状态',width:80}],data:[{inpNo:'ZY20260001',patient:'王建国',dept:'内科',totalFee:'¥12,580',drugFee:'¥4,320',examFee:'¥2,100',treatFee:'¥3,400',insurancePay:'¥8,806',selfPay:'¥3,774',status:'在院'},{inpNo:'ZY20260003',patient:'陈大明',dept:'外科',totalFee:'¥25,800',drugFee:'¥6,500',examFee:'¥4,200',treatFee:'¥10,800',insurancePay:'¥18,060',selfPay:'¥7,740',status:'在院'},{inpNo:'ZY20260007',patient:'吴强',dept:'ICU',totalFee:'¥58,600',drugFee:'¥18,400',examFee:'¥12,800',treatFee:'¥18,600',insurancePay:'¥41,020',selfPay:'¥17,580',status:'在院'}]},
+  'nursing-action':{cols:[{prop:'code',label:'措施编码',width:110},{prop:'name',label:'措施名称',width:180},{prop:'category',label:'类型',width:100},{prop:'scope',label:'适用范围',width:120},{prop:'desc',label:'描述',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{code:'NC-001',name:'生命体征监测',category:'基础护理',scope:'全科室',desc:'定时监测体温、脉搏、呼吸、血压等',status:'启用'},{code:'NC-002',name:'口腔护理',category:'基础护理',scope:'全科室',desc:'每日口腔清洁护理',status:'启用'},{code:'NC-003',name:'管道护理',category:'专科护理',scope:'外科/ICU',desc:'各类引流管、导管的日常维护',status:'启用'},{code:'NC-004',name:'压疮预防',category:'基础护理',scope:'全科室',desc:'定时翻身、皮肤检查',status:'启用'},{code:'NC-005',name:'血糖监测',category:'专科护理',scope:'内科',desc:'糖尿病患者血糖定时监测',status:'启用'}]},
+  'nurse-check-exec':{cols:[{prop:'orderNo',label:'医嘱号',width:120},{prop:'patient',label:'患者',width:90},{prop:'bedNo',label:'床位',width:80},{prop:'orderContent',label:'医嘱内容',width:200},{prop:'type',label:'类型',width:90},{prop:'startTime',label:'开始时间',width:160},{prop:'nurse',label:'执行护士',width:100},{prop:'status',label:'状态',width:80}],data:[{orderNo:'YZ20260510001',patient:'王建国',bedNo:'A-01',orderContent:'二甲双胍片 0.5g 口服 tid',type:'长期',startTime:'2026-05-10 08:00',nurse:'王丽',status:'已执行'},{orderNo:'YZ20260510002',patient:'王建国',bedNo:'A-01',orderContent:'生理盐水250ml+头孢呋辛1.5g 静脉滴注 bid',type:'长期',startTime:'2026-05-10 08:00',nurse:'王丽',status:'已执行'},{orderNo:'YZ20260510003',patient:'陈大明',bedNo:'B-01',orderContent:'术前备皮',type:'临时',startTime:'2026-05-10 09:00',nurse:'刘芳',status:'待执行'},{orderNo:'YZ20260510005',patient:'吴强',bedNo:'F-01',orderContent:'多巴胺注射液 持续泵入',type:'长期',startTime:'2026-05-10 07:00',nurse:'李娜',status:'执行中'}]},
+  'handover-report':{cols:[{prop:'reportNo',label:'报告编号',width:120},{prop:'date',label:'日期',width:110},{prop:'shift',label:'班次',width:100},{prop:'ward',label:'病区',width:100},{prop:'outNurse',label:'交班护士',width:100},{prop:'inNurse',label:'接班护士',width:100},{prop:'patientCount',label:'在院人数',width:90},{prop:'keyNotes',label:'重点事项',minWidth:200},{prop:'status',label:'状态',width:80}],data:[{reportNo:'HB20260510001',date:'2026-05-10',shift:'夜班→白班',ward:'内科病区',outNurse:'赵红',inNurse:'王丽',patientCount:28,keyNotes:'12床血糖波动，已通知医生',status:'已完成'},{reportNo:'HB20260510002',date:'2026-05-10',shift:'夜班→白班',ward:'外科病区',outNurse:'刘芳',inNurse:'刘芳',patientCount:22,keyNotes:'3床明日手术，术前准备已就绪',status:'已完成'},{reportNo:'HB20260510003',date:'2026-05-10',shift:'夜班→白班',ward:'ICU',outNurse:'李娜',inNurse:'李娜',patientCount:6,keyNotes:'1床病情稳定，继续特级护理',status:'进行中'}]},
+  'cabinet-dispense':{cols:[{prop:'dispenseNo',label:'摆药单号',width:130},{prop:'drugName',label:'药品名称',width:160},{prop:'spec',label:'规格',width:100},{prop:'quantity',label:'数量',width:80},{prop:'unit',label:'单位',width:70},{prop:'patient',label:'患者',width:90},{prop:'bedNo',label:'床位',width:80},{prop:'dispenseTime',label:'摆药时间',width:160},{prop:'status',label:'状态',width:80}],data:[{dispenseNo:'BY20260510001',drugName:'阿莫西林胶囊',spec:'0.5g*24粒',quantity:2,unit:'盒',patient:'王建国',bedNo:'A-01',dispenseTime:'2026-05-10 08:30',status:'已完成'},{dispenseNo:'BY20260510002',drugName:'二甲双胍片',spec:'0.5g*30片',quantity:1,unit:'盒',patient:'王建国',bedNo:'A-01',dispenseTime:'2026-05-10 08:30',status:'已完成'},{dispenseNo:'BY20260510003',drugName:'头孢克肟分散片',spec:'0.1g*6片',quantity:3,unit:'盒',patient:'陈大明',bedNo:'B-01',dispenseTime:'2026-05-10 09:00',status:'待摆药'}]},
+  'drug-request':{cols:[{prop:'requestNo',label:'请领单号',width:130},{prop:'drugName',label:'药品名称',width:160},{prop:'spec',label:'规格',width:100},{prop:'quantity',label:'请领数量',width:90},{prop:'unit',label:'单位',width:70},{prop:'requester',label:'请领人',width:90},{prop:'requestTime',label:'请领时间',width:160},{prop:'status',label:'状态',width:80}],data:[{requestNo:'QL20260510001',drugName:'阿莫西林胶囊',spec:'0.5g*24粒',quantity:10,unit:'盒',requester:'王丽',requestTime:'2026-05-10 07:30',status:'已到货'},{requestNo:'QL20260510002',drugName:'二甲双胍片',spec:'0.5g*30片',quantity:5,unit:'盒',requester:'王丽',requestTime:'2026-05-10 07:30',status:'已到货'},{requestNo:'QL20260510003',drugName:'头孢克肟分散片',spec:'0.1g*6片',quantity:20,unit:'盒',requester:'刘芳',requestTime:'2026-05-10 08:00',status:'待配送'}]},
+  'fixed-fee-tpl':{cols:[{prop:'tplCode',label:'模板编码',width:110},{prop:'tplName',label:'模板名称',width:180},{prop:'dept',label:'适用科室',width:120},{prop:'feeCount',label:'费用项数',width:90},{prop:'totalAmount',label:'合计金额',width:100},{prop:'status',label:'状态',width:80}],data:[{tplCode:'FT-001',tplName:'内科常规护理费模板',dept:'内科',feeCount:5,totalAmount:'¥128.00',status:'启用'},{tplCode:'FT-002',tplName:'外科术后护理费模板',dept:'外科',feeCount:8,totalAmount:'¥256.00',status:'启用'},{tplCode:'FT-003',tplName:'ICU特护费模板',dept:'ICU',feeCount:12,totalAmount:'¥580.00',status:'启用'}]},
 };
-
 createApp({
   setup(){
-    const searchText=ref('');
-    const expandedSections=ref(['patient','inp-fee','order-exec']);
-    const activeItem=ref('bed-card');
-    const crumbGroup=ref('住院患者管理');
-    const crumbChild=ref('床卡一览表');
-    const filterKw=ref('');
-
-    const filteredMenu=computed(()=>{
-      if(!searchText.value)return menuData;
-      const kw=searchText.value.toLowerCase();
-      return menuData.map(s=>{
-        const items=s.items.filter(i=>i.label.toLowerCase().includes(kw));
-        if(items.length||s.label.toLowerCase().includes(kw))return{...s,items:s.label.toLowerCase().includes(kw)?s.items:items};
-        return null;
-      }).filter(Boolean);
-    });
-
-    const toggleSection=k=>{const i=expandedSections.value.indexOf(k);i>=0?expandedSections.value.splice(i,1):expandedSections.value.push(k)};
-    const selectItem=(key,group,label)=>{activeItem.value=key;crumbGroup.value=group;crumbChild.value=label};
-    const currentTitle=computed(()=>crumbChild.value||'住院护士站');
+    const activeItem=ref('');const crumbGroup=ref('');const crumbChild=ref('');const filterKw=ref('');
+    const onMenuSelect=({key,groupLabel,itemLabel})=>{activeItem.value=key;crumbGroup.value=groupLabel;crumbChild.value=itemLabel};
     const tableCols=computed(()=>(tableDataMap[activeItem.value]||{}).cols||[]);
     const tableData=computed(()=>(tableDataMap[activeItem.value]||{}).data||[]);
-
-    return{searchText,expandedSections,activeItem,crumbGroup,crumbChild,filterKw,filteredMenu,toggleSection,selectItem,currentTitle,tableCols,tableData};
+    return{menuData,activeItem,crumbGroup,crumbChild,filterKw,onMenuSelect,tableCols,tableData};
   }
-}).use(ElementPlus).mount('#app');
+}).component('subsys-menu',initSubsystemMenu(menuData)).use(ElementPlus).mount('#app');
 </script>
 </body>
 </html>
